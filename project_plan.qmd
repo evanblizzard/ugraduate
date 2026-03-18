@@ -121,4 +121,24 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 
 #### Week 4 (04/09-04/16)
 
--   
+-   **Goal:** Incorporate "Degrees Awarded" data and statistical modeling
+
+-   **Tasks:**
+
+    -   Integrate degrees conferred data to let users explore graduation outcomes by program
+
+    -   Regression model to predict 2026 grad totals based on current Senior standing by program and major
+
+    -   **Deliverable:** A "final" app version with predictive analytics
+
+#### Week 5 (04/16-04/23)
+
+-   **Goal:** Methodology documentation and final UI tweaks
+
+-   **Tasks:**
+
+    -   Draft 5-7 page vignette
+
+    -   Ensure all ADRB definitions are explained in an "About" tab
+
+    -   Stress testing (if necessary)
