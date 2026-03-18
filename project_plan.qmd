@@ -69,6 +69,56 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 
 ### Schedule
 
-### 
+#### Week 1 (03/19-03/26)
 
-## 
+-   **Tasks:**
+
+    -   Automate extraction of headcounts, primary vs. secondary majors, and class standing
+
+    -   Get wide format tables (pp. 37-51) into long format
+
+        -   Year \| School \| Department \| Major \| Count)
+
+    -   **Deliverable:** Initial data extraction script and a master dataset
+
+#### Week 2 (03/26-4/02)
+
+-   **Goal:** Build basic app navigation and initial visualizations
+
+-   **Tasks:**
+
+    -   Define the Shiny UI (navbarPage may work here) to create tabs for "Enrollment Trends," "Incoming Profiles," and "Degrees Awarded"
+
+    -   Implement filters for college and major that update visualizations
+
+    -   **Deliverable:** Version 1 of the app that was working trend plots for the data extracted in \[Week 1\](####Week 1)
+
+    -   **Peer Review also due March 27.**
+
+#### Week 3 (04/02-04/09)
+
+-   **Goal:** Incorporate "Incoming Degree Students" and "Retention" data
+
+-   **Tasks:**
+
+    -   Extract profiles of incoming freshmen and transfer students, including residency and academic background (pp. 59-77)
+
+    -   Extract one-year retention rates and graduation rates by cohort (pp. 87-102)
+
+    -   **Deliverables (subject to change, unsure of this data):**
+
+        -   An app version 2 with:
+
+            -   an interactive map by student type (First-year vs Transfer)
+
+                -   Would show which states are the primary feeders for AU
+
+            -   Grouped line charts that plot longitudinal graduation rates (4-year vs. 6-year) for different entry years
+
+                -   If we are feeling crazy, we could add a prediction tool where users enter a hypothetical starting class size for a major and the app uses the historical retention rates to estimate how many students will graduate in 4 years.
+
+        -   **Progress Report due 04/03**
+
+#### Week 4 (04/09-04/16)
+
+-   
