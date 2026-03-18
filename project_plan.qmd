@@ -11,13 +11,15 @@ by Evan Blizzard, Myles Nwatu, Natalie Cope
 
 DATA-413
 
-## Problem Statement and Context
+## Topic and Data
+
+### Problem Statement and Context
 
 American University's Office of Institutional Research and Assessment (OIRA) publishes the Academic Data Reference Book (ADRB) as the university's official source for longitudinal student data, which is essential for university planning and academic assessment. While the 2025 ADRB provides a reliable snapshot oof enrollment, student profiles, retention, and graduation rates, the data is currently delivered in a static 127-page PDF format. This is a barrier to data accessibility, making it difficult for prospective and current students, faculty, and administrators to perform department-specific comparisons or visualize the data over time. This Shiny application addresses the problem by transforming the static tables in the ADRB into an interactive tool, enabling users to filter and visualize how AU's academic data has evolved from 2019 to 2025.
 
-## Status and key takeaways from the Literature Review (at least 3 sources)
+### Status and key takeaways from the Literature Review (at least 3 sources)
 
-## Proposed Data Sources
+### Proposed Data Sources
 
 -   Source: American University Academic Data Reference Book (ADRB) 2025-2026
 
@@ -28,6 +30,8 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 -   Number of Observations: Currently unknown. Data is in PDF format, so this is not something we can easily verify yet.
 
 ## Use Case
+
+### Use Case and Actor Description
 
 -   **Primary Actor: Academic Administrators**
 
@@ -40,5 +44,31 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 -   **Tertiary Actor: University Researchers (OIRA)**
 
     -   **Use Case:** Researches can use the interactive visualizations to identify outliers in retention or degree conferral that might require qualitative analysis in more depth, without needing to manually cross-reference a PDF.
+
+### Actor Questions of Interest
+
+### Anticipated Actor Workflow
+
+## Ethical Review
+
+## App Concept
+
+### General App Layout
+
+### Planned Options for User Data Selection and Manipulation (if any)
+
+### Planned Options for User Exploratory numerical/graphical analysis
+
+### Planned Options for User Statistical Models and Tests
+
+## Collaboration
+
+### Names and Responsibilities for Group Members
+
+### Approach to Team Workflow: Collaboration and Branching
+
+### Schedule
+
+### 
 
 ## 
