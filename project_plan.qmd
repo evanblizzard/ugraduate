@@ -17,4 +17,14 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 
 ## Status and key takeaways from the Literature Review (at least 3 sources)
 
+## Proposed Data Sources
+
+-   Source: American University Academic Data Reference Book (ADRB) 2025-2026
+
+-   [Link: Academic Data Reference Book \| OIRA](https://www.american.edu/provost/oira/academic-data-reference-book.cfm)
+
+-   Approximately 12 variables, including School/College, Academic Department, Major Name, Enrollment Status (Full-time/Part-time), Class Standing (First-year through Senior), Degree Level (Undergraduate/Graduate), Residency/State of Origin, Retention Cohort, and Year.
+
+-   Number of Observations: Currently unknown. Data is in PDF format, so this is not something we can easily verify yet.
+
 ## 
