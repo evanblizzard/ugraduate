@@ -5,23 +5,12 @@ editor: visual
 embedded-resources: true
 ---
 
-## "App Title"
+## App: GraduateAU
 
-by Evan Blizzard, Myles Nwatu, Natalie Cope DATA-413
+by Evan Blizzard, Myles Nwatu, Natalie Cope
 
-## Running Code
+DATA-413
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Problem Statement and Context
 
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+American University's Office of Institutional Research and Assessment (OIRA) publishes the Academic Data Reference Book (ADRB) as the university's official source for longitudinal student data, which is essential for university planning and academic assessment. While the 2025 ADRB provides a reliable snapshot oof enrollment, student profiles, retention, and graduation rates, the data is currently delivered in a static 127-page PDF format. This is a barrier to data accessibility, making it difficult for prospective and current students, faculty, and administrators to perform department-specific comparisons or visualize the data over time. This Shiny application addresses the problem by transforming the static tables in the ADRB into an interactive tool, enabling users to filter and visualize how AU's academic data has evolved from 2019 to 2025.
