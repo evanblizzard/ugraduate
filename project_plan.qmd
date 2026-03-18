@@ -67,6 +67,8 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 
 ### Approach to Team Workflow: Collaboration and Branching
 
+Our team will use a basic GitHub workflow to ensure integrity of the main branch. Each member will create feature-specific branches (e.g., data-wrangling, ui-design, stats-modeling) to work on individual components. Integration will occur via pull requests, requiring at least one peer review to check for code functionality before merging. We will use GitHub to assign tasks and track progress over our timeline.
+
 ### Schedule
 
 #### Week 1 (03/19-03/26)
