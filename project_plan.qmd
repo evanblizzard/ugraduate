@@ -27,4 +27,12 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 
 -   Number of Observations: Currently unknown. Data is in PDF format, so this is not something we can easily verify yet.
 
+## Use Case
+
+-   **Primary Actor: Academic Administrators**
+
+    -   **Use Case:** These users would utilize the Shiny app to track longitudinal enrollment trends in their specific departments compared to the university at large. For example, a department chair will be able to filter by major to see if the enrollment trend aligns with their internal staffing and resource planning.
+
+-   **Secondary Actor: Prospective and Current Students**
+
 ## 
