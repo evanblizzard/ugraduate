@@ -35,4 +35,10 @@ American University's Office of Institutional Research and Assessment (OIRA) pub
 
 -   **Secondary Actor: Prospective and Current Students**
 
+    -   **Use Case:** Students will use the app to explore the popularity of various majors. A student interested in a particular program can use the app to see the incoming class profile for a particular year and the retention/graduation rates for that program to make informed choices about their course of study.
+
+-   **Tertiary Actor: University Researchers (OIRA)**
+
+    -   **Use Case:** Researches can use the interactive visualizations to identify outliers in retention or degree conferral that might require qualitative analysis in more depth, without needing to manually cross-reference a PDF.
+
 ## 
