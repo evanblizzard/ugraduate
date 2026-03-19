@@ -56,7 +56,51 @@ Alternatively, retention rates are the percentage of first-time undergraduates w
 
 ### Anticipated Actor Workflow
 
-## Ethical Review
+## Ethical Review and Code of Conduct
+
+-   **Data Sourcing & Web Scraping**
+
+    -   The data used to make GraduateAU is drawn exclusively from the publicly available Academic Data Reference Book (ADRB), which is published annually by AU’s Office of Institutional Research & Assessment (OIRA). This resource is intended to provide the AU community with reliable and useful information.
+
+    -   The ethical risk is relatively low because this project is extracting data from an officially published PDF, rather than scraping a live website or accessing restricted internal systems.
+
+        -   Additionally, the OIRA won’t fulfill data requests from students for non-publicly available data for class-related or personal research purposes, so our project is bound to the scope provided by the ADRB [@au_oira_request].
+
+        -   We are also aware of AU'S Responsible Use of University Technology Resources that clearly prohibits individuals from accessing or attempting to access any account, file or software that we don’t have specific authorization for [@au_it_policy].
+
+-   FERPA & Student Privacy
+
+    -   The most significant ethical consideration for GraduateAU is compliance with the Family Educational Rights and Privacy Act (FERPA), which protects the privacy of students' education records, and affords students rights including access to their records, and disclosure only with consent except in certain circumstances [@ferpa_privacy].
+
+        -   While the ADRB presents aggregated rather than individual student data, FERPA considerations still apply when the data is broken down into smaller groups. Our team will be cautious in making sure that our statistical data doesn’t contain information that would personally identify a student. 
+
+-   AU Data Classification Policy
+
+    -   AU's Data Classification Policy gives more perspective and guidance that’s relevant to this project. This policy outlines the governance for privacy, security, and integrity of university data (especially confidential data) and the responsibilities of institutional units and individuals, regardless of where the data resides [@au_data_classification].
+
+        -   The policy classifies all university data into three tiers (Confidential, Official Use Only, and Unrestricted), because the ADRB data is posted publicly by OIRA, it falls under the Unrestricted category. However, we can’t combine with outside data sources because it could increase sensitivity.
+
+-   AU Privacy Notice & App-Level Considerations
+
+    -   A disclaimer should be included in the app’s “About” tab clarifying that GraduateAU is a student project, and not officially affiliated with American University, to prevent confusion with OIRA’s resources.
+
+-   Research Integrity
+
+    -   AU’s Office of Research Integrity states that it, “promotes the responsible conduct of research with high standards of ethics and accountability in planning, implementation, behavior, and information dissemination.”
+
+        -   Our team will make sure to document what we’ve done with the data so that it’s reproducible and aligns with the set standard of the ORI, and that we clearly cite where the data is from on the app’s interface [@au_ori].
+
+-   Code of Conduct Summary
+
+    -   Data Fidelity: No ADRB figures will be altered and any derived calculations will be clearly labeled as estimates.
+
+    -   Cell Suppression: Enrollment subgroups with fewer than 10 students will be masked in the app to prevent re-identification to stay within the bounds of FERPA
+
+    -   Scope Limitation: The project will only use publicly available ADRB data, and stay within the bounds of the OIRA’s student data request policy
+
+    -   Disclaimer: The app will clearly identify itself as a student project, and not an official AU resource
+
+    -   Attribution: All data will be cited to ADRM and OIRA in the app’s “About” tab
 
 ## App Concept
 
