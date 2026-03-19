@@ -148,6 +148,30 @@ The statistical models tab will allow for users to perform hypothesis testing.
 
 ### Names and Responsibilities for Group Members
 
+Evan Blizzard:
+
+-   Initial data wrangling/scraping
+
+-   Keeping group to proposed schedule/proposed schedule revisions
+
+-   Written component revision
+
+Natalie Cope:
+
+-   Application UI setup
+
+-   Primary member for graphical and statistical analysis setup
+
+-   Written component revision
+
+Adaobi Myles Nwatu:
+
+-   Qualitative research and written component drafting
+
+-   Secondary member for graphical and statistical analysis setup
+
+All members are responsible for peer reviewing code. No changes should be merged to main without at least one other group member's approval.
+
 ### Approach to Team Workflow: Collaboration and Branching
 
 Our team will use a basic GitHub workflow to ensure integrity of the main branch. Each member will create feature-specific branches (e.g., data-wrangling, ui-design, stats-modeling) to work on individual components. Integration will occur via pull requests, requiring at least one peer review to check for code functionality before merging. We will use GitHub Issues to assign tasks and track progress over our timeline.
