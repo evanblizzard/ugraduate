@@ -106,11 +106,43 @@ Alternatively, retention rates are the percentage of first-time undergraduates w
 
 ### General App Layout
 
-### Planned Options for User Data Selection and Manipulation (if any)
+### Planned Options for User Data Selection and Manipulation
+
+The application will use a sidebar for reactive data control.
+
+-   **Variable Selection**: selectInput and checkboxGroupInput menus will let users filter by School/College, Major, and Student Status
+
+-   **Time frame Control:** A sliderInput will let users subset the year range.
 
 ### Planned Options for User Exploratory numerical/graphical analysis
 
+Each tab will function as a different exploratory tab for the different ADRB sections.
+
+-   **Enrollment Trends:** Users can perform graphical analysis of enrollment data.
+
+    -   *Visuals:* Interactive line charts
+
+    -   *Numerical Summary:* A data table displaying Year-over-Year percentage growth
+
+-   **Student Lifecycle:** Users will be able to visualize the incoming student to retained student data.
+
+    -   *Visuals:* A stacked bar chart for incoming class profiles (freshmen vs. transfers) and a grouped bar chart for one-year retention rate by cohort type (Honors, First-Gen, etc.).
+
+-   **Degrees Conferred:** A categorical analysis of university attendance outcomes.
+
+    -   *Visuals:* A stacked bar chart showing the distribution of degrees awarded across the five schools.
+
 ### Planned Options for User Statistical Models and Tests
+
+The statistical models tab will allow for users to perform hypothesis testing.
+
+-   **Correlation Analysis:** A reactive scatterplot where users can select two variables to visualize relationships with an overlaid linear regression.
+
+-   **Comparative Testing:** A t-test or ANOVA summary table to statistically compare mean retention rates across different schools/colleges to identify significant differences in student success.
+
+### Design/Branding
+
+-   **Aesthetics:** UI will be customized to implement AU's color palette.
 
 ## Collaboration
 
