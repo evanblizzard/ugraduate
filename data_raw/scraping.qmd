@@ -59,24 +59,26 @@ tidy_section_1 <- section_1_raw |>
            sep = "\\s+",
            convert = TRUE,
            fill = "right") |> 
-  # pivot to long so each row is one metric for one year
+  # pivot to long
   pivot_longer(cols = starts_with("v"),
                names_to = "column_pos",
                values_to = "count") |> 
-  # assign correct year and metric (M1, M2, or Total) based on position
+  # extract a numeric position and assign a year/metric
   mutate(
     column_num = as.numeric(str_remove(column_pos, "v")),
     year = case_when(
-      column_num <= 3 ~ 2019,
-      column_num <=6 ~ 2020,
-      column_num <= 9 ~ 2021,
+      column_num <= 3  ~ 2019,
+      column_num <= 6  ~ 2020, 
+      column_num <= 9  ~ 2021,
       column_num <= 12 ~ 2022,
       column_num <= 15 ~ 2023, 
       column_num <= 18 ~ 2024,
       column_num <= 21 ~ 2025
     ),
-    metric = rep(c("M1", "M2", "Total"), length.out = n()) |> 
-      select(major_name, year, metric, count)
+    # Ensure metric repeats M1, M2, Total consistently
+    metric = rep(c("M1", "M2", "Total"), length.out = n())
+  ) |> 
+  select(major_name, year, metric, count)
     
   
            
