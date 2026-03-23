@@ -19,10 +19,31 @@ raw_pdf_text <- pdf_text("2025-select-fall-adrb-tables-2-0.pdf")
 page_37 <- raw_pdf_text[37]
 cat(page_37)
 ```
-
+Attempting to create a function for table extraction.
 ```{r}
-cleaned_data <- tibble(text = page_37) |> 
-  separate_rows(text, sep = "\n") |> 
-  #
+target_pages <- 36:40
+
+extract_adrb_table <- function(page_num) {
+  # getting text for one page and splitting into lines
+  lines <- raw_text[page_num] |> read_lines()
+  
+  # reomving headers and footers
+  clean_lines <- lines[!str_detect(lines, "ADRB|Page|Table 1-5C | School/")]
+  
+  # converting to tibble
+  df <- tibble(raw_line = clean_lines) |> 
+    # removing empty lines
+    filter(raw_line != "") |> 
+    # identifying major and counts
+    mutate(
+      major_name = str_extract(raw_line, "^[A-Za-z &,-/]+"),  
+      counts_raw = str_remove(raw_line, "^[A-Za-z &,-/]+")
+    ) |> 
+    # trimming whitespace
+    mutate(across(everything(), str_squish)) |> 
+    filter(!is.na(major_name), major_name != "Total")
+  
+  return(df)
+}
 
 ```
