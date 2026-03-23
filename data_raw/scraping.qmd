@@ -23,9 +23,9 @@ Attempting to create a function for table extraction.
 ```{r}
 target_pages <- 36:40
 
-extract_adrb_table <- function(page_num) {
+extract_adrb_table <- function(page_num, pdf_data) {
   # getting text for one page and splitting into lines
-  lines <- raw_text[page_num] |> read_lines()
+  lines <- pdf_data[page_num] |> read_lines()
   
   # reomving headers and footers
   clean_lines <- lines[!str_detect(lines, "ADRB|Page|Table 1-5C | School/")]
@@ -36,7 +36,7 @@ extract_adrb_table <- function(page_num) {
     filter(raw_line != "") |> 
     # identifying major and counts
     mutate(
-      major_name = str_extract(raw_line, "^[A-Za-z &,-/]+"),  
+      major_name = str_extract(raw_line, "^[A-Za-z &,-/]+"),  # match beginning of line, all uppercase and lowercase, allow for a space, and allow symbols
       counts_raw = str_remove(raw_line, "^[A-Za-z &,-/]+")
     ) |> 
     # trimming whitespace
@@ -45,5 +45,40 @@ extract_adrb_table <- function(page_num) {
   
   return(df)
 }
+
+```
+Attempt at processing pages into a master list
+```{r}
+section_1_raw <- map_dfr(target_pages, extract_adrb_table, pdf_data = raw_pdf_text)
+```
+
+```{r}
+tidy_section_1 <- section_1_raw |> 
+  separate(counts_raw,
+           into = paste0("v", 1:21),
+           sep = "\\s+",
+           convert = TRUE,
+           fill = "right") |> 
+  # pivot to long so each row is one metric for one year
+  pivot_longer(cols = starts_with("v"),
+               names_to = "column_pos",
+               values_to = "count") |> 
+  # assign correct year and metric (M1, M2, or Total) based on position
+  mutate(
+    column_num = as.numeric(str_remove(column_pos, "v")),
+    year = case_when(
+      column_num <= 3 ~ 2019,
+      column_num <=6 ~ 2020,
+      column_num <= 9 ~ 2021,
+      column_num <= 12 ~ 2022,
+      column_num <= 15 ~ 2023, 
+      column_num <= 18 ~ 2024,
+      column_num <= 21 ~ 2025
+    ),
+    metric = rep(c("M1", "M2", "Total"), length.out = n()) |> 
+      select(major_name, year, metric, count)
+    
+  
+           
 
 ```
