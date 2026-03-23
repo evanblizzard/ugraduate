@@ -26,22 +26,24 @@ target_pages <- 36:40
 extract_adrb_table <- function(page_num, pdf_data) {
   # getting text for one page and splitting into lines
   lines <- pdf_data[page_num] |> read_lines()
-  
-  # reomving headers and footers
-  clean_lines <- lines[!str_detect(lines, "ADRB|Page|Table 1-5C | School/")]
+
+  # removing headers and footers
+  clean_lines <- lines[!str_detect(lines, "ADRB|Page|Table 1-5C| School/")]
   
   # converting to tibble
   df <- tibble(raw_line = clean_lines) |> 
     # removing empty lines
     filter(raw_line != "") |> 
+    # only keep lines with numbers
+    filter(str_detect(raw_line, "\\d")) |> 
     # identifying major and counts
     mutate(
-      major_name = str_extract(raw_line, "^[A-Za-z &,-/]+"),  # match beginning of line, all uppercase and lowercase, allow for a space, and allow symbols
-      counts_raw = str_remove(raw_line, "^[A-Za-z &,-/]+")
+      major_name = str_extract(raw_line, "^[^0-9]+"),  # match beginning of line, all uppercase and lowercase, allow for a space, and allow symbols
+      counts_raw = str_remove(raw_line, "^[0-9].*$")
     ) |> 
     # trimming whitespace
     mutate(across(everything(), str_squish)) |> 
-    filter(!is.na(major_name), major_name != "Total")
+    filter(!major_name %in% c("School/", "College/ Department Major", "Office"))
   
   return(df)
 }
@@ -79,8 +81,5 @@ tidy_section_1 <- section_1_raw |>
     metric = rep(c("M1", "M2", "Total"), length.out = n())
   ) |> 
   select(major_name, year, metric, count)
-    
-  
-           
-
+head(tidy_section_1)
 ```
