@@ -1,0 +1,28 @@
+---
+title: "scraping"
+format: html
+---
+
+```{r}
+library(pdftools)
+library(tidyverse)
+```
+
+# PDF Reading
+
+```{r}
+# read pdf into R
+raw_pdf_text <- pdf_text("2025-select-fall-adrb-tables-2-0.pdf")
+
+# extracting specific page for testing
+
+page_37 <- raw_pdf_text[37]
+cat(page_37)
+```
+
+```{r}
+cleaned_data <- tibble(text = page_37) |> 
+  separate_rows(text, sep = "\n") |> 
+  #
+
+```
