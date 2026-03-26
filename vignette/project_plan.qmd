@@ -54,7 +54,49 @@ Alternatively, retention rates are the percentage of first-time undergraduates w
 
 ### Actor Questions of Interest
 
+-   How has the total enrollment in a department changed over the last six years compared to the university-wide growth rate?
+
+-   Is the increase in secondary majors in a program significant enough to justify additional teaching assistants?
+
+-   Which specific student cohorts within a college have the highest retention rates?
+
+-   How does the graduation rate of a school compare to other schools?
+
+-   What majors within a school have seen the most growth in incoming freshman enrollment in a particular year?
+
+-   What does the typical profile of an incoming transfer student look like for my intended major?
+
+-   Are there specific years where a department experienced a statistically significant drop in retention?
+
 ### Anticipated Actor Workflow
+
+Our app is designed to support an exploratory workflow.
+
+#### 1. Contextualization (Overview)
+
+-   The user would begin by reviewing an About Section to understand the scope of the data and AU's specific data definitions.
+
+#### 2. Data Filtering (Sidebar)
+
+-   The user would use the Sidebar to set their parameters: School/College, Specific Major, and Timeframe. This ensures all subsequent tabs reflect the subset of data of interest to the actor.
+
+#### 3. Trend Exploration (Enrollment and Degree Tabs)
+
+-   Academic Administrators would navigate to the enrollment trends tab to analyze shifts via interactive line charts and review Year-over-year growth tables.
+
+-   Current students would move to the degrees conferred tab to view stacked bar charts that illustrate the popularity and outcome of their chosen major compared to other programs.
+
+#### 4. Deeper Analysis (Student Lifecycle tab)
+
+-   Prospective students would examine the "Incoming Profiles"(Freshman vs Transfer) and Retention Rates to gauge the peer environment and of a specific program.
+
+#### 5. Statistical Validation (Models tab)
+
+-   University researchers would use the statistical models tab to run correlation analysis or perform t-tests/ANOVA to determine if differences in retention rates across colleges are statistically significant.
+
+#### 6. Reporting and Methodology
+
+-   The workflow would conclude with the user reference an Ethics and Disclaimer section to ensure any insights drawn are cited correctly as a student project and not an official AU administrative report.
 
 ## Ethical Review and Code of Conduct
 
