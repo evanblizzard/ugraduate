@@ -24,7 +24,8 @@ print(table_list$TABLE_NAME)
 
 # pulling tables professor suggested
 institutional_chars <- sqlFetch(con, "HD2019")
-student_financial_aid <- sqlFetch(con, "SFA1819_P2")
+student_financial_aid <- sqlFetch(con, "SFA1819_P1") # for pell percentage
+student_financial_aid_2 <- sqlFetch(con, "SFA1819_P2") # for net price
 fall_enrollment_cip <- sqlFetch(con, "C2019_A")
 retention <- sqlFetch(con, "EF2019D")
 ```
@@ -34,15 +35,61 @@ retention <- sqlFetch(con, "EF2019D")
 target_ids <- c(130794, 131496, 131469)
 
 # cleaning institutional characteristics
-inst_clean <- institutional_chars |> 
+inst_clean_2019 <- institutional_chars |> 
   clean_names() |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, instnm, city, stabbr) # instnm is name, stabbr is state abbreviation
 
 # cleaning retention
-ret_clean <- retention |> 
+ret_clean_2019 <- retention |> 
   clean_names() |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, ret_pres = ret_pcf) # ret pres measures % of first-time, full-time undegraduates who return to same institution following fall
 
+# cleaning financial aid data
+aid_p1_clean <- student_financial_aid |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, pell_pct = pgrnt_p) 
+aid_p2_clean <- student_financial_aid_2 |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, avg_net_public = npist2, avg_net_private = npgrn2, net_price_pell_proxy = npis412)
+# note npist2 is used (average net price of students awarded grant or scholarship aid) bc npisur8 was not yet introduced
+# npis412 is a proxy, it's 0-30k income net price
+
+# joining the 2 aid tables
+aid_final_2019 <- aid_p1_clean |> 
+  left_join(aid_p2_clean, by = "unitid")
+
+```
+
+```{r}
+# calculating herfindahl-hirschman index using c2019_a
+hhi_2019 <- fall_enrollment_cip |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  # filtering for just bachelor's degreees
+  filter(awlevel == 5) |> 
+  # extrating 2 digit cip code from 6-digit code
+  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
+  # grouping by school and department
+  group_by(unitid, cip_2) |> 
+  summarize(dept_total = sum(ctotalt), .groups = "drop_last") |> 
+  # calculating share of total degrees for each dept
+  mutate(share = dept_total / sum(dept_total)) |> 
+  # squaring shares and summing for hhi score
+  summarize(hhi_score = sum(share^2)) |> 
+  ungroup()
+
+```
+
+```{r}
+# merging all 2019 tables
+master_2019 <- inst_clean_2019 |> 
+  left_join(ret_clean_2019, by = "unitid") |> 
+  left_join(aid_final_2019, by = "unitid") |> 
+  left_join(hhi_2019, by = "unitid") |> 
+  mutate(academic_year = "2019-20")
+print(master_2019)
 ```
