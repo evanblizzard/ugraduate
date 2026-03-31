@@ -1,0 +1,23 @@
+---
+title: "data_ingestion"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(RODBC)
+
+# path to unzipped .accdb file
+# using normalize path  bc Windows ODBC driver was being weird
+db_path <- normalizePath("../data_raw/IPEDS201920.accdb")
+
+```
+
+```{r}
+# establishing connection to db
+con <- odbcConnectAccess2007(db_path)
+
+# checking tables inside
+table_list <- sqlTables(con, tableType = "TABLE")
+print(table_list$TABLE_NAME)
+```
