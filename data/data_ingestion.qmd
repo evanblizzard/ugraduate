@@ -32,7 +32,19 @@ retention <- sqlFetch(con, "EF2019D")
 
 ```{r}
 # defining peer group of dc schools
-target_ids <- c(130794, 131496, 131469)
+target_ids <- c(131159, # american
+                131496, # gw
+                131469, # georgetown
+                167358, # northeastern
+                164924, # boston
+                193900, # nyu
+                190150, # fordham
+                196413, # syracuse
+                212051, # drexel
+                160755, # tulane
+                135726, # u miami
+                127060, # u denver
+                216597) # villanova
 
 # cleaning institutional characteristics
 inst_clean_2019 <- institutional_chars |> 
@@ -92,4 +104,5 @@ master_2019 <- inst_clean_2019 |>
   left_join(hhi_2019, by = "unitid") |> 
   mutate(academic_year = "2019-20")
 print(master_2019)
+odbcClose(con)
 ```
