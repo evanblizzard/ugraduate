@@ -105,4 +105,112 @@ master_2019 <- inst_clean_2019 |>
   mutate(academic_year = "2019-20")
 print(master_2019)
 odbcClose(con)
+save(master_2019, file = "../master_2019.RData")
+```
+
+
+# 2020-2021 Data Extraction
+```{r}
+db_path_2020 <- normalizePath("../data_raw/IPEDS202021.accdb")
+con <- odbcConnectAccess2007(db_path_2020)
+
+# extracting and cleaning tables
+# institutional characteristics
+inst_2020 <- sqlFetch(con, "HD2020") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, instnm, city, stabbr)
+
+# retention
+ret_2020 <- sqlFetch(con, "EF2020D") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, ret_pres = ret_pcf)
+
+# financial aid part 1 (pell %)
+aid_p1_2020 <- sqlFetch(con, "SFA1920_P1") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, pell_pct = upgrntp)
+# financial aid pt 2 (net price)
+aid_p2_2020 <- sqlFetch(con, "SFA1920_P2") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, net_price_avg = npist2, net_price_pell_proxy = npis412)
+
+# calculate hhi
+hhi_2020 <- sqlFetch(con, "C2020_A") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids, awlevel == 5) |> 
+  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
+  group_by(unitid, cip_2) |> 
+  summarise(dept_total = sum(ctotalt), .groups = "drop_last") |> 
+  mutate(share = dept_total / sum(dept_total)) |> 
+  summarise(hhi_score = sum(share^2)) |> 
+  ungroup()
+
+# merging all 2020 data
+master_2020 <- inst_2020 |> 
+  left_join(ret_2020, by = "unitid") |> 
+  left_join(aid_p1_2020, by = "unitid") |> 
+  left_join(aid_p2_2020, by = "unitid") |> 
+  left_join(hhi_2020, by = "unitid") |> 
+  mutate(academic_year = "2020-21")
+
+# closing connection and saving
+odbcClose(con)
+save(master_2020, file = "../data/master_2020.RData")
+
+```
+
+# 2021-2022 Data Extraction
+```{r}
+db_path_2021 <- normalizePath("../data_raw/IPEDS202122.accdb")
+con <- odbcConnectAccess2007(db_path_2021)
+# institutional
+inst_2021 <- sqlFetch(con, "HD2021") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, instnm, city, stabbr)
+
+# retention rates
+ret_2021 <- sqlFetch(con, "EF2021D") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, ret_pres = ret_pcf) # ret_pcf is full-time retention rate
+
+# Financial Aid Part 1 (Pell %)
+aid_p1_2021 <- sqlFetch(con, "SFA2021_P1") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, pell_pct = upgrntp)
+
+# Financial Aid Part 2 (Net Price)
+aid_p2_2021 <- sqlFetch(con, "SFA2021_P2") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, net_price_avg = npist2, net_price_pell_proxy = npis412)
+
+# calculating hhi
+hhi_2021 <- sqlFetch(con, "C2021_A") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids, awlevel == 5) |> 
+  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
+  group_by(unitid, cip_2) |> 
+  summarise(dept_total = sum(ctotalt), .groups = "drop_last") |> 
+  mutate(share = dept_total / sum(dept_total)) |> 
+  summarise(hhi_score = sum(share^2)) |> 
+  ungroup()
+
+# merging all 2021-2022 tables
+master_2021 <- inst_2021 |> 
+  left_join(ret_2021, by = "unitid") |> 
+  left_join(aid_p1_2021, by = "unitid") |> 
+  left_join(aid_p2_2021, by = "unitid") |> 
+  left_join(hhi_2021, by = "unitid") |> 
+  mutate(academic_year = "2021-22")
+
+# closing connection and saving
+odbcClose(con)
+save(master_2021, file = "../data/master_2021.RData")
 ```
