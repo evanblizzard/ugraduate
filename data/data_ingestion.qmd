@@ -6,6 +6,7 @@ format: html
 ```{r}
 library(tidyverse)
 library(RODBC)
+library(janitor)
 
 # path to unzipped .accdb file
 # using normalize path  bc Windows ODBC driver was being weird
@@ -20,4 +21,28 @@ con <- odbcConnectAccess2007(db_path)
 # checking tables inside
 table_list <- sqlTables(con, tableType = "TABLE")
 print(table_list$TABLE_NAME)
+
+# pulling tables professor suggested
+institutional_chars <- sqlFetch(con, "HD2019")
+student_financial_aid <- sqlFetch(con, "SFA1819_P2")
+fall_enrollment_cip <- sqlFetch(con, "C2019_A")
+retention <- sqlFetch(con, "EF2019D")
+```
+
+```{r}
+# defining peer group of dc schools
+target_ids <- c(130794, 131496, 131469)
+
+# cleaning institutional characteristics
+inst_clean <- institutional_chars |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, instnm, city, stabbr) # instnm is name, stabbr is state abbreviation
+
+# cleaning retention
+ret_clean <- retention |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, ret_pres = ret_pcf) # ret pres measures % of first-time, full-time undegraduates who return to same institution following fall
+
 ```
