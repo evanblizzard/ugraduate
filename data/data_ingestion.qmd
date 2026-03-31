@@ -290,18 +290,18 @@ ret_2023 <- sqlFetch(con, "EF2023D") |>
 aid_p1_2023 <- sqlFetch(con, "SFA2223_P1") |> 
   clean_names() |> 
   # renaming the key because for some reason cgunitid is used here
-  rename(unitid = any_of(c("cgunitid", "unitid", "id"))) |> 
+  rename(unitid = unit_id) |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, net_price_avg = npist2, net_price_pell_proxy = npis412)
 
 aid_p2_2023 <- sqlFetch(con, "SFA2223_P2") |> 
   clean_names() |> 
   # renaming the key because for some reason cgunitid is used here
-  rename(unitid = any_of(c("cgunitid", "unitid", "id"))) |> 
+  rename(unitid = unit_id) |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, pell_pct = upgrntp)
 aid_final_2023 <- aid_p1_2023 |> 
-  left_join(aid_p2_2023, by = "unitid")
+  left_join(aid_p2_2023, by = "unit_id")
 # calculating hhi
 hhi_2023 <- sqlFetch(con, "C2023_A") |> 
   clean_names() |> 
@@ -329,7 +329,4 @@ save(master_2023, file = "../data/master_2023.RData")
 
 ```{r}
 
-# Check column names of the raw 2023 Directory table
-# Run this and look at the first 5 names in your console
-names(sqlFetch(con, "HD2023")) |> head()
 ```
