@@ -4,6 +4,7 @@ format: html
 ---
 
 ```{r}
+#| label: library-loading
 library(tidyverse)
 library(RODBC)
 library(janitor)
@@ -13,24 +14,9 @@ library(janitor)
 db_path <- normalizePath("../data_raw/IPEDS201920.accdb")
 
 ```
-
 ```{r}
-# establishing connection to db
-con <- odbcConnectAccess2007(db_path)
+#| label: peer-groups
 
-# checking tables inside
-table_list <- sqlTables(con, tableType = "TABLE")
-print(table_list$TABLE_NAME)
-
-# pulling tables professor suggested
-institutional_chars <- sqlFetch(con, "HD2019")
-student_financial_aid <- sqlFetch(con, "SFA1819_P1") # for pell percentage
-student_financial_aid_2 <- sqlFetch(con, "SFA1819_P2") # for net price
-fall_enrollment_cip <- sqlFetch(con, "C2019_A")
-retention <- sqlFetch(con, "EF2019D")
-```
-
-```{r}
 # defining peer group of dc schools
 target_ids <- c(131159, # american
                 131496, # gw
@@ -46,6 +32,24 @@ target_ids <- c(131159, # american
                 127060, # u denver
                 216597) # villanova
 
+```
+# 2019-2020 Data Extraction
+
+```{r}
+#| label: 2019-2020-ingestion
+#| cache: true
+# path to unzipped .accdb file
+# using normalize path  bc Windows ODBC driver was being weird
+db_path <- normalizePath("../data_raw/IPEDS201920.accdb")
+# establishing connection to db
+con <- odbcConnectAccess2007(db_path)
+
+# Retrieving 2019-20 Tables
+institutional_chars <- sqlFetch(con, "HD2019")
+student_financial_aid <- sqlFetch(con, "SFA1819_P1") # for pell percentage
+student_financial_aid_2 <- sqlFetch(con, "SFA1819_P2") # for net price
+fall_enrollment_cip <- sqlFetch(con, "C2019_A") # for cip 
+retention <- sqlFetch(con, "EF2019D")
 # cleaning institutional characteristics
 inst_clean_2019 <- institutional_chars |> 
   clean_names() |> 
@@ -73,15 +77,11 @@ aid_p2_clean <- student_financial_aid_2 |>
 # joining the 2 aid tables
 aid_final_2019 <- aid_p1_clean |> 
   left_join(aid_p2_clean, by = "unitid")
-
-```
-
-```{r}
 # calculating herfindahl-hirschman index using c2019_a
 hhi_2019 <- fall_enrollment_cip |> 
   clean_names() |> 
   filter(unitid %in% target_ids) |> 
-  # filtering for just bachelor's degreees
+  # filtering for just bachelor's degrees
   filter(awlevel == 5) |> 
   # extrating 2 digit cip code from 6-digit code
   mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
@@ -93,10 +93,6 @@ hhi_2019 <- fall_enrollment_cip |>
   # squaring shares and summing for hhi score
   summarize(hhi_score = sum(share^2)) |> 
   ungroup()
-
-```
-
-```{r}
 # merging all 2019 tables
 master_2019 <- inst_clean_2019 |> 
   left_join(ret_clean_2019, by = "unitid") |> 
@@ -107,7 +103,6 @@ print(master_2019)
 odbcClose(con)
 save(master_2019, file = "../master_2019.RData")
 ```
-
 
 # 2020-2021 Data Extraction
 ```{r}
@@ -216,60 +211,6 @@ save(master_2021, file = "../data/master_2021.RData")
 ```
 
 # 2022-2023 Data Extraction
-```{r}
-db_path_2022 <- normalizePath("../data_raw/IPEDS202223.accdb")
-con <- odbcConnectAccess2007(db_path_2022)
-
-# institutional characteristics (HD2022)
-inst_2022 <- sqlFetch(con, "HD2022") |> 
-  clean_names() |> 
-  filter(unitid %in% target_ids) |> 
-  select(unitid, instnm, city, stabbr)
-
-# retention (EF2022D)
-ret_2022 <- sqlFetch(con, "EF2022D") |> 
-  clean_names() |> 
-  filter(unitid %in% target_ids) |> 
-  select(unitid, ret_pres = ret_pcf)
-
-# financial aid Part 1 (SFA2122_P1 for Pell %)
-aid_p1_2022 <- sqlFetch(con, "SFA2122_P1") |> 
-  clean_names() |> 
-  filter(unitid %in% target_ids) |> 
-  select(unitid, pell_pct = upgrntp)
-
-# financial aid Part 2 (SFA2122_P2 for Net Price)
-aid_p2_2022 <- sqlFetch(con, "SFA2122_P2") |> 
-  clean_names() |> 
-  filter(unitid %in% target_ids) |> 
-  select(unitid, net_price_avg = npist2, net_price_pell_proxy = npis412)
-
-# calculating hhi
-hhi_2022 <- sqlFetch(con, "C2022_A") |> 
-  clean_names() |> 
-  filter(unitid %in% target_ids, awlevel == 5) |> 
-  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
-  group_by(unitid, cip_2) |> 
-  summarise(dept_total = sum(ctotalt), .groups = "drop_last") |> 
-  mutate(share = dept_total / sum(dept_total)) |> 
-  summarise(hhi_score = sum(share^2)) |> 
-  ungroup()
-
-# merging all 2022-2023 data
-master_2022 <- inst_2022 |> 
-  left_join(ret_2022, by = "unitid") |> 
-  left_join(aid_p1_2022, by = "unitid") |> 
-  left_join(aid_p2_2022, by = "unitid") |> 
-  left_join(hhi_2022, by = "unitid") |> 
-  mutate(academic_year = "2022-23")
-
-# closing connection and saving
-odbcClose(con)
-save(master_2022, file = "../data/master_2022.RData")
-
-```
-
-
 ```{r}
 db_path_2022 <- normalizePath("../data_raw/IPEDS202223.accdb")
 con <- odbcConnectAccess2007(db_path_2022)
