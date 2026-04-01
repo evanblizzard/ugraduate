@@ -6,7 +6,7 @@ library(shiny)
 library(bslib)
 library(plotly)
 
-data <- load("../clean/master_data.RData")
+data <- load("data/master_data.RData")
 
 
 ## Begin User Interface Section
@@ -29,7 +29,25 @@ ui <- page_sidebar(
 )
 
 server <- function(input, output) {
-  
+  # reactive filter based on ui selections
+  filtered_data <- reactive({
+    master_data |> 
+      filter(instnm %in% input$peer_select)
+  })
+  # rendering trend_plot
+  output$trend_plot <- renderPlotly({
+    p <- ggplot(filtered_data(),
+                aes(x = academic_year,
+                    y = .data[[input$metric]],
+                    group = instnm,
+                    color = instnm)) +
+      geom_line(size = 1) +
+      geom_point() +
+      labs(y = "Value", x = "Academic Year", color = "Institution") +
+      theme_minimal()
+    # making ggplot interactive with plotly
+    ggplotly(p)
+  })
 }
 
 shinyApp(ui, server)
