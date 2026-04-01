@@ -54,7 +54,8 @@ retention <- sqlFetch(con, "EF2019D")
 inst_clean_2019 <- institutional_chars |> 
   clean_names() |> 
   filter(unitid %in% target_ids) |> 
-  select(unitid, instnm, city, stabbr) # instnm is name, stabbr is state abbreviation
+  select(unitid, instnm, city, stabbr) # instnm is name, 
+                                       # stabbr is state abbreviation
 
 # cleaning retention
 ret_clean_2019 <- retention |> 
@@ -106,6 +107,8 @@ save(master_2019, file = "../master_2019.RData")
 
 # 2020-2021 Data Extraction
 ```{r}
+#| label: 2020-2021-ingestion
+#| cache: true
 db_path_2020 <- normalizePath("../data_raw/IPEDS202021.accdb")
 con <- odbcConnectAccess2007(db_path_2020)
 
@@ -160,6 +163,8 @@ save(master_2020, file = "../data/master_2020.RData")
 
 # 2021-2022 Data Extraction
 ```{r}
+#| label: 2021-2022-ingestion
+#| cache: true
 db_path_2021 <- normalizePath("../data_raw/IPEDS202122.accdb")
 con <- odbcConnectAccess2007(db_path_2021)
 # institutional
@@ -212,6 +217,8 @@ save(master_2021, file = "../data/master_2021.RData")
 
 # 2022-2023 Data Extraction
 ```{r}
+#| label: 2022-2023-ingestion
+#| cache: true
 db_path_2022 <- normalizePath("../data_raw/IPEDS202223.accdb")
 con <- odbcConnectAccess2007(db_path_2022)
 
@@ -267,6 +274,8 @@ save(master_2022, file = "../data/master_2022.RData")
 # 2023-2024 Data Extraction
 
 ```{r} 
+#| label: 2023-2024-ingestion
+#| cache: true
 db_path_2023 <- normalizePath("../data_raw/IPEDS202324.accdb")
 con <- odbcConnectAccess2007(db_path_2023)
 
@@ -294,7 +303,8 @@ aid_p1_2023 <- sqlFetch(con, "SFA2223_P2") |>
   filter(unitid %in% target_ids) |> 
   select(unitid, net_price_avg, net_price_pell_proxy)
 
-# Pell Percentage Data. For some reason this info swapped tables and is located in P1.
+# Pell Percentage Data. 
+# For some reason this info swapped tables and is located in P1.
 # I'm still calling it p2 for consistency.
 aid_p2_2023 <- sqlFetch(con, "SFA2223_P1") |> 
   clean_names(numerals = "asis") |> 
@@ -323,8 +333,6 @@ master_2023 <- inst_2023 |>
 
 odbcClose(con)
 save(master_2023, file = "../data/master_2023.RData")
-
-
 ```
 
 
