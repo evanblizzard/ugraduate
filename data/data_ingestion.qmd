@@ -269,41 +269,37 @@ save(master_2022, file = "../data/master_2022.RData")
 
 ```
 
-```{r}
-db_path_2023 <- normalizePath("../data_raw/IPEDS202324.accdb")
-con <- odbcConnectAccess2007(db_path_2023)
 
-# institutional characteristics (HD2023)
-inst_2023 <- sqlFetch(con, "HD2023") |> 
+```{r}
+db_path_2022 <- normalizePath("../data_raw/IPEDS202223.accdb")
+con <- odbcConnectAccess2007(db_path_2022)
+
+# institutional characteristics (HD2022)
+inst_2022 <- sqlFetch(con, "HD2022") |> 
   clean_names() |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, instnm, city, stabbr)
 
-# retention rates (EF2023D - Fall 2023)
-ret_2023 <- sqlFetch(con, "EF2023D") |> 
+# retention (EF2022D)
+ret_2022 <- sqlFetch(con, "EF2022D") |> 
   clean_names() |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, ret_pres = ret_pcf)
 
-# financial aid (SFA2223 Tables)
-# note in 2023 data: P1 now contains Net Price, P2 contains Pell %
-aid_p1_2023 <- sqlFetch(con, "SFA2223_P1") |> 
+# financial aid Part 1 (SFA2122_P1 for Pell %)
+aid_p1_2022 <- sqlFetch(con, "SFA2122_P1") |> 
   clean_names() |> 
-  # renaming the key because for some reason cgunitid is used here
-  rename(unitid = unit_id) |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, pell_pct = upgrntp)
+
+# financial aid Part 2 (SFA2122_P2 for Net Price)
+aid_p2_2022 <- sqlFetch(con, "SFA2122_P2") |> 
+  clean_names() |> 
   filter(unitid %in% target_ids) |> 
   select(unitid, net_price_avg = npist2, net_price_pell_proxy = npis412)
 
-aid_p2_2023 <- sqlFetch(con, "SFA2223_P2") |> 
-  clean_names() |> 
-  # renaming the key because for some reason cgunitid is used here
-  rename(unitid = unit_id) |> 
-  filter(unitid %in% target_ids) |> 
-  select(unitid, pell_pct = upgrntp)
-aid_final_2023 <- aid_p1_2023 |> 
-  left_join(aid_p2_2023, by = "unit_id")
 # calculating hhi
-hhi_2023 <- sqlFetch(con, "C2023_A") |> 
+hhi_2022 <- sqlFetch(con, "C2022_A") |> 
   clean_names() |> 
   filter(unitid %in% target_ids, awlevel == 5) |> 
   mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
@@ -313,7 +309,70 @@ hhi_2023 <- sqlFetch(con, "C2023_A") |>
   summarise(hhi_score = sum(share^2)) |> 
   ungroup()
 
-# merging all 2023 tables
+# merging all 2022-2023 data
+master_2022 <- inst_2022 |> 
+  left_join(ret_2022, by = "unitid") |> 
+  left_join(aid_p1_2022, by = "unitid") |> 
+  left_join(aid_p2_2022, by = "unitid") |> 
+  left_join(hhi_2022, by = "unitid") |> 
+  mutate(academic_year = "2022-23")
+
+# closing connection and saving
+odbcClose(con)
+save(master_2022, file = "../data/master_2022.RData")
+
+```
+
+# 2023-2024 Data Extraction
+
+```{r} 
+db_path_2023 <- normalizePath("../data_raw/IPEDS202324.accdb")
+con <- odbcConnectAccess2007(db_path_2023)
+
+# institutional data
+inst_2023 <- sqlFetch(con, "HD2023") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, instnm, city, stabbr)
+# retention data
+ret_2023 <- sqlFetch(con, "EF2023D") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, ret_pres = ret_pcf)
+
+# financial aid
+
+# Net Price Data. For some reason this info swapped tables and is located in P2
+# I'm still calling it p1 for consistency
+aid_p1_2023 <- sqlFetch(con, "SFA2223_P2") |> 
+  clean_names(numerals = "asis") |> 
+  # Using rename with 'any_of' to handle potential underscores in this years data
+  rename(unitid = any_of(c("unit_id", "cgunitid")),
+         net_price_avg = any_of(c("npist2", "npist_2")),
+         net_price_pell_proxy = any_of(c("npis412", "npis_412"))) |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, net_price_avg, net_price_pell_proxy)
+
+# Pell Percentage Data. For some reason this info swapped tables and is located in P1.
+# I'm still calling it p2 for consistency.
+aid_p2_2023 <- sqlFetch(con, "SFA2223_P1") |> 
+  clean_names(numerals = "asis") |> 
+  rename(unitid = any_of(c("unit_id", "cgunitid")),
+         pell_pct = any_of(c("upgrntp", "upgrnt_p"))) |> 
+  filter(unitid %in% target_ids) |> 
+  select(unitid, pell_pct)
+
+# calculating hhi
+hhi_2023 <- sqlFetch(con, "C2023_A") |> 
+  clean_names() |> 
+  filter(unitid %in% target_ids, awlevel == 5) |> 
+  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> 
+  group_by(unitid, cip_2) |> 
+  summarise(dept_total = sum(ctotalt), .groups = "drop_last") |> 
+  mutate(share = dept_total / sum(dept_total)) |> 
+  summarise(hhi_score = sum(share^2), .groups = "drop")
+
+# master merge
 master_2023 <- inst_2023 |> 
   left_join(ret_2023, by = "unitid") |> 
   left_join(aid_p1_2023, by = "unitid") |> 
@@ -321,12 +380,10 @@ master_2023 <- inst_2023 |>
   left_join(hhi_2023, by = "unitid") |> 
   mutate(academic_year = "2023-24")
 
-# closing connection and saving
 odbcClose(con)
 save(master_2023, file = "../data/master_2023.RData")
 
-```
-
-```{r}
 
 ```
+
+
