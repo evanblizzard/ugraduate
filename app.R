@@ -32,7 +32,7 @@ ui <- page_navbar(
         plotlyOutput("trend_plot")
       )
     )
-  ),
+  ), # close tab 1
   # Tab 2 Specialization and Retention Regression
   nav_panel(
     title = "Specialization and Retention",
