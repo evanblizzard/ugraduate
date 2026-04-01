@@ -93,7 +93,7 @@ server <- function(input, output) {
       geom_point(aes(color = instnm), size = 3) +
       labs(x = "Program Specialization (HHI Score)",
            y = "Retention Rate (%)") +
-      theme_minmal() +
+      theme_minimal() +
       theme(legend.position = "none") # hiding legnd
     
     # logic for adding regression line
