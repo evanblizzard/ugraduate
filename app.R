@@ -94,11 +94,14 @@ server <- function(input, output) {
       labs(x = "Program Specialization (HHI Score)",
            y = "Retention Rate (%)") +
       theme_minimal() +
-      theme(legend.position = "none") # hiding legnd
+      theme(legend.position = "none") # hiding legend
     
     # logic for adding regression line
     if (input$show_line) {
-      p <- p + geom_smooth(method = "lm", color = "black", linetype = "dashed", 
+      p <- p + geom_smooth(method = "lm", 
+                           color = "black", 
+                           formula = y ~ x,
+                           linetype = "dashed", 
                            se = FALSE)
     }
     
