@@ -335,4 +335,21 @@ odbcClose(con)
 save(master_2023, file = "../data/master_2023.RData")
 ```
 
+```{r}
+#| label: master-dataset
+master_data <- bind_rows(
+  master_2019,
+  master_2020,
+  master_2021,
+  master_2022,
+  master_2023
+) |> 
+  # making sure academic years are ordered
+  mutate(academic_year = factor(academic_year, 
+                               levels = c("2019-20", "2020-21", "2021-22", "2022-23", "2023-24")))
 
+
+save(master_data, file = "../data/clean/master_longitudinal.RData")
+write_csv(master_data, "../data/clean/master_longitudinal.csv")
+
+```
