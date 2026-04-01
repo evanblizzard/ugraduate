@@ -56,11 +56,18 @@ ui <- page_navbar(
 
 
 server <- function(input, output) {
-  # reactive filter based on ui selections
+  # reactive filter based on ui selections for Tab 1
   filtered_data <- reactive({
     master_data |> 
       filter(instnm %in% input$peer_select)
   })
+  
+  # reactive filter for Tab 2 (filters by year)
+  hhi_filtered <- reactive({
+    master_data |> 
+      filter(academic_year == input$year_select)
+  })
+  
   # rendering trend_plot
   output$trend_plot <- renderPlotly({
     p <- ggplot(filtered_data(),
@@ -74,6 +81,29 @@ server <- function(input, output) {
       theme_minimal()
     # making ggplot interactive with plotly
     ggplotly(p)
+  })
+  
+  # rendering hhi_scatter plot (Tab 2)
+  output$hhi_scatter <- renderPlotly({
+    # building base plot
+    p <- ggplot(hhi_filtered(),
+                aes(x = hhi_score,
+                    y = ret_pres,
+                    text = instnm)) + 
+      geom_point(aes(color = instnm), size = 3) +
+      labs(x = "Program Specialization (HHI Score)",
+           y = "Retention Rate (%)") +
+      theme_minmal() +
+      theme(legend.position = "none") # hiding legnd
+    
+    # logic for adding regression line
+    if (input$show_line) {
+      p <- p + geom_smooth(method = "lm", color = "black", linetype = "dashed", 
+                           se = FALSE)
+    }
+    
+    # using tooltip = "text" to show institution names on hover
+    ggplotly(p, tooltip = "text")
   })
   
 }
