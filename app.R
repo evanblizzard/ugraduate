@@ -17,7 +17,7 @@ ui <- page_sidebar(
                 choices = unique(master_data$instnm),
                 selected = "American University",
                 multiple = TRUE),
-    selectInput("metric", "Select Metric:",
+    radioButtons("metric", "Select Metric:",
                 choices = c("Retention" = "ret_pres",
                             "Pell %" = "pell_pct",
                             "HHI (Specialization)" = "hhi_score"))
@@ -27,6 +27,26 @@ ui <- page_sidebar(
     plotlyOutput("trend_plot")
   )
 )
+
+nav_panel("Specialization and Retention",
+          layout_sidebar(
+            sidebar = sidebar(
+              selectInput("year_select", "Select Academic Year:",
+                          choices = levels(master_data$academic_year),
+                          selected = "2023-24"),
+              checkboxInput("show_line", "Show Trend Line", value = TRUE)
+            ),
+            card(
+              card_header("Does Specialization Drive Retention?"),
+              plotlyOutput("hhi_scatter"),
+              card_footer("Note: Higher HHI = More Specialized. 
+                          Lower HHI = More Diversified/Generalist.")
+            )
+          )
+        )
+      )
+
+
 
 server <- function(input, output) {
   # reactive filter based on ui selections
@@ -48,6 +68,7 @@ server <- function(input, output) {
     # making ggplot interactive with plotly
     ggplotly(p)
   })
+  
 }
 
 shinyApp(ui, server)
