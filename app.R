@@ -100,7 +100,6 @@ server <- function(input, output) {
     if (input$show_line) {
       p <- p + geom_smooth(method = "lm", 
                            color = "black", 
-                           formula = y ~ x,
                            linetype = "dashed", 
                            se = FALSE)
     }
