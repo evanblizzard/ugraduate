@@ -14,10 +14,12 @@ four_year_control_codes <- c(1L, 2L, 3L)
 
 # After clean_names(), some net price fields appear as npist_2 instead of npist2; map to a single codebook.
 normalize_sfa_net_price_cols <- function(df) {
+  # was getting repeated errors over these being "not found" so now it just renames all of them to be the same 
   if (!"npist2" %in% names(df) && "npist_2" %in% names(df)) df <- df |> rename(npist2 = npist_2)
   if (!"npgrn2" %in% names(df) && "npgrn_2" %in% names(df)) df <- df |> rename(npgrn2 = npgrn_2)
   if (!"npis412" %in% names(df) && "npis_412" %in% names(df)) df <- df |> rename(npis412 = npis_412)
   if (!"npgr412" %in% names(df) && "npgr_412" %in% names(df)) df <- df |> rename(npgr412 = npgr_412)
+  # safety check that fills a required column with NA if it can't be found (shouldn't really be used)
   for (nm in c("npist2", "npgrn2", "npis412", "npgr412")) {
     if (!nm %in% names(df)) df[[nm]] <- NA_real_
   }
@@ -29,21 +31,25 @@ add_net_price_by_control <- function(df) {
   df |>
     mutate(
       .ctrl = as.integer(control),
+      # creates a temporary control variable 
+      # use public variable (npist2) if control is 1
+      # use private variable (npgrn2) if control is 2
       net_price_avg = case_when(
         .ctrl == 1L ~ npist2,
         .ctrl %in% c(2L, 3L) ~ npgrn2,
         TRUE ~ NA_real_
       ),
+      # same logic for the pell proxy variable
       net_price_avg_pell = case_when(
         .ctrl == 1L ~ npis412,
         .ctrl %in% c(2L, 3L) ~ npgr412,
         TRUE ~ NA_real_
       )
     ) |>
+    # remove the temporary control and the original source columns
     select(-.ctrl, -any_of(c("npist2", "npgrn2", "npis412", "npgr412")))
 }
 
-db_path <- normalizePath("../data_raw/IPEDS201920.accdb")
 ```
 
 ```{r}
@@ -63,6 +69,9 @@ target_ids <- c(
 db_path <- normalizePath("../data_raw/IPEDS201920.accdb")
 con <- odbcConnectAccess2007(db_path)
 
+# fetches raw tables from database
+# this is a separate step because i was figuring out .accdb files
+# combined for all future years
 institutional_chars <- sqlFetch(con, "HD2019")
 student_financial_aid <- sqlFetch(con, "SFA1819_P1")
 student_financial_aid_2 <- sqlFetch(con, "SFA1819_P2")
@@ -71,11 +80,13 @@ retention <- sqlFetch(con, "EF2019D")
 
 inst_clean_2019 <- institutional_chars |>
   clean_names() |>
+  # keep only 4-year schools and valid school types (1,2,3)
   filter(as.integer(iclevel) == 1L, as.integer(control) %in% four_year_control_codes) |>
   select(unitid, instnm, city, stabbr, control)
 
 ret_clean_2019 <- retention |>
   clean_names() |>
+  # using semi_join to make sure we only keep schools that survived the inst_clean filter
   semi_join(inst_clean_2019, by = "unitid") |>
   select(unitid, ret_pres = ret_pcf)
 
@@ -85,36 +96,40 @@ aid_p1_clean <- student_financial_aid |>
   select(unitid, pell_pct = pgrnt_p)
 
 aid_p2_clean <- student_financial_aid_2 |>
-  clean_names(numerals = "asis") |>
+  clean_names(numerals = "asis") |> # keep the numbers in the names so selection doesn't break
   semi_join(inst_clean_2019, by = "unitid") |>
-  normalize_sfa_net_price_cols() |>
+  normalize_sfa_net_price_cols() |> # use the helper function
   select(unitid, npist2, npgrn2, npis412, npgr412)
 
+# merging both aid tables
 aid_final_2019 <- aid_p1_clean |>
   left_join(aid_p2_clean, by = "unitid")
 
+
+# calculating hhi 
 hhi_2019 <- fall_enrollment_cip |>
   clean_names() |>
   semi_join(inst_clean_2019, by = "unitid") |>
-  filter(awlevel == 5) |>
-  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |>
+  filter(awlevel == 5) |> # filtering for only bachelor's degrees
+  mutate(cip_2 = str_sub(as.character(cipcode), 1, 2)) |> # get the broad 2 digit CIP codes
   group_by(unitid, cip_2) |>
-  summarize(dept_total = sum(ctotalt), .groups = "drop_last") |>
-  mutate(share = dept_total / sum(dept_total)) |>
-  summarize(hhi_score = sum(share^2)) |>
+  summarize(dept_total = sum(ctotalt), .groups = "drop_last") |> 
+  mutate(share = dept_total / sum(dept_total)) |> # calculate % of students in each major
+  summarize(hhi_score = sum(share^2)) |> # square and sum per the hhi formula 
   ungroup()
 
+# final join into one big 2019 dataset
 master_2019 <- inst_clean_2019 |>
   left_join(ret_clean_2019, by = "unitid") |>
   left_join(aid_final_2019, by = "unitid") |>
   left_join(hhi_2019, by = "unitid") |>
   add_net_price_by_control() |>
   mutate(academic_year = "2019-20")
-
+# closing connection and saving
 odbcClose(con)
 save(master_2019, file = "../master_2019.RData")
 ```
-
+All data below follows the exact same steps as above except 2023-24.
 # 2020-2021 Data Extraction
 
 ```{r}
@@ -292,6 +307,9 @@ ret_2023 <- sqlFetch(con, "EF2023D") |>
 # Net price is in SFA2223_P2 for this release; ensure unitid column exists.
 aid_p1_2023 <- sqlFetch(con, "SFA2223_P2") |>
   clean_names(numerals = "asis")
+
+# a bit of defensive coding because they changed unitid to unit_id for just some tables
+# :(
 if (!"unitid" %in% names(aid_p1_2023) && "unit_id" %in% names(aid_p1_2023)) {
   aid_p1_2023 <- aid_p1_2023 |> rename(unitid = unit_id)
 }
@@ -339,6 +357,8 @@ save(master_2023, file = "../data/master_2023.RData")
 
 ```{r}
 #| label: master-dataset
+
+# final combination of all years, ensuring years are ordered
 master_data <- bind_rows(
   master_2019,
   master_2020,
