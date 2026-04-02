@@ -5,6 +5,7 @@
 library(shiny)
 library(bslib)
 library(plotly)
+library(dplyr)
 
 data <- load("data/master_data.RData")
 
