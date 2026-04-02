@@ -18,10 +18,20 @@ ui <- page_navbar(
     title = "Institutional Trends",
     layout_sidebar(
       sidebar = sidebar(
-        selectInput("peer_select", "Select Peer Institution:",
-                    choices = unique(master_data$instnm),
-                    selected = "American University",
-                    multiple = TRUE),
+        # step 1: sector filtering
+        checkboxGroupInput("filter_control", "1. Select Sector:",
+                    choices = c("Public" = 1, 
+                                "Private Nonprofit" = 2, 
+                                "Private For-Profit" = 3),
+                                selected = c(1,2)), 
+        # step 2: state filtering dependent on sector
+        uiOutput("state_selector"),
+        # step 3: institution filtering dependent on sector
+        uiOutput("school_selector"),
+        
+        hr(), # line break
+                    
+                    
         radioButtons("metric", "Select Metric:",
                      choices = c("Retention" = "ret_pres",
                                  "Pell %" = "pell_pct",
@@ -56,16 +66,48 @@ ui <- page_navbar(
 
 
 server <- function(input, output) {
-  # reactive filter based on ui selections for Tab 1
-  filtered_data <- reactive({
-    master_data |> 
-      filter(instnm %in% input$peer_select)
+  # generate state list based on sector choice
+  output$state_selector <- renderUI({
+    states <- master_data |> 
+      filter(as.integer(control) %in% input$filter_control) |> 
+      pull(stabbr) |> unique() |> sort()
+    
+    selectInput("filter_state", "2. Select State(s):",
+                choices = states, multiple = TRUE, selected = "DC")
+    
   })
   
-  # reactive filter for Tab 2 (filters by year)
-  hhi_filtered <- reactive({
+  # generate school list based on sector AND state
+  output$school_selector <- renderUI({
+    req(input$filter_state) # only show if state is picked
+    
+    schools <- master_data |> 
+      filter(as.integer(control) %in% input$filter_control,
+             stabbr %in% input$filter_state) |> 
+      pull(instnm) |> unique() |> sort()
+  
+  
+  selectizeInput("peer_select", "3. Select Peer Institution(s):",
+                 choices = schools,
+                 selected = schools[1],
+                 multiple = TRUE,
+                 options = list(placeholder = "Type to search"))
+  })
+  filtered_data <- reactive({
+    req(input$peer_select)
     master_data |> 
-      filter(academic_year == input$year_select)
+      filter(instnm %in% input$peer_select) |> 
+      filter(!is.na(.data[[input$metric]]))
+  })
+  # reactive filter for Tab 2 (filters by year and peer selection)
+  hhi_filtered <- reactive({
+    req(input$peer_select, input$year_select)
+    
+    master_data |> 
+      filter(academic_year == input$year_select,
+             instnm %in% input$peer_select) |> 
+      # NEW: Ensure both variables for the scatter plot are present
+      filter(!is.na(hhi_score), !is.na(ret_pres))
   })
   
   # rendering trend_plot
