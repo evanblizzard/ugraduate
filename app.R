@@ -8,6 +8,7 @@ library(bslib)
 library(plotly)
 library(dplyr) # Added this to fix the error I was seeing that said 
 # could not find function "pull"
+library(ggplot2)
 
 data <- load("data/master_data.RData")
 
@@ -27,26 +28,13 @@ ui <- page_sidebar(
   # Making sidebar global
   sidebar = sidebar(
     checkboxGroupInput("filter_control", "1. Select Sector:",
-                       choices = c("Public = 1", 
+                       choices = c("Public" = 1, 
                                    "Private Nonprofit" = 2,
                                    "Private For-Profit" = 3),
                        selected = c(1,2)),
     uiOutput("state_selector"),
-    uiOutput("school_selector"),
+    uiOutput("school_selector")
     
-    hr(),
-    
-    radioButtons("metric", "Trend metric:",
-                 choices = c("Retention"                = "ret_pres",
-                             "Pell %"                   = "pell_pct",
-                             "HHI (Specialization)" = "hhi_score")),
-    
-    hr(),
-    
-    selectInput("year_select", "Scatter year:",
-                choices = levels(master_data$academic_year),
-                selected = "2023-24"),
-    checkboxInput("show_line", "Show trend line", value = TRUE)
   ),
   
   navset_card_underline(
@@ -88,7 +76,9 @@ ui <- page_sidebar(
           card_footer("")
         )
       )
-    ),
+    )
+  )
+)
 
 
 server <- function(input, output) {
