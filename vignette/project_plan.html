@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Evan, Natalie, and Myles">
 
-<title>Project Plan</title>
+<title>Progress Report</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +21,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="project_plan_files/libs/clipboard/clipboard.min.js"></script>
@@ -54,26 +35,72 @@ div.csl-indent {
 <link href="project_plan_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="project_plan_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="project_plan_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="project_plan_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="project_plan_files/libs/bootstrap/bootstrap-4d7f0bce1131f3e5f9547cd857cfbfc8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<style>html{ scroll-behavior: smooth; }</style>
 
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#app-graduateau" id="toc-app-graduateau" class="nav-link active" data-scroll-target="#app-graduateau"><span class="header-section-number">1</span> App: GraduateAU</a>
+  <ul class="collapse">
+  <li><a href="#topic-and-data" id="toc-topic-and-data" class="nav-link" data-scroll-target="#topic-and-data"><span class="header-section-number">1.1</span> Topic and Data</a>
+  <ul class="collapse">
+  <li><a href="#problem-statement-and-context" id="toc-problem-statement-and-context" class="nav-link" data-scroll-target="#problem-statement-and-context"><span class="header-section-number">1.1.1</span> Problem Statement and Context</a></li>
+  <li><a href="#status-and-key-takeaways-from-the-literature-review-at-least-3-sources" id="toc-status-and-key-takeaways-from-the-literature-review-at-least-3-sources" class="nav-link" data-scroll-target="#status-and-key-takeaways-from-the-literature-review-at-least-3-sources"><span class="header-section-number">1.1.2</span> Status and key takeaways from the Literature Review (at least 3 sources)</a></li>
+  <li><a href="#proposed-data-sources" id="toc-proposed-data-sources" class="nav-link" data-scroll-target="#proposed-data-sources"><span class="header-section-number">1.1.3</span> Proposed Data Sources</a></li>
+  </ul></li>
+  <li><a href="#use-case" id="toc-use-case" class="nav-link" data-scroll-target="#use-case"><span class="header-section-number">1.2</span> Use Case</a>
+  <ul class="collapse">
+  <li><a href="#use-case-and-actor-description" id="toc-use-case-and-actor-description" class="nav-link" data-scroll-target="#use-case-and-actor-description"><span class="header-section-number">1.2.1</span> Use Case and Actor Description</a></li>
+  <li><a href="#actor-questions-of-interest" id="toc-actor-questions-of-interest" class="nav-link" data-scroll-target="#actor-questions-of-interest"><span class="header-section-number">1.2.2</span> Actor Questions of Interest</a></li>
+  <li><a href="#anticipated-actor-workflow" id="toc-anticipated-actor-workflow" class="nav-link" data-scroll-target="#anticipated-actor-workflow"><span class="header-section-number">1.2.3</span> Anticipated Actor Workflow</a></li>
+  </ul></li>
+  <li><a href="#ethical-review-and-code-of-conduct" id="toc-ethical-review-and-code-of-conduct" class="nav-link" data-scroll-target="#ethical-review-and-code-of-conduct"><span class="header-section-number">1.3</span> Ethical Review and Code of Conduct</a></li>
+  <li><a href="#app-concept" id="toc-app-concept" class="nav-link" data-scroll-target="#app-concept"><span class="header-section-number">1.4</span> App Concept</a>
+  <ul class="collapse">
+  <li><a href="#general-app-layout" id="toc-general-app-layout" class="nav-link" data-scroll-target="#general-app-layout"><span class="header-section-number">1.4.1</span> General App Layout</a></li>
+  <li><a href="#planned-options-for-user-data-selection-and-manipulation" id="toc-planned-options-for-user-data-selection-and-manipulation" class="nav-link" data-scroll-target="#planned-options-for-user-data-selection-and-manipulation"><span class="header-section-number">1.4.2</span> Planned Options for User Data Selection and Manipulation</a></li>
+  <li><a href="#planned-options-for-user-exploratory-numericalgraphical-analysis" id="toc-planned-options-for-user-exploratory-numericalgraphical-analysis" class="nav-link" data-scroll-target="#planned-options-for-user-exploratory-numericalgraphical-analysis"><span class="header-section-number">1.4.3</span> Planned Options for User Exploratory numerical/graphical analysis</a></li>
+  <li><a href="#planned-options-for-user-statistical-models-and-tests" id="toc-planned-options-for-user-statistical-models-and-tests" class="nav-link" data-scroll-target="#planned-options-for-user-statistical-models-and-tests"><span class="header-section-number">1.4.4</span> Planned Options for User Statistical Models and Tests</a></li>
+  <li><a href="#designbranding" id="toc-designbranding" class="nav-link" data-scroll-target="#designbranding"><span class="header-section-number">1.4.5</span> Design/Branding</a></li>
+  </ul></li>
+  <li><a href="#collaboration" id="toc-collaboration" class="nav-link" data-scroll-target="#collaboration"><span class="header-section-number">1.5</span> Collaboration</a>
+  <ul class="collapse">
+  <li><a href="#names-and-responsibilities-for-group-members" id="toc-names-and-responsibilities-for-group-members" class="nav-link" data-scroll-target="#names-and-responsibilities-for-group-members"><span class="header-section-number">1.5.1</span> Names and Responsibilities for Group Members</a></li>
+  <li><a href="#approach-to-team-workflow-collaboration-and-branching" id="toc-approach-to-team-workflow-collaboration-and-branching" class="nav-link" data-scroll-target="#approach-to-team-workflow-collaboration-and-branching"><span class="header-section-number">1.5.2</span> Approach to Team Workflow: Collaboration and Branching</a></li>
+  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule"><span class="header-section-number">1.5.3</span> Schedule</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project Plan</h1>
+<h1 class="title">Progress Report</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Evan, Natalie, and Myles </p>
+          </div>
+  </div>
     
   
     
@@ -84,24 +111,24 @@ div.csl-indent {
 </header>
 
 
-<section id="app-graduateau" class="level1">
-<h1>App: GraduateAU</h1>
+<section id="app-graduateau" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> App: GraduateAU</h1>
 <p>by Evan Blizzard, Myles Nwatu, Natalie Cope</p>
 <p>DATA-413</p>
-<section id="topic-and-data" class="level2">
-<h2 class="anchored" data-anchor-id="topic-and-data">Topic and Data</h2>
-<section id="problem-statement-and-context" class="level3">
-<h3 class="anchored" data-anchor-id="problem-statement-and-context">Problem Statement and Context</h3>
+<section id="topic-and-data" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="topic-and-data"><span class="header-section-number">1.1</span> Topic and Data</h2>
+<section id="problem-statement-and-context" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="problem-statement-and-context"><span class="header-section-number">1.1.1</span> Problem Statement and Context</h3>
 <p>American University’s Office of Institutional Research and Assessment (OIRA) publishes the Academic Data Reference Book (ADRB) as the university’s official source for longitudinal student data, which is essential for university planning and academic assessment. While the 2025 ADRB provides a reliable snapshot oof enrollment, student profiles, retention, and graduation rates, the data is currently delivered in a static 127-page PDF format. This is a barrier to data accessibility, making it difficult for prospective and current students, faculty, and administrators to perform department-specific comparisons or visualize the data over time. This Shiny application addresses the problem by transforming the static tables in the ADRB into an interactive tool, enabling users to filter and visualize how AU’s academic data has evolved from 2019 to 2025.</p>
 </section>
-<section id="status-and-key-takeaways-from-the-literature-review-at-least-3-sources" class="level3">
-<h3 class="anchored" data-anchor-id="status-and-key-takeaways-from-the-literature-review-at-least-3-sources">Status and key takeaways from the Literature Review (at least 3 sources)</h3>
+<section id="status-and-key-takeaways-from-the-literature-review-at-least-3-sources" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="status-and-key-takeaways-from-the-literature-review-at-least-3-sources"><span class="header-section-number">1.1.2</span> Status and key takeaways from the Literature Review (at least 3 sources)</h3>
 <p>GraduateAU assesses a real issue when it comes to deciding what school to commit yourself to during your time at university: How can I maximize my experience and get the best degree based on my interests, career aspirations, and competition amongst other students?&nbsp; GraduateAU is meant to act as a resource for prospective students and their parents when deciding the next steps in the college journey.&nbsp;</p>
-<p>Graduation and retention rates are ways of assessing the success of a university. According to the National Center for Education Statistics, graduation rate is the percentage of full-time undergraduate students who complete their program across a specific time period <span class="citation" data-cites="nces_retention">(<a href="#ref-nces_retention" role="doc-biblioref">National Center for Education Statistics 2026</a>)</span>. However, according to an annual report done by the National Student Clearinghouse Research Center, studies show that undergraduates have been steadily completing college in six years by roughly 60%, and eight-year completions by roughly 65% <span class="citation" data-cites="nscrc_yearly_2026">(<a href="#ref-nscrc_yearly_2026" role="doc-biblioref">National Student Clearinghouse Research Center 2026</a>)</span>. College is taking longer and longer to complete, and getting more and more expensive. The Education Data Initiative is a subset of the work done by a small group of researchers at EducationData.org, that aims to collect data to be used to better understand the U.S. education system by organizing their findings in an accessible, comprehensive fashion. In a recent report published in November of 2025, they’ve found that college tuition has increased by 36.8% since 2020 and is projected to increase again by 3.25% for the 2026-2027 academic year <span class="citation" data-cites="education_data_inflation">(<a href="#ref-education_data_inflation" role="doc-biblioref">EducationData.org 2026</a>)</span>.</p>
-<p>Alternatively, retention rates are the percentage of first-time undergraduates who return to the same institution the following fall, meaning that students are coming back instead of transferring to another academic institution or dropping out of secondary education entirely <span class="citation" data-cites="nces_retention">(<a href="#ref-nces_retention" role="doc-biblioref">National Center for Education Statistics 2026</a>)</span>. An overview done by Hanover Research, a data-driven consulting organization, stated how retention rates are a, “reflection of an institution’s ability to support students academically, socially, and financially <span class="citation" data-cites="lynn_2025">(<a href="#ref-lynn_2025" role="doc-biblioref">Lynn 2025</a>)</span>. High retention rates for an academic institution can signal to investors, and parents that the university has infrastructure to support its students. Lower retention rates can give the impression that a misalignment between university administrators and student needs, financial challenges or ineffective student engagement <span class="citation" data-cites="lynn_2025">(<a href="#ref-lynn_2025" role="doc-biblioref">Lynn 2025</a>)</span>. Watermark, a consulting firm focused on providing strategies for instructors and academic institutions cited social isolation, unmet expectations, poor academic fit, and financial barriers as some of their top reasons for why undergraduate students transfer before their second year <span class="citation" data-cites="watermark_transfer">(<a href="#ref-watermark_transfer" role="doc-biblioref">Watermark Insights 2026</a>)</span>.</p>
+<p>Graduation and retention rates are ways of assessing the success of a university. According to the National Center for Education Statistics, graduation rate is the percentage of full-time undergraduate students who complete their program across a specific time period <span class="citation" data-cites="nces_retention">[@nces_retention]</span>. However, according to an annual report done by the National Student Clearinghouse Research Center, studies show that undergraduates have been steadily completing college in six years by roughly 60%, and eight-year completions by roughly 65% <span class="citation" data-cites="nscrc_yearly_2026">[@nscrc_yearly_2026]</span>. College is taking longer and longer to complete, and getting more and more expensive. The Education Data Initiative is a subset of the work done by a small group of researchers at EducationData.org, that aims to collect data to be used to better understand the U.S. education system by organizing their findings in an accessible, comprehensive fashion. In a recent report published in November of 2025, they’ve found that college tuition has increased by 36.8% since 2020 and is projected to increase again by 3.25% for the 2026-2027 academic year <span class="citation" data-cites="education_data_inflation">[@education_data_inflation]</span>.</p>
+<p>Alternatively, retention rates are the percentage of first-time undergraduates who return to the same institution the following fall, meaning that students are coming back instead of transferring to another academic institution or dropping out of secondary education entirely <span class="citation" data-cites="nces_retention">[@nces_retention]</span>. An overview done by Hanover Research, a data-driven consulting organization, stated how retention rates are a, “reflection of an institution’s ability to support students academically, socially, and financially <span class="citation" data-cites="lynn_2025">[@lynn_2025]</span>. High retention rates for an academic institution can signal to investors, and parents that the university has infrastructure to support its students. Lower retention rates can give the impression that a misalignment between university administrators and student needs, financial challenges or ineffective student engagement <span class="citation" data-cites="lynn_2025">[@lynn_2025]</span>. Watermark, a consulting firm focused on providing strategies for instructors and academic institutions cited social isolation, unmet expectations, poor academic fit, and financial barriers as some of their top reasons for why undergraduate students transfer before their second year <span class="citation" data-cites="watermark_transfer">[@watermark_transfer]</span>.</p>
 </section>
-<section id="proposed-data-sources" class="level3">
-<h3 class="anchored" data-anchor-id="proposed-data-sources">Proposed Data Sources</h3>
+<section id="proposed-data-sources" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="proposed-data-sources"><span class="header-section-number">1.1.3</span> Proposed Data Sources</h3>
 <ul>
 <li><p>Source: American University Academic Data Reference Book (ADRB) 2025-2026</p></li>
 <li><p><a href="https://www.american.edu/provost/oira/academic-data-reference-book.cfm">Link: Academic Data Reference Book | OIRA</a></p></li>
@@ -110,10 +137,10 @@ div.csl-indent {
 </ul>
 </section>
 </section>
-<section id="use-case" class="level2">
-<h2 class="anchored" data-anchor-id="use-case">Use Case</h2>
-<section id="use-case-and-actor-description" class="level3">
-<h3 class="anchored" data-anchor-id="use-case-and-actor-description">Use Case and Actor Description</h3>
+<section id="use-case" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="use-case"><span class="header-section-number">1.2</span> Use Case</h2>
+<section id="use-case-and-actor-description" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="use-case-and-actor-description"><span class="header-section-number">1.2.1</span> Use Case and Actor Description</h3>
 <ul>
 <li><p><strong>Primary Actor: Academic Administrators</strong></p>
 <ul>
@@ -129,8 +156,8 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="actor-questions-of-interest" class="level3">
-<h3 class="anchored" data-anchor-id="actor-questions-of-interest">Actor Questions of Interest</h3>
+<section id="actor-questions-of-interest" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="actor-questions-of-interest"><span class="header-section-number">1.2.2</span> Actor Questions of Interest</h3>
 <ul>
 <li><p>How has the total enrollment in a department changed over the last six years compared to the university-wide growth rate?</p></li>
 <li><p>Is the increase in secondary majors in a program significant enough to justify additional teaching assistants?</p></li>
@@ -141,70 +168,70 @@ div.csl-indent {
 <li><p>Are there specific years where a department experienced a statistically significant drop in retention?</p></li>
 </ul>
 </section>
-<section id="anticipated-actor-workflow" class="level3">
-<h3 class="anchored" data-anchor-id="anticipated-actor-workflow">Anticipated Actor Workflow</h3>
+<section id="anticipated-actor-workflow" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="anticipated-actor-workflow"><span class="header-section-number">1.2.3</span> Anticipated Actor Workflow</h3>
 <p>Our app is designed to support an exploratory workflow.</p>
-<section id="contextualization-overview" class="level4">
-<h4 class="anchored" data-anchor-id="contextualization-overview">1. Contextualization (Overview)</h4>
+<section id="contextualization-overview" class="level4" data-number="1.2.3.1">
+<h4 data-number="1.2.3.1" class="anchored" data-anchor-id="contextualization-overview"><span class="header-section-number">1.2.3.1</span> 1. Contextualization (Overview)</h4>
 <ul>
 <li>The user would begin by reviewing an About Section to understand the scope of the data and AU’s specific data definitions.</li>
 </ul>
 </section>
-<section id="data-filtering-sidebar" class="level4">
-<h4 class="anchored" data-anchor-id="data-filtering-sidebar">2. Data Filtering (Sidebar)</h4>
+<section id="data-filtering-sidebar" class="level4" data-number="1.2.3.2">
+<h4 data-number="1.2.3.2" class="anchored" data-anchor-id="data-filtering-sidebar"><span class="header-section-number">1.2.3.2</span> 2. Data Filtering (Sidebar)</h4>
 <ul>
 <li>The user would use the Sidebar to set their parameters: School/College, Specific Major, and Timeframe. This ensures all subsequent tabs reflect the subset of data of interest to the actor.</li>
 </ul>
 </section>
-<section id="trend-exploration-enrollment-and-degree-tabs" class="level4">
-<h4 class="anchored" data-anchor-id="trend-exploration-enrollment-and-degree-tabs">3. Trend Exploration (Enrollment and Degree Tabs)</h4>
+<section id="trend-exploration-enrollment-and-degree-tabs" class="level4" data-number="1.2.3.3">
+<h4 data-number="1.2.3.3" class="anchored" data-anchor-id="trend-exploration-enrollment-and-degree-tabs"><span class="header-section-number">1.2.3.3</span> 3. Trend Exploration (Enrollment and Degree Tabs)</h4>
 <ul>
 <li><p>Academic Administrators would navigate to the enrollment trends tab to analyze shifts via interactive line charts and review Year-over-year growth tables.</p></li>
 <li><p>Current students would move to the degrees conferred tab to view stacked bar charts that illustrate the popularity and outcome of their chosen major compared to other programs.</p></li>
 </ul>
 </section>
-<section id="deeper-analysis-student-lifecycle-tab" class="level4">
-<h4 class="anchored" data-anchor-id="deeper-analysis-student-lifecycle-tab">4. Deeper Analysis (Student Lifecycle tab)</h4>
+<section id="deeper-analysis-student-lifecycle-tab" class="level4" data-number="1.2.3.4">
+<h4 data-number="1.2.3.4" class="anchored" data-anchor-id="deeper-analysis-student-lifecycle-tab"><span class="header-section-number">1.2.3.4</span> 4. Deeper Analysis (Student Lifecycle tab)</h4>
 <ul>
 <li>Prospective students would examine the “Incoming Profiles”(Freshman vs Transfer) and Retention Rates to gauge the peer environment and of a specific program.</li>
 </ul>
 </section>
-<section id="statistical-validation-models-tab" class="level4">
-<h4 class="anchored" data-anchor-id="statistical-validation-models-tab">5. Statistical Validation (Models tab)</h4>
+<section id="statistical-validation-models-tab" class="level4" data-number="1.2.3.5">
+<h4 data-number="1.2.3.5" class="anchored" data-anchor-id="statistical-validation-models-tab"><span class="header-section-number">1.2.3.5</span> 5. Statistical Validation (Models tab)</h4>
 <ul>
 <li>University researchers would use the statistical models tab to run correlation analysis or perform t-tests/ANOVA to determine if differences in retention rates across colleges are statistically significant.</li>
 </ul>
 </section>
-<section id="reporting-and-methodology" class="level4">
-<h4 class="anchored" data-anchor-id="reporting-and-methodology">6. Reporting and Methodology</h4>
+<section id="reporting-and-methodology" class="level4" data-number="1.2.3.6">
+<h4 data-number="1.2.3.6" class="anchored" data-anchor-id="reporting-and-methodology"><span class="header-section-number">1.2.3.6</span> 6. Reporting and Methodology</h4>
 <ul>
 <li>The workflow would conclude with the user reference an Ethics and Disclaimer section to ensure any insights drawn are cited correctly as a student project and not an official AU administrative report.</li>
 </ul>
 </section>
 </section>
 </section>
-<section id="ethical-review-and-code-of-conduct" class="level2">
-<h2 class="anchored" data-anchor-id="ethical-review-and-code-of-conduct">Ethical Review and Code of Conduct</h2>
+<section id="ethical-review-and-code-of-conduct" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="ethical-review-and-code-of-conduct"><span class="header-section-number">1.3</span> Ethical Review and Code of Conduct</h2>
 <ul>
 <li><p><strong>Data Sourcing &amp; Web Scraping</strong></p>
 <ul>
 <li><p>The data used to make GraduateAU is drawn exclusively from the publicly available Academic Data Reference Book (ADRB), which is published annually by AU’s Office of Institutional Research &amp; Assessment (OIRA). This resource is intended to provide the AU community with reliable and useful information.</p></li>
 <li><p>The ethical risk is relatively low because this project is extracting data from an officially published PDF, rather than scraping a live website or accessing restricted internal systems.</p>
 <ul>
-<li><p>Additionally, the OIRA won’t fulfill data requests from students for non-publicly available data for class-related or personal research purposes, so our project is bound to the scope provided by the ADRB <span class="citation" data-cites="au_oira_request">(<a href="#ref-au_oira_request" role="doc-biblioref">American University Office of Institutional Research and Assessment 2026</a>)</span>.</p></li>
-<li><p>We are also aware of AU’S Responsible Use of University Technology Resources that clearly prohibits individuals from accessing or attempting to access any account, file or software that we don’t have specific authorization for <span class="citation" data-cites="au_it_policy">(<a href="#ref-au_it_policy" role="doc-biblioref">American University 2026</a>)</span>.</p></li>
+<li><p>Additionally, the OIRA won’t fulfill data requests from students for non-publicly available data for class-related or personal research purposes, so our project is bound to the scope provided by the ADRB <span class="citation" data-cites="au_oira_request">[@au_oira_request]</span>.</p></li>
+<li><p>We are also aware of AU’S Responsible Use of University Technology Resources that clearly prohibits individuals from accessing or attempting to access any account, file or software that we don’t have specific authorization for <span class="citation" data-cites="au_it_policy">[@au_it_policy]</span>.</p></li>
 </ul></li>
 </ul></li>
 <li><p>FERPA &amp; Student Privacy</p>
 <ul>
-<li><p>The most significant ethical consideration for GraduateAU is compliance with the Family Educational Rights and Privacy Act (FERPA), which protects the privacy of students’ education records, and affords students rights including access to their records, and disclosure only with consent except in certain circumstances <span class="citation" data-cites="ferpa_privacy">(<a href="#ref-ferpa_privacy" role="doc-biblioref">U.S. Department of Education 2026</a>)</span>.</p>
+<li><p>The most significant ethical consideration for GraduateAU is compliance with the Family Educational Rights and Privacy Act (FERPA), which protects the privacy of students’ education records, and affords students rights including access to their records, and disclosure only with consent except in certain circumstances <span class="citation" data-cites="ferpa_privacy">[@ferpa_privacy]</span>.</p>
 <ul>
 <li>While the ADRB presents aggregated rather than individual student data, FERPA considerations still apply when the data is broken down into smaller groups. Our team will be cautious in making sure that our statistical data doesn’t contain information that would personally identify a student.&nbsp;</li>
 </ul></li>
 </ul></li>
 <li><p>AU Data Classification Policy</p>
 <ul>
-<li><p>AU’s Data Classification Policy&nbsp;gives more perspective and guidance that’s relevant to this project. This policy outlines the governance for privacy, security, and integrity of university data (especially confidential data) and the responsibilities of institutional units and individuals, regardless of where the data resides <span class="citation" data-cites="au_data_classification">(<a href="#ref-au_data_classification" role="doc-biblioref">American University n.d.</a>)</span>.</p>
+<li><p>AU’s Data Classification Policy&nbsp;gives more perspective and guidance that’s relevant to this project. This policy outlines the governance for privacy, security, and integrity of university data (especially confidential data) and the responsibilities of institutional units and individuals, regardless of where the data resides <span class="citation" data-cites="au_data_classification">[@au_data_classification]</span>.</p>
 <ul>
 <li>The policy classifies all university data into three tiers (Confidential, Official Use Only, and Unrestricted), because the ADRB data is posted publicly by OIRA, it falls under the Unrestricted category. However, we can’t combine with outside data sources because it could increase sensitivity.</li>
 </ul></li>
@@ -217,7 +244,7 @@ div.csl-indent {
 <ul>
 <li><p>AU’s Office of Research Integrity states that it, “promotes the responsible conduct of research with high standards of ethics and accountability in planning, implementation, behavior, and information dissemination.”</p>
 <ul>
-<li>Our team will make sure to document what we’ve done with the data so that it’s reproducible and aligns with the set standard of the ORI, and that we clearly cite where the data is from on the app’s interface <span class="citation" data-cites="au_ori">(<a href="#ref-au_ori" role="doc-biblioref">American University Office of Research Integrity 2026</a>)</span>.</li>
+<li>Our team will make sure to document what we’ve done with the data so that it’s reproducible and aligns with the set standard of the ORI, and that we clearly cite where the data is from on the app’s interface <span class="citation" data-cites="au_ori">[@au_ori]</span>.</li>
 </ul></li>
 </ul></li>
 <li><p>Code of Conduct Summary</p>
@@ -230,21 +257,21 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="app-concept" class="level2">
-<h2 class="anchored" data-anchor-id="app-concept">App Concept</h2>
-<section id="general-app-layout" class="level3">
-<h3 class="anchored" data-anchor-id="general-app-layout">General App Layout</h3>
+<section id="app-concept" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="app-concept"><span class="header-section-number">1.4</span> App Concept</h2>
+<section id="general-app-layout" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="general-app-layout"><span class="header-section-number">1.4.1</span> General App Layout</h3>
 </section>
-<section id="planned-options-for-user-data-selection-and-manipulation" class="level3">
-<h3 class="anchored" data-anchor-id="planned-options-for-user-data-selection-and-manipulation">Planned Options for User Data Selection and Manipulation</h3>
+<section id="planned-options-for-user-data-selection-and-manipulation" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="planned-options-for-user-data-selection-and-manipulation"><span class="header-section-number">1.4.2</span> Planned Options for User Data Selection and Manipulation</h3>
 <p>The application will use a sidebar for reactive data control.</p>
 <ul>
 <li><p><strong>Variable Selection</strong>: selectInput and checkboxGroupInput menus will let users filter by School/College, Major, and Student Status</p></li>
 <li><p><strong>Time frame Control:</strong> A sliderInput will let users subset the year range.</p></li>
 </ul>
 </section>
-<section id="planned-options-for-user-exploratory-numericalgraphical-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="planned-options-for-user-exploratory-numericalgraphical-analysis">Planned Options for User Exploratory numerical/graphical analysis</h3>
+<section id="planned-options-for-user-exploratory-numericalgraphical-analysis" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="planned-options-for-user-exploratory-numericalgraphical-analysis"><span class="header-section-number">1.4.3</span> Planned Options for User Exploratory numerical/graphical analysis</h3>
 <p>Each tab will function as a different exploratory tab for the different ADRB sections.</p>
 <ul>
 <li><p><strong>Enrollment Trends:</strong> Users can perform graphical analysis of enrollment data.</p>
@@ -262,25 +289,25 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="planned-options-for-user-statistical-models-and-tests" class="level3">
-<h3 class="anchored" data-anchor-id="planned-options-for-user-statistical-models-and-tests">Planned Options for User Statistical Models and Tests</h3>
+<section id="planned-options-for-user-statistical-models-and-tests" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="planned-options-for-user-statistical-models-and-tests"><span class="header-section-number">1.4.4</span> Planned Options for User Statistical Models and Tests</h3>
 <p>The statistical models tab will allow for users to perform hypothesis testing.</p>
 <ul>
 <li><p><strong>Correlation Analysis:</strong> A reactive scatterplot where users can select two variables to visualize relationships with an overlaid linear regression.</p></li>
 <li><p><strong>Comparative Testing:</strong> A t-test or ANOVA summary table to statistically compare mean retention rates across different schools/colleges to identify significant differences in student success.</p></li>
 </ul>
 </section>
-<section id="designbranding" class="level3">
-<h3 class="anchored" data-anchor-id="designbranding">Design/Branding</h3>
+<section id="designbranding" class="level3" data-number="1.4.5">
+<h3 data-number="1.4.5" class="anchored" data-anchor-id="designbranding"><span class="header-section-number">1.4.5</span> Design/Branding</h3>
 <ul>
 <li><strong>Aesthetics:</strong> UI will be customized to implement AU’s color palette.</li>
 </ul>
 </section>
 </section>
-<section id="collaboration" class="level2">
-<h2 class="anchored" data-anchor-id="collaboration">Collaboration</h2>
-<section id="names-and-responsibilities-for-group-members" class="level3">
-<h3 class="anchored" data-anchor-id="names-and-responsibilities-for-group-members">Names and Responsibilities for Group Members</h3>
+<section id="collaboration" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="collaboration"><span class="header-section-number">1.5</span> Collaboration</h2>
+<section id="names-and-responsibilities-for-group-members" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="names-and-responsibilities-for-group-members"><span class="header-section-number">1.5.1</span> Names and Responsibilities for Group Members</h3>
 <p>Evan Blizzard:</p>
 <ul>
 <li><p>Initial data wrangling/scraping</p></li>
@@ -300,14 +327,14 @@ div.csl-indent {
 </ul>
 <p>All members are responsible for peer reviewing code. No changes should be merged to main without at least one other group member’s approval.</p>
 </section>
-<section id="approach-to-team-workflow-collaboration-and-branching" class="level3">
-<h3 class="anchored" data-anchor-id="approach-to-team-workflow-collaboration-and-branching">Approach to Team Workflow: Collaboration and Branching</h3>
+<section id="approach-to-team-workflow-collaboration-and-branching" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="approach-to-team-workflow-collaboration-and-branching"><span class="header-section-number">1.5.2</span> Approach to Team Workflow: Collaboration and Branching</h3>
 <p>Our team will use a basic GitHub workflow to ensure integrity of the main branch. Each member will create feature-specific branches (e.g., data-wrangling, ui-design, stats-modeling) to work on individual components. Integration will occur via pull requests, requiring at least one peer review to check for code functionality before merging. We will use GitHub Issues to assign tasks and track progress over our timeline.</p>
 </section>
-<section id="schedule" class="level3">
-<h3 class="anchored" data-anchor-id="schedule">Schedule</h3>
-<section id="week-1-0319-0326" class="level4">
-<h4 class="anchored" data-anchor-id="week-1-0319-0326">Week 1 (03/19-03/26)</h4>
+<section id="schedule" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" class="anchored" data-anchor-id="schedule"><span class="header-section-number">1.5.3</span> Schedule</h3>
+<section id="week-1-0319-0326" class="level4" data-number="1.5.3.1">
+<h4 data-number="1.5.3.1" class="anchored" data-anchor-id="week-1-0319-0326"><span class="header-section-number">1.5.3.1</span> Week 1 (03/19-03/26)</h4>
 <ul>
 <li><p><strong>Tasks:</strong></p>
 <ul>
@@ -320,8 +347,8 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="week-2-0326-402" class="level4">
-<h4 class="anchored" data-anchor-id="week-2-0326-402">Week 2 (03/26-4/02)</h4>
+<section id="week-2-0326-402" class="level4" data-number="1.5.3.2">
+<h4 data-number="1.5.3.2" class="anchored" data-anchor-id="week-2-0326-402"><span class="header-section-number">1.5.3.2</span> Week 2 (03/26-4/02)</h4>
 <ul>
 <li><p><strong>Goal:</strong> Build basic app navigation and initial visualizations</p></li>
 <li><p><strong>Tasks:</strong></p>
@@ -333,8 +360,8 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="week-3-0402-0409" class="level4">
-<h4 class="anchored" data-anchor-id="week-3-0402-0409">Week 3 (04/02-04/09)</h4>
+<section id="week-3-0402-0409" class="level4" data-number="1.5.3.3">
+<h4 data-number="1.5.3.3" class="anchored" data-anchor-id="week-3-0402-0409"><span class="header-section-number">1.5.3.3</span> Week 3 (04/02-04/09)</h4>
 <ul>
 <li><p><strong>Goal:</strong> Incorporate “Incoming Degree Students” and “Retention” data</p></li>
 <li><p><strong>Tasks:</strong></p>
@@ -359,8 +386,8 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="week-4-0409-0416" class="level4">
-<h4 class="anchored" data-anchor-id="week-4-0409-0416">Week 4 (04/09-04/16)</h4>
+<section id="week-4-0409-0416" class="level4" data-number="1.5.3.4">
+<h4 data-number="1.5.3.4" class="anchored" data-anchor-id="week-4-0409-0416"><span class="header-section-number">1.5.3.4</span> Week 4 (04/09-04/16)</h4>
 <ul>
 <li><p><strong>Goal:</strong> Incorporate “Degrees Awarded” data and statistical modeling</p></li>
 <li><p><strong>Tasks:</strong></p>
@@ -371,8 +398,8 @@ div.csl-indent {
 </ul></li>
 </ul>
 </section>
-<section id="week-5-0416-0423" class="level4">
-<h4 class="anchored" data-anchor-id="week-5-0416-0423">Week 5 (04/16-04/23)</h4>
+<section id="week-5-0416-0423" class="level4" data-number="1.5.3.5">
+<h4 data-number="1.5.3.5" class="anchored" data-anchor-id="week-5-0416-0423"><span class="header-section-number">1.5.3.5</span> Week 5 (04/16-04/23)</h4>
 <ul>
 <li><p><strong>Goal:</strong> Methodology documentation and final UI tweaks</p></li>
 <li><p><strong>Tasks:</strong></p>
@@ -382,44 +409,12 @@ div.csl-indent {
 <li><p>Stress testing (if necessary)</p></li>
 </ul></li>
 </ul>
-
 </section>
 </section>
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-au_data_classification" class="csl-entry" role="listitem">
-American University. n.d. <span>“Data Classification Policy.”</span> Internal Policy Document.
-</div>
-<div id="ref-au_it_policy" class="csl-entry" role="listitem">
-———. 2026. <span>“Responsible Use of University Technology Resources Policy.”</span> <a href="https://www.american.edu/policies/information-technology/responsible-use-of-university-technology-resources-policy.cfm" class="uri">https://www.american.edu/policies/information-technology/responsible-use-of-university-technology-resources-policy.cfm</a>.
-</div>
-<div id="ref-au_oira_request" class="csl-entry" role="listitem">
-American University Office of Institutional Research and Assessment. 2026. <span>“Data Request from <span>OIRA</span>.”</span> <a href="https://www.american.edu/provost/oira/data-request.cfm" class="uri">https://www.american.edu/provost/oira/data-request.cfm</a>.
-</div>
-<div id="ref-au_ori" class="csl-entry" role="listitem">
-American University Office of Research Integrity. 2026. <span>“Office of Research Integrity.”</span> <a href="https://www.american.edu/research/ori-about-us.cfm" class="uri">https://www.american.edu/research/ori-about-us.cfm</a>.
-</div>
-<div id="ref-education_data_inflation" class="csl-entry" role="listitem">
-EducationData.org. 2026. <span>“College Tuition Inflation [2025]: Rate Increase Statistics.”</span> <a href="https://educationdata.org/college-tuition-inflation-rate" class="uri">https://educationdata.org/college-tuition-inflation-rate</a>.
-</div>
-<div id="ref-lynn_2025" class="csl-entry" role="listitem">
-Lynn, Martha. 2025. <span>“Unlocking Student Success: Proven Strategies to Increase College Student Retention.”</span> Hanover Research. October 31, 2025. <a href="https://www.hanoverresearch.com/insights-blog/higher-education/increase-college-student-retention/">https://www.hanoverresearch.com/insights-blog/higher-education/increase-college-student-retention/</a>.
-</div>
-<div id="ref-nces_retention" class="csl-entry" role="listitem">
-National Center for Education Statistics. 2026. <span>“<span>COE</span> - Undergraduate Retention and Graduation Rates.”</span> <a href="https://nces.ed.gov/programs/coe/indicator/ctr/undergrad-retention-graduation" class="uri">https://nces.ed.gov/programs/coe/indicator/ctr/undergrad-retention-graduation</a>.
-</div>
-<div id="ref-nscrc_yearly_2026" class="csl-entry" role="listitem">
-National Student Clearinghouse Research Center. 2026. <span>“Yearly Progress and Completion.”</span> <a href="https://nscresearchcenter.org/yearly-progress-and-completion/" class="uri">https://nscresearchcenter.org/yearly-progress-and-completion/</a>.
-</div>
-<div id="ref-ferpa_privacy" class="csl-entry" role="listitem">
-U.S. Department of Education. 2026. <span>“What Is <span>FERPA</span>? | Protecting Student Privacy.”</span> <a href="https://studentprivacy.ed.gov/faq/what-ferpa" class="uri">https://studentprivacy.ed.gov/faq/what-ferpa</a>.
-</div>
-<div id="ref-watermark_transfer" class="csl-entry" role="listitem">
-Watermark Insights. 2026. <span>“Reasons Students Transfer and What Your Institution Can Do.”</span> 2026. <a href="https://www.watermarkinsights.com/resources/blog/top-reasons-why-students-transfer-and-what-your-institution-can-do/">https://www.watermarkinsights.com/resources/blog/top-reasons-why-students-transfer-and-what-your-institution-can-do/</a>.
-</div>
-</div></section></div></main>
+</main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -826,4 +821,5 @@ Watermark Insights. 2026. <span>“Reasons Students Transfer and What Your Insti
 
 
 
+<script src="project_plan_files/libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

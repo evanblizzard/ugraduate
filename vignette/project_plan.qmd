@@ -1,5 +1,4 @@
 ---
----
 title: "Progress Report"
 author: "Evan, Natalie, and Myles"
 format:
