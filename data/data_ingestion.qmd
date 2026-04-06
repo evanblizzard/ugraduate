@@ -54,14 +54,13 @@ add_net_price_by_control <- function(df) {
 # function for admissions data
 # pulls admission rate and raw counts from the ADM table
 # DVADM01 is IPEDS percent admitted; negative codes = missing / not applicable
-# BUGFIX: the cleaned + semi_joined table must be assigned back to df — otherwise df is still
-#   the raw ODBC frame (columns like APPLCN), so names(df) never sees dvadm01/applcn and select() fails.
 clean_adm <- function(df, inst_clean) {
   df <- df |>
     clean_names() |>
-    semi_join(inst_clean, by = "unitid")
-
-  if ("dvadm01" %in% names(df)) {
+    semi_join(inst_clean, by = "unitid") #doing cleaning
+  # checking if dvadm01 exists in the table
+  # if it exists, use directly, if not calculate admissions rate manually
+  if ("dvadm01" %in% names(df)) { 
     df <- df |>
       mutate(admit_rate = if_else(dvadm01 < 0, NA_real_, dvadm01))
   } else {
@@ -69,9 +68,6 @@ clean_adm <- function(df, inst_clean) {
       mutate(admit_rate = if_else(applcn > 0, (admssn / applcn) * 100, NA_real_))
   }
 
-  # If a vintage omits count columns, avoid select() errors
-  if (!"applcn" %in% names(df)) df$applcn <- NA_real_
-  if (!"admssn" %in% names(df)) df$admssn <- NA_real_
 
   df |>
     select(unitid, applicants = applcn, admissions = admssn, admit_rate)
@@ -153,16 +149,14 @@ master_2019 <- inst_clean_2019 |>
   left_join(ret_clean_2019, by = "unitid") |>
   left_join(aid_final_2019, by = "unitid") |>
   left_join(hhi_2019, by = "unitid") |>
-  left_join(adm_clean_2019, by = "unitid")
+  left_join(adm_clean_2019, by = "unitid") |> 
   add_net_price_by_control() |>
   mutate(academic_year = "2019-20")
 # closing connection and saving
 odbcClose(con)
 save(master_2019, file = "../master_2019.RData")
 ```
-```{r}
-sqlFetch(con, "ADM2019") |> clean_names() |> names()
-```
+
 All data below follows the exact same steps as above except 2023-24.
 # 2020-2021 Data Extraction
 
@@ -193,6 +187,9 @@ aid_p2_2020 <- sqlFetch(con, "SFA1920_P2") |>
   normalize_sfa_net_price_cols() |>
   select(unitid, npist2, npgrn2, npis412, npgr412)
 
+adm_clean_2020 <- sqlFetch(con, "ADM2020") |> 
+  clean_adm(inst_2020)
+
 hhi_2020 <- sqlFetch(con, "C2020_A") |>
   clean_names() |>
   semi_join(inst_2020, by = "unitid") |>
@@ -209,6 +206,7 @@ master_2020 <- inst_2020 |>
   left_join(aid_p1_2020, by = "unitid") |>
   left_join(aid_p2_2020, by = "unitid") |>
   left_join(hhi_2020, by = "unitid") |>
+  left_join(adm_clean_2020, by = "unitid") |> 
   add_net_price_by_control() |>
   mutate(academic_year = "2020-21")
 
@@ -245,6 +243,9 @@ aid_p2_2021 <- sqlFetch(con, "SFA2021_P2") |>
   normalize_sfa_net_price_cols() |>
   select(unitid, npist2, npgrn2, npis412, npgr412)
 
+adm_clean_2021 <- sqlFetch(con, "ADM2021") |> 
+  clean_adm(inst_2021)
+
 hhi_2021 <- sqlFetch(con, "C2021_A") |>
   clean_names() |>
   semi_join(inst_2021, by = "unitid") |>
@@ -261,6 +262,7 @@ master_2021 <- inst_2021 |>
   left_join(aid_p1_2021, by = "unitid") |>
   left_join(aid_p2_2021, by = "unitid") |>
   left_join(hhi_2021, by = "unitid") |>
+  left_join(adm_clean_2020, by = "unitid") |> 
   add_net_price_by_control() |>
   mutate(academic_year = "2021-22")
 
@@ -297,6 +299,9 @@ aid_p2_2022 <- sqlFetch(con, "SFA2122_P2") |>
   normalize_sfa_net_price_cols() |>
   select(unitid, npist2, npgrn2, npis412, npgr412)
 
+adm_clean_2022 <- sqlFetch(con, "ADM2022") |> 
+  clean_adm(inst_2022)
+
 hhi_2022 <- sqlFetch(con, "C2022_A") |>
   clean_names() |>
   semi_join(inst_2022, by = "unitid") |>
@@ -313,6 +318,7 @@ master_2022 <- inst_2022 |>
   left_join(aid_p1_2022, by = "unitid") |>
   left_join(aid_p2_2022, by = "unitid") |>
   left_join(hhi_2022, by = "unitid") |>
+  left_join(adm_clean_2022, by = "unitid") |> 
   add_net_price_by_control() |>
   mutate(academic_year = "2022-23")
 
@@ -367,6 +373,10 @@ aid_p2_2023 <- aid_p2_2023 |>
   semi_join(inst_2023, by = "unitid") |>
   select(unitid, pell_pct = upgrntp)
 
+
+adm_clean_2023 <- sqlFetch(con, "ADM2023") |> 
+  clean_adm(inst_2023)
+
 hhi_2023 <- sqlFetch(con, "C2023_A") |>
   clean_names() |>
   semi_join(inst_2023, by = "unitid") |>
@@ -382,6 +392,7 @@ master_2023 <- inst_2023 |>
   left_join(aid_p1_2023, by = "unitid") |>
   left_join(aid_p2_2023, by = "unitid") |>
   left_join(hhi_2023, by = "unitid") |>
+  left_join(adm_clean_2023, by = "unitid") |> 
   add_net_price_by_control() |>
   mutate(academic_year = "2023-24")
 
