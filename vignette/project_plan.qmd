@@ -1,9 +1,15 @@
 ---
-title: "Project Plan"
-bibliography: references.bib
-format: html
-editor: visual
-embedded-resources: true
+---
+title: "Progress Report"
+author: "Evan, Natalie, and Myles"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-title: "Contents"
+    toc-location: left
+    number-sections: true
+    smooth-scroll: true
 ---
 
 # App: GraduateAU
