@@ -50,6 +50,21 @@ add_net_price_by_control <- function(df) {
     select(-.ctrl, -any_of(c("npist2", "npgrn2", "npis412", "npgr412")))
 }
 
+
+# function for admissions data
+# pulls admission rate and raw counts from the ADM table
+# DVADM01 is IPED's Percent Admitted Variable
+# IPED's uses negative values for missing/na values
+clean_adm <- function(df, inst_clean) {
+  df |> 
+    clean_names() |> 
+    semi_join(inst_clean, by = "unitid") |> 
+    select(unitid,
+           applicants = applcn,
+           admissions = admssn,
+           admit_rate = dvadm01) |> 
+    mutate(admit_rate = if_else(admit_rate < 0, NA_real_, admit_rate))
+}
 ```
 
 ```{r}
