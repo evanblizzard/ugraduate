@@ -1,6 +1,14 @@
 ---
-title: "progress_report"
-format: html
+title: "Progress Report"
+author: "Evan, Natalie, and Myles"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-title: "Contents"
+    toc-location: left
+    number-sections: true
+    smooth-scroll: true
 ---
 
 # Topic and Data

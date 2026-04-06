@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>progress_report</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="progress_report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="progress_report_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="progress_report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="progress_report_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="progress_report_files/libs/quarto-html/popper.min.js"></script>
+<script src="progress_report_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="progress_report_files/libs/quarto-html/anchor.min.js"></script>
+<link href="progress_report_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="progress_report_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="progress_report_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="progress_report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="progress_report_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">progress_report</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="topic-and-data" class="level1">
+<h1>Topic and Data</h1>
+<section id="updates-to-context" class="level2">
+<h2 class="anchored" data-anchor-id="updates-to-context">Updates to Context</h2>
+<p>Initially, our project was based on AU’s static Academic Data Reference Book (ADRB). We have incorporated Professor Ressler’s feedback that the ADRB is “not well-suited for meaningful analysis” due to its single institution scope and inconsistent table structures.</p>
+</section>
+<section id="updates-to-problem" class="level2">
+<h2 class="anchored" data-anchor-id="updates-to-problem">Updates to Problem</h2>
+<p>Thus, we have pivoted the context from a just AU point-of-view to a multi-institutional one. The problem is now: “How does university student success (retention) compare to peer institutions when controlled for cost, financial aid profiles, and program specialization?” We are now utilizing the U.S. Department of Education’s IPEDS database because of its comprehensive longitudinal data.</p>
+</section>
+<section id="updates-to-use-case" class="level2">
+<h2 class="anchored" data-anchor-id="updates-to-use-case">Updates to Use Case</h2>
+<p>Our primary actors of administrators and secondary actors of students remains the same. However, their use cases have expanded.</p>
+<ul>
+<li><p><strong>Institutional Peer Bench Marking</strong>: Administrators are no longer limited to internal department trends. Ideally, they will be able to identify a set of “peer schools” using Euclidean distance to see if their institution’s retention gaps among Pell Grant recipients vs non-recipients are unique or reflect broad trends.</p></li>
+<li><p><strong>Program Strength:</strong> Users can now analyze Program Strength relative to other schools by examining HHI scores.</p></li>
+</ul>
+</section>
+<section id="updates-to-data-sources" class="level2">
+<h2 class="anchored" data-anchor-id="updates-to-data-sources">Updates to Data Sources</h2>
+<p>IPEDS data is now the source for our app.</p>
+<section id="variable-overview" class="level3">
+<h3 class="anchored" data-anchor-id="variable-overview">Variable Overview:</h3>
+<p>Currently, our variables include the following:</p>
+<section id="institutional-identifierscharacteristics" class="level4">
+<h4 class="anchored" data-anchor-id="institutional-identifierscharacteristics">Institutional Identifiers/Characteristics</h4>
+<ul>
+<li><p>unitid: A unique identification number assigned to every postsecondary institution.</p></li>
+<li><p>instnm: The official name of the institution.</p></li>
+<li><p>stabbr: The state abbreviation for where the institution is located.</p></li>
+<li><p>Control: Classification of the institution (Public, Private nonprofit, Private for-profit)</p></li>
+</ul>
+</section>
+<section id="retention-and-student-success" class="level4">
+<h4 class="anchored" data-anchor-id="retention-and-student-success">Retention and Student Success:</h4>
+<ul>
+<li><p>ret_pres: The percentage of first-time, full-time degree-seeking undergrads from the previous fall who are enrolled again in the current fall</p></li>
+<li><p>pell_pct: The same statistic as above, but for Pell Grant recipients</p></li>
+<li><p>net_price_avg: The average net price for students receiving regular forms of aid (loans, scholarship, etc.)</p></li>
+<li><p>net_price_pell_avg: There was no variable specifically for the average net price for Pell recipients, so the average net price for students on 0-30k income was used as a proxy.</p></li>
+<li><p>hhi_score: Calculated value representing program concentration of universities. Sum of the squares of the shares of each CIP code’s enrollment.</p>
+<ul>
+<li><p>Number of students in a specific 2-digit CIP code / total number of students at university</p>
+<ul>
+<li>Then squared and summed.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="modeling-and-benchmark-variables" class="level4">
+<h4 class="anchored" data-anchor-id="modeling-and-benchmark-variables">Modeling and Benchmark Variables</h4>
+<ul>
+<li>Ideally we will also create a Euclidean distance metric. Not yet implemented.</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+<section id="update-of-ethics-review" class="level1">
+<h1>Update of Ethics Review</h1>
+<section id="data-source-ipeds-and-public-federal-data" class="level3">
+<h3 class="anchored" data-anchor-id="data-source-ipeds-and-public-federal-data">Data Source: IPEDS and Public Federal Data</h3>
+<p>The project’s pivot to IPEDS substantially changes the data sourcing ethics. IPEDS is a publicly available federal data-set published by the National Center for Education Statistics (NCES). [<a href="https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds%5D">https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds]</a></p>
+<p>IPEDS is reputable source for describing institutional, state, and national trends in post-secondary education and for providing students and families with unbiased consumer information.</p>
+<p>Because IPEDS is a federally mandated reporting system that institutions are legally required to contribute to, there are no restrictions on its use for research or educational purposes. This data is intentionally designed to be publicly downloaded and anlyzed. No web-scraping of live systems is involved, and no access-restricted databases are being queried.</p>
+</section>
+<section id="ferpa-and-aggregated-federal-data" class="level3">
+<h3 class="anchored" data-anchor-id="ferpa-and-aggregated-federal-data">FERPA and Aggregated Federal Data</h3>
+<p>IPEDS reports institution-level aggregated data rather than individual student records; FERPA’s core protections around individual student privacy are not directly implication in the same way as with internal university data. Statistical data complications that do not contain information that would personally identify a student are not considered education records under FERPA. [<a href="https://www.american.edu/counsel/ferpa.cfm%5D">https://www.american.edu/counsel/ferpa.cfm]</a></p>
+<p>IPEDS is considered to comply with this standard. Nevertheless, the team should remain mindful that some smaller, or more specialized, institutions, may have very small Pell recipient cohorts, which could make disaggregated breakdowns sensitive. The cell suppression policy ( masking data where cohort sizes fall below 10) remains the best practice work retaining from the original code of conduct.</p>
+</section>
+<section id="program-specialization-the-hhi" class="level3">
+<h3 class="anchored" data-anchor-id="program-specialization-the-hhi">Program Specialization &amp; the HHI</h3>
+<p>The Herfindahl-Hirschman Index (HHI) is a measurement tool originally designed by economists to track how competitive a market is. A high HHI score means most students are graduating from just one or two subject areas, while a low score means degrees are spread more evenly across many different fields. This is a creative analytical choice, but it comes with an important responsibility to be upfront with users about what the number actually means.</p>
+<p>To be ethically responsible, the app’s “About” tab should explain how HHI is calculated, acknowledge that it was adapted from economics rather than designed for education, and make clear that it is a descriptive tool for understanding program structure rather than a rating of institutional quality.</p>
+</section>
+</section>
+<section id="update-of-app-design" class="level1">
+<h1>Update of App Design</h1>
+<section id="options-for-user-data-selection" class="level2">
+<h2 class="anchored" data-anchor-id="options-for-user-data-selection">Options for User Data Selection</h2>
+<ul>
+<li><p>Sector Selection: A selectInput that lets users filter the IPEDS dataset by type of institution</p></li>
+<li><p>State Filtering: A multi-select menu to subset institution type by state</p></li>
+<li><p>School Filtering: A searchable menu that to add specific schools that fall under the above filters.</p></li>
+<li><p>Metric selection: Lets users select between overall retention rate, pell retention rate, and average net price.</p></li>
+<li><p>We would like a “Find My Peers” button that performs the Euclidean distance calculation between the selected school and the rest of the filtered dataset.</p>
+<ul>
+<li>Not yet implemented</li>
+</ul></li>
+</ul>
+</section>
+<section id="options-for-exploratory-numerical-and-graphical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="options-for-exploratory-numerical-and-graphical-analysis">Options for Exploratory Numerical and Graphical Analysis</h2>
+<ul>
+<li>Current functionality:
+<ul>
+<li><strong>Institutional Retention Trends:</strong> Interactive plotly line charts that plot either retention rate, pell retention rate, or HHI over time for selected institutions.</li>
+<li><strong>Programmatic Specialization (HHI) Scatter Plot:</strong> A visualization that displays the HHI scores against retention rates.
+<ul>
+<li>Currently, there appears to be very little correlation, so this feature would likely be improved if users could scatter whichever variables they like.</li>
+</ul></li>
+</ul></li>
+<li>Ideal Functionality:
+<ul>
+<li><strong>Data Tables:</strong> Filterable tables to show raw numerical values for retention, net price, HHI, and potentially admission
+<ul>
+<li>We would have to add admission data to the current master_data file</li>
+</ul></li>
+<li><strong>Retention Gap Analysis:</strong> A grouped bar chart comparing Overall Retention vs.&nbsp;Pell Student Retention</li>
+<li><strong>Selectivity vs Outcome Modeling:</strong> A scatterplot with a regression comparing admission to retention
+<ul>
+<li>This could be incorporated into the current HHI Scatter tab.</li>
+</ul></li>
+<li><strong>Euclidean Distance:</strong> A plot representing Euclidean distance of peer schools.
+<ul>
+<li>Could use a cluster plot</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="updates-to-responsibilities" class="level1">
+<h1>Updates to Responsibilities</h1>
+<ul>
+<li><p><strong>Evan</strong> remains the main person for data ingestion.</p>
+<ul>
+<li><p>Also working on data selection and filtering.</p></li>
+<li><p>Peer reviewing Natalie’s pull requests before merging.</p></li>
+</ul></li>
+<li><p><strong>Natalie</strong> is working primarily on adding visualizations and extra filters where necessary.</p></li>
+<li><p>Myles is responsible for keeping up with code of ethics withiin the bounds of this project, and is helping Natalie with visualizations.</p></li>
+</ul>
+</section>
+<section id="risk-assessment" class="level1">
+<h1>Risk Assessment</h1>
+<p>The only major problem run into so far is problems with data ingestion. Some variables are named differently across different years and are located in different tables. This was able to be resolved with some light LLM usage to help review the exhaustive codebooks, but if more variables need to be added, this could be a bit of a time sink.</p>
+</section>
+<section id="updates-to-schedule" class="level1">
+<h1>Updates to Schedule</h1>
+<section id="week-2-0326-0402" class="level2">
+<h2 class="anchored" data-anchor-id="week-2-0326-0402">Week 2 (03/26-04/02)</h2>
+<ul>
+<li><p><strong>Tasks:</strong></p>
+<ul>
+<li><p><strong>Goal 1:</strong> Data ingestion of most essential variables for a barebones version of the app.</p>
+<ul>
+<li><strong>Deliverable 1:</strong> Data extraction script and a master dataset. (<strong>Achieved)</strong></li>
+</ul></li>
+<li><p><strong>Goal 2:</strong> Build basic app navigation and initial visualizations.</p>
+<ul>
+<li><strong>Deliverable</strong> <strong>2:</strong> Version 1 of the app with working filters for type of school, state, and school as well as filters for retention, Pell retention, and HHI score. (<strong>Achieved)</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="week-3-0402-0409" class="level2">
+<h2 class="anchored" data-anchor-id="week-3-0402-0409">Week 3 (04/02-04/09)</h2>
+<ul>
+<li><p><strong>Goal:</strong> Implement the automated peer discover using “unsupervised learning methods” suggested by Professor Ressler (likely k-means)</p>
+<ul>
+<li><p><strong>Tasks:</strong></p>
+<ul>
+<li><p><strong>Data Normalization:</strong> Write the “one line of code” to scale and normalize all metrics (Net Price, % Pell, Admissions Rate, HHI)</p></li>
+<li><p><strong>Ingestion Update:</strong> Get Admissions data into master dataset</p></li>
+<li><p><strong>Euclidean Distance:</strong> Develop the business logic function to calculate “closeness” of other institutions to a user-selected school</p></li>
+<li><p><strong>Peer Discovery UI:</strong> Add a tab where users can view top 5-10 most similar institutions</p></li>
+</ul></li>
+<li><p><strong>Deliverable:</strong> Version 2 of app with a functional peer benchmarking tool</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="week-4-0409-0416" class="level2">
+<h2 class="anchored" data-anchor-id="week-4-0409-0416">Week 4 (04/09-04/16)</h2>
+<ul>
+<li><p><strong>Goal:</strong> Analysis of drivers of undergraduate retention and HHI</p>
+<ul>
+<li><p><strong>Tasks:</strong></p>
+<ul>
+<li><strong>Retention Regression Model:</strong> Build and test a multivariate model with Bachelor’s retention as a function of variables like cost, selectivity, and HHI</li>
+</ul></li>
+<li><p><strong>Deliverable:</strong> Version 3 of app with retention modeling</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="week-5-0416-0423" class="level2">
+<h2 class="anchored" data-anchor-id="week-5-0416-0423">Week 5 (04/16-04/23)</h2>
+<ul>
+<li><p><strong>Goal:</strong> Finalize methodology documentation and user resources like a variable dictionary and a landing page with data sourcing info</p>
+<ul>
+<li><p><strong>Tasks:</strong></p>
+<ul>
+<li><p><strong>Vignette Drafting:</strong> Write the 5-7 page technical vignette</p></li>
+<li><p><strong>Metadata:</strong> Create an about tab with variable definitions and ethics disclaimer</p></li>
+<li><p><strong>UI Polishing:</strong> Ensure all plots make sense and answer the intended questions.</p></li>
+</ul></li>
+<li><p><strong>Deliverable:</strong> Final app submission with vignette.</p></li>
+</ul></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
