@@ -175,7 +175,8 @@ server <- function(input, output) {
                            aes(x = .data[[x_var]], y = .data[[y_var]]),
                            method = "lm",
                            color = "black",
-                           linetype = "dashed",
+                           alpha = 0.4,
+                           linewidth = 0.5,
                            se = FALSE)
     }
     ggplotly(p, tooltip = "text")
