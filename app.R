@@ -13,68 +13,95 @@ data <- load("data/master_data.RData")
 
 
 ## Begin User Interface Section
-ui <- page_navbar(
+ui <- page_sidebar(
   title = "AU Retention & Peer Benchmarking",
+  # Making sidebar global
+  sidebar = sidebar(
+    checkboxGroupInput("filter_control", "1. Select Sector:",
+                       choices = c("Public = 1", 
+                                   "Private Nonprofit" = 2,
+                                   "Private For-Profit" = 3),
+                       selected = c(1,2)),
+    uiOutput("state_selector"),
+    uiOutput("school_selector"),
+    
+    hr(),
+    
+    radioButtons("metric", "Trend metric:",
+                 choices = c("Retention"                = "ret_pres",
+                             "Pell %"                   = "pell_pct",
+                             "HHI (Specialization)" = "hhi_score")),
+    
+    hr(),
+    
+    selectInput("year_select", "Scatter year:",
+                choices = levels(master_data$academic_year),
+                selected = "2023-24"),
+    checkboxInput("show_line", "Show trend line", value = TRUE)
+  ),
   
+  navset_card_underline(
+
   # TAB 1: Trends
-  nav_panel(
-    title = "Institutional Trends",
-    layout_sidebar(
-      sidebar = sidebar(
-        checkboxGroupInput("filter_control", "1. Select Sector:",
-                           choices = c("Public" = 1, 
-                                       "Private Nonprofit" = 2, 
-                                       "Private For-Profit" = 3),
-                           selected = c(1,2)), 
-        uiOutput("state_selector"),
-        uiOutput("school_selector"),
-        
-        hr(),
-        
-        radioButtons("metric", "Select Metric:",
-                     choices = c("Retention" = "ret_pres",
-                                 "Pell %" = "pell_pct",
-                                 "HHI (Specialization)" = "hhi_score"))
-      ),
-      card(
-        card_header("Trend Over Time"),
-        plotlyOutput("trend_plot")
+    nav_panel(
+      title = "Institutional Trends",
+      layout_sidebar(
+        sidebar = sidebar(
+          checkboxGroupInput("filter_control", "1. Select Sector:",
+                             choices = c("Public" = 1, 
+                                         "Private Nonprofit" = 2, 
+                                         "Private For-Profit" = 3),
+                             selected = c(1,2)), 
+          uiOutput("state_selector"),
+          uiOutput("school_selector"),
+          
+          hr(),
+          
+          radioButtons("metric", "Select Metric:",
+                       choices = c("Retention" = "ret_pres",
+                                   "Pell %" = "pell_pct",
+                                   "HHI (Specialization)" = "hhi_score"))
+        ),
+        card(
+          card_header("Trend Over Time"),
+          plotlyOutput("trend_plot")
+        )
       )
-    )
-  ),
-  
-  # TAB 2: HHI vs Retention
-  nav_panel(
-    title = "Specialization and Retention",
-    layout_sidebar(
-      sidebar = sidebar(
-        selectInput("year_select", "Select Academic Year:",
-                    choices = levels(master_data$academic_year),
-                    selected = "2023-24"),
-        checkboxInput("show_line", "Show Trend Line", value = TRUE)
-      ),
-      card(
-        card_header("Does Specialization Drive Retention?"),
-        plotlyOutput("hhi_scatter"),
-        card_footer("Note: Higher HHI = More Specialized. Lower HHI = More Diversified/Generalist.")
+    ),
+    
+    # TAB 2: HHI vs Retention
+    nav_panel(
+      title = "Specialization and Retention",
+      layout_sidebar(
+        sidebar = sidebar(
+          selectInput("year_select", "Select Academic Year:",
+                      choices = levels(master_data$academic_year),
+                      selected = "2023-24"),
+          checkboxInput("show_line", "Show Trend Line", value = TRUE)
+        ),
+        card(
+          card_header("Does Specialization Drive Retention?"),
+          plotlyOutput("hhi_scatter"),
+          card_footer("Note: Higher HHI = More Specialized. Lower HHI = More Diversified/Generalist.")
+        )
       )
-    )
-  ),
-  
-  # ➕ NEW TAB 3: Pell vs Retention
-  nav_panel(
-    title = "Pell and Retention",
-    layout_sidebar(
-      sidebar = sidebar(
-        selectInput("year_select_pell", "Select Academic Year:",
-                    choices = levels(master_data$academic_year),
-                    selected = "2023-24"),
-        checkboxInput("show_line_pell", "Show Trend Line", value = TRUE)
-      ),
-      card(
-        card_header("Is Financial Aid Associated with Retention?"),
-        plotlyOutput("pell_scatter"),
-        card_footer("Note: Pell % is used as a proxy for financial aid / income diversity.")
+    ),
+    
+    # ➕ NEW TAB 3: Pell vs Retention
+    nav_panel(
+      title = "Pell and Retention",
+      layout_sidebar(
+        sidebar = sidebar(
+          selectInput("year_select_pell", "Select Academic Year:",
+                      choices = levels(master_data$academic_year),
+                      selected = "2023-24"),
+          checkboxInput("show_line_pell", "Show Trend Line", value = TRUE)
+        ),
+        card(
+          card_header("Is Financial Aid Associated with Retention?"),
+          plotlyOutput("pell_scatter"),
+          card_footer("Note: Pell % is used as a proxy for financial aid / income diversity.")
+        )
       )
     )
   )
