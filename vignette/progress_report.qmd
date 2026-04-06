@@ -71,7 +71,7 @@ Currently, our variables include the following:
 
 ### Data Source: IPEDS and Public Federal Data
 
-The project’s pivot to IPEDS substantially changes the data sourcing ethics. IPEDS is a publicly available federal data-set published by the National Center for Education Statistics (NCES). \[[https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds\]](https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds])
+The project’s pivot to IPEDS substantially changes the data sourcing ethics. IPEDS is a publicly available federal data-set published by the National Center for Education Statistics (NCES). \[<https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds%5D>
 
 IPEDS is reputable source for describing institutional, state, and national trends in post-secondary education and for providing students and families with unbiased consumer information.
 
@@ -79,7 +79,7 @@ Because IPEDS is a federally mandated reporting system that institutions are leg
 
 ### FERPA and Aggregated Federal Data
 
-IPEDS reports institution-level aggregated data rather than individual student records; FERPA’s core protections around individual student privacy are not directly implication in the same way as with internal university data. Statistical data complications that do not contain information that would personally identify a student are not considered education records under FERPA. \[[https://www.american.edu/counsel/ferpa.cfm\]](https://www.american.edu/counsel/ferpa.cfm])
+IPEDS reports institution-level aggregated data rather than individual student records; FERPA’s core protections around individual student privacy are not directly implication in the same way as with internal university data. Statistical data complications that do not contain information that would personally identify a student are not considered education records under FERPA. \[<https://www.american.edu/counsel/ferpa.cfm%5D>
 
 IPEDS is considered to comply with this standard. Nevertheless, the team should remain mindful that some smaller, or more specialized, institutions, may have very small Pell recipient cohorts, which could make disaggregated breakdowns sensitive. The cell suppression policy ( masking data where cohort sizes fall below 10) remains the best practice work retaining from the original code of conduct.
 
