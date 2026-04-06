@@ -53,23 +53,34 @@ add_net_price_by_control <- function(df) {
 
 # function for admissions data
 # pulls admission rate and raw counts from the ADM table
-# DVADM01 is IPED's Percent Admitted Variable
-# IPED's uses negative values for missing/na values
+# DVADM01 is IPEDS percent admitted; negative codes = missing / not applicable
+# BUGFIX: the cleaned + semi_joined table must be assigned back to df — otherwise df is still
+#   the raw ODBC frame (columns like APPLCN), so names(df) never sees dvadm01/applcn and select() fails.
 clean_adm <- function(df, inst_clean) {
-  df |> 
-    clean_names() |> 
-    semi_join(inst_clean, by = "unitid") |> 
-    select(unitid,
-           applicants = applcn,
-           admissions = admssn,
-           admit_rate = dvadm01) |> 
-    mutate(admit_rate = if_else(admit_rate < 0, NA_real_, admit_rate))
+  df <- df |>
+    clean_names() |>
+    semi_join(inst_clean, by = "unitid")
+
+  if ("dvadm01" %in% names(df)) {
+    df <- df |>
+      mutate(admit_rate = if_else(dvadm01 < 0, NA_real_, dvadm01))
+  } else {
+    df <- df |>
+      mutate(admit_rate = if_else(applcn > 0, (admssn / applcn) * 100, NA_real_))
+  }
+
+  # If a vintage omits count columns, avoid select() errors
+  if (!"applcn" %in% names(df)) df$applcn <- NA_real_
+  if (!"admssn" %in% names(df)) df$admssn <- NA_real_
+
+  df |>
+    select(unitid, applicants = applcn, admissions = admssn, admit_rate)
 }
 ```
 
 ```{r}
 #| label: peer-groups
-# Optional reference list (not used in filters below).
+# Optional reference list (not used in filters below)
 target_ids <- c(
   131159, 131496, 131469, 167358, 164924, 193900, 190150,
   196413, 212051, 160755, 135726, 127060, 216597
@@ -92,6 +103,8 @@ student_financial_aid <- sqlFetch(con, "SFA1819_P1")
 student_financial_aid_2 <- sqlFetch(con, "SFA1819_P2")
 fall_enrollment_cip <- sqlFetch(con, "C2019_A")
 retention <- sqlFetch(con, "EF2019D")
+adm_2019 <- sqlFetch(con, "ADM2019")
+
 
 inst_clean_2019 <- institutional_chars |>
   clean_names() |>
@@ -120,6 +133,8 @@ aid_p2_clean <- student_financial_aid_2 |>
 aid_final_2019 <- aid_p1_clean |>
   left_join(aid_p2_clean, by = "unitid")
 
+adm_clean_2019 <- clean_adm(adm_2019, inst_clean_2019)
+
 
 # calculating hhi 
 hhi_2019 <- fall_enrollment_cip |>
@@ -138,11 +153,15 @@ master_2019 <- inst_clean_2019 |>
   left_join(ret_clean_2019, by = "unitid") |>
   left_join(aid_final_2019, by = "unitid") |>
   left_join(hhi_2019, by = "unitid") |>
+  left_join(adm_clean_2019, by = "unitid")
   add_net_price_by_control() |>
   mutate(academic_year = "2019-20")
 # closing connection and saving
 odbcClose(con)
 save(master_2019, file = "../master_2019.RData")
+```
+```{r}
+sqlFetch(con, "ADM2019") |> clean_names() |> names()
 ```
 All data below follows the exact same steps as above except 2023-24.
 # 2020-2021 Data Extraction
