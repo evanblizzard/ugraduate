@@ -11,6 +11,15 @@ library(dplyr) # Added this to fix the error I was seeing that said
 
 data <- load("data/master_data.RData")
 
+# variables used in multiple places
+metric_choices <- c(
+  "Retention Rate"          = "ret_pres",
+  "Pell %"                  = "pell_pct",
+  "HHI (Specialization)"    = "hhi_score",
+  "Avg Net Price"           = "net_price_avg",
+  "Avg Net Price (Pell)"    = "net_price_avg_pell"
+)
+
 
 ## Begin User Interface Section
 ui <- page_sidebar(
@@ -47,20 +56,8 @@ ui <- page_sidebar(
       title = "Institutional Trends",
       layout_sidebar(
         sidebar = sidebar(
-          checkboxGroupInput("filter_control", "1. Select Sector:",
-                             choices = c("Public" = 1, 
-                                         "Private Nonprofit" = 2, 
-                                         "Private For-Profit" = 3),
-                             selected = c(1,2)), 
-          uiOutput("state_selector"),
-          uiOutput("school_selector"),
-          
-          hr(),
-          
           radioButtons("metric", "Select Metric:",
-                       choices = c("Retention" = "ret_pres",
-                                   "Pell %" = "pell_pct",
-                                   "HHI (Specialization)" = "hhi_score"))
+                       choices = metric_choices)
         ),
         card(
           card_header("Trend Over Time"),
@@ -71,45 +68,31 @@ ui <- page_sidebar(
     
     # TAB 2: HHI vs Retention
     nav_panel(
-      title = "Specialization and Retention",
+      title = "Explore Relationships",
       layout_sidebar(
         sidebar = sidebar(
-          selectInput("year_select", "Select Academic Year:",
+          selectInput("scatter_x", "X-axis:",
+                      choices = metric_choices,
+                      selected = "hhi_score"),
+          selectInput("scatter_y", "Y-axis:",
+                      choices = metric_choices,
+                      selected = "ret_pres"),
+          selectInput("year_select", "Academic Year:",
                       choices = levels(master_data$academic_year),
                       selected = "2023-24"),
           checkboxInput("show_line", "Show Trend Line", value = TRUE)
         ),
         card(
-          card_header("Does Specialization Drive Retention?"),
-          plotlyOutput("hhi_scatter"),
-          card_footer("Note: Higher HHI = More Specialized. Lower HHI = More Diversified/Generalist.")
+          card_header("Relationship Explorer"),
+          plotlyOutput("scatter_plot"),
+          card_footer("")
         )
       )
     ),
-    
-    # ➕ NEW TAB 3: Pell vs Retention
-    nav_panel(
-      title = "Pell and Retention",
-      layout_sidebar(
-        sidebar = sidebar(
-          selectInput("year_select_pell", "Select Academic Year:",
-                      choices = levels(master_data$academic_year),
-                      selected = "2023-24"),
-          checkboxInput("show_line_pell", "Show Trend Line", value = TRUE)
-        ),
-        card(
-          card_header("Is Financial Aid Associated with Retention?"),
-          plotlyOutput("pell_scatter"),
-          card_footer("Note: Pell % is used as a proxy for financial aid / income diversity.")
-        )
-      )
-    )
-  )
-)
 
 
 server <- function(input, output) {
-  
+  # state dropdown based on sector selection
   output$state_selector <- renderUI({
     states <- master_data |> 
       filter(as.integer(control) %in% input$filter_control) |> 
@@ -118,7 +101,7 @@ server <- function(input, output) {
     selectInput("filter_state", "2. Select State(s):",
                 choices = states, multiple = TRUE, selected = "DC")
   })
-  
+  # school dropdown based on sector + state
   output$school_selector <- renderUI({
     req(input$filter_state)
     
@@ -133,7 +116,14 @@ server <- function(input, output) {
                    multiple = TRUE,
                    options = list(placeholder = "Type to search"))
   })
-  
+  # all schools in the sector+state filter
+  background_data <- reactive({
+    req(input$filter_state)
+    master_data |> 
+      filter(as.integer(control) %in% input$filter_control,
+             stabbr %in% input$filter_state)
+  })
+  # just for the trend line data on tab 1
   filtered_data <- reactive({
     req(input$peer_select)
     master_data |> 
@@ -141,26 +131,8 @@ server <- function(input, output) {
       filter(!is.na(.data[[input$metric]]))
   })
   
-  hhi_filtered <- reactive({
-    req(input$peer_select, input$year_select)
-    
-    master_data |> 
-      filter(academic_year == input$year_select,
-             instnm %in% input$peer_select) |> 
-      filter(!is.na(hhi_score), !is.na(ret_pres))
-  })
   
-  # ➕ NEW REACTIVE FOR PELL
-  pell_filtered <- reactive({
-    req(input$peer_select, input$year_select_pell)
-    
-    master_data |> 
-      filter(academic_year == input$year_select_pell,
-             instnm %in% input$peer_select) |> 
-      filter(!is.na(pell_pct), !is.na(ret_pres))
-  })
-  
-  # Trend Plot
+  # Tab 1 Trend Plot
   output$trend_plot <- renderPlotly({
     p <- ggplot(filtered_data(),
                 aes(x = academic_year,
@@ -175,27 +147,9 @@ server <- function(input, output) {
     ggplotly(p)
   })
   
-  # HHI Scatter
-  output$hhi_scatter <- renderPlotly({
-    p <- ggplot(hhi_filtered(),
-                aes(x = hhi_score,
-                    y = ret_pres,
-                    text = instnm)) + 
-      geom_point(aes(color = instnm), size = 3) +
-      labs(x = "Program Specialization (HHI Score)",
-           y = "Retention Rate (%)") +
-      theme_minimal() +
-      theme(legend.position = "none")
-    
-    if (input$show_line) {
-      p <- p + geom_smooth(method = "lm",
-                           color = "black",
-                           linetype = "dashed",
-                           se = FALSE)
-    }
-    
-    ggplotly(p, tooltip = "text")
-  })
+  # Tab 2 scatter explorer
+  # two layers, gray background points (all schools) + colored selected schools
+
   
   # Extra Relationship Tab - Pell Scatter:
   output$pell_scatter <- renderPlotly({
