@@ -149,37 +149,48 @@ server <- function(input, output) {
   
   # Tab 2 scatter explorer
   # two layers, gray background points (all schools) + colored selected schools
-
-  
-  # Extra Relationship Tab - Pell Scatter:
-  output$pell_scatter <- renderPlotly({
+  output$scatter_plot <- renderPlotly({
+    req(input$scatter_x, input$scatter_y, input$year_select)
     
-    p <- ggplot(pell_filtered(),
-                aes(x = pell_pct,
-                    y = ret_pres,
-                    text = instnm)) +
-      
-      
-      # trying to eventually match colors of the institutional trends tab 
-      # color = "#E6550D" is a placeholder
-      geom_point(color = "#E6550D", size = 3, alpha = 0.8) + 
-      labs(
-        x = "Pell Grant Percentage (%)",
-        y = "Retention Rate (%)",
-        title = "Is Financial Aid Associated with Retention?"
-      ) +
-      
-      theme_minimal()
+    x_var <- input$scatter_x
+    y_var <- input$scatter_y
     
-    if (input$show_line_pell) {
-      p <- p + geom_smooth(method = "lm",
+    # full background (all schools meeting filter conditions)
+    bg <- background_data() |> 
+      filter(academic_year == input$year_select) |> 
+      filter(!is.na(.data[[x_var]]), !is.na(.data[[y_var]]))
+    
+    # highlighted (only selected schools)
+    selected <- bg |> 
+      filter(instnm %in% input$peer_select)
+    
+    x_label <- names(metric_choices)[metric_choices == x_var]
+    y_label <- names(metric_choices)[metric_choices == y_var]
+    
+    p <- ggplot() +
+      # first layer: all schools
+      geom_point(data = bg,
+                 aes(x = .data[[x_var]], y = .data[[y_var]], text = instnm),
+                 color = "gray70", size = 2, alpha = 0.5) +
+    # layer 2: all selected schools colored and labeled
+      geom_point(data = selected,
+                 aes(x = .data[[x_var]], y = .data[[y_var]],
+                     color = instnm, text = instnm),
+                 size = 4) +
+        labs(x = x_label, y = y_label, color = "Selected Schools") +
+        theme_minimal()
+    
+    if (input$show_line) {
+      p <- p + geom_smooth(data = bg,
+                           aes(x = .data[[x_var]], y = .data[[y_var]]),
+                           method = "lm",
                            color = "black",
                            linetype = "dashed",
                            se = FALSE)
     }
-    
     ggplotly(p, tooltip = "text")
   })
+
 }
 
 shinyApp(ui, server)
