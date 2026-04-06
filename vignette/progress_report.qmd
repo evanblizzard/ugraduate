@@ -59,7 +59,27 @@ Currently, our variables include the following:
 
 -   Ideally we will also create a Euclidean distance metric. Not yet implemented.
 
-# Update of ethics review
+# Update of Ethics Review
+
+### Data Source: IPEDS and Public Federal Data
+
+The project’s pivot to IPEDS substantially changes the data sourcing ethics. IPEDS is a publicly available federal data-set published by the National Center for Education Statistics (NCES). \[[https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds\]](https://www.rti.org/impact/integrated-postsecondary-education-data-system-ipeds])
+
+IPEDS is reputable source for describing institutional, state, and national trends in post-secondary education and for providing students and families with unbiased consumer information.
+
+Because IPEDS is a federally mandated reporting system that institutions are legally required to contribute to, there are no restrictions on its use for research or educational purposes. This data is intentionally designed to be publicly downloaded and anlyzed. No web-scraping of live systems is involved, and no access-restricted databases are being queried.
+
+### FERPA and Aggregated Federal Data
+
+IPEDS reports institution-level aggregated data rather than individual student records; FERPA’s core protections around individual student privacy are not directly implication in the same way as with internal university data. Statistical data complications that do not contain information that would personally identify a student are not considered education records under FERPA. \[[https://www.american.edu/counsel/ferpa.cfm\]](https://www.american.edu/counsel/ferpa.cfm])
+
+IPEDS is considered to comply with this standard. Nevertheless, the team should remain mindful that some smaller, or more specialized, institutions, may have very small Pell recipient cohorts, which could make disaggregated breakdowns sensitive. The cell suppression policy ( masking data where cohort sizes fall below 10) remains the best practice work retaining from the original code of conduct.
+
+### Program Specialization & the HHI
+
+The Herfindahl-Hirschman Index (HHI) is a measurement tool originally designed by economists to track how competitive a market is. A high HHI score means most students are graduating from just one or two subject areas, while a low score means degrees are spread more evenly across many different fields. This is a creative analytical choice, but it comes with an important responsibility to be upfront with users about what the number actually means.
+
+To be ethically responsible, the app’s “About” tab should explain how HHI is calculated, acknowledge that it was adapted from economics rather than designed for education, and make clear that it is a descriptive tool for understanding program structure rather than a rating of institutional quality.
 
 # Update of App Design
 
@@ -102,7 +122,7 @@ Currently, our variables include the following:
 
 -   **Natalie** is working primarily on adding visualizations and extra filters where necessary.
 
--   **Myles**
+-   Myles is responsible for keeping up with code of ethics withiin the bounds of this project, and is helping Natalie with visualizations.
 
 # Risk Assessment
 
