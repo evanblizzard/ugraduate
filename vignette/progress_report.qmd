@@ -1,5 +1,5 @@
 ---
-title: "Retention & Benchmarking: Progress Report"
+title: "Progress Report"
 author: "Evan, Natalie, and Myles"
 format:
   html:

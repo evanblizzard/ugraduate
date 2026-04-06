@@ -1,5 +1,5 @@
 ---
-title: "Progress Report"
+title: "Project Plan"
 author: "Evan, Natalie, and Myles"
 format:
   html:
