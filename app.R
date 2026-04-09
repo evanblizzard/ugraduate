@@ -28,10 +28,13 @@ euclidean <- function(school, pool, vars, n = 10) {
   mat <- pool |> select(unitid, instnm, all_of(vars))
   
   # drop rows with NA in selected variables
-  mat <- mat |> filter(if_all(all_of(vars), ~is.na(.)))
-  
+  mat <- mat |> filter(if_all(all_of(vars), ~!is.na(.))) # using a lambda 
+          # . is a placeholder meaning whatever column its currently looking at
+          # is not NA? keep that row.
   # using z score normalization
   mat_scaled <- mat |> 
+    # scale() subtracts column mean and divides by standard deviation
+    # ensures every variable is centered at 0 with spread of 1
     mutate(across(all_of(vars), scale))
   
   # get the selected school's NORMALIZED values as a vector
@@ -43,12 +46,18 @@ euclidean <- function(school, pool, vars, n = 10) {
   # calculate distance from target to every other school
   
   mat_scaled |> 
+    # make sure selected school isn't in the pool
     filter(instnm != selected_school) |> 
+    # rowwise() so each row is treated as its own group
+    # makes mutate run one row at a time
+    # c_across(all_of(vars)) grabs current' rows variables for all 
+    # variables as a vector
     rowwise() |> 
     mutate(    # this is just euclidean distance formula
                # sqrt of the sum of the squared differences between selected school each of the other schools
       distance = sqrt(sum((c_across(all_of(vars)) - target)^2))
     ) |> 
+    # have to ungroup after using rowwise to return to normal data frame
     ungroup()
   slice_min(distance, n = n) # to compare with requested amount of schools
   select(unitid, instnm, distance)
