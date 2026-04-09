@@ -21,6 +21,21 @@ metric_choices <- c(
   "Avg Net Price (Pell)"    = "net_price_avg_pell"
 )
 
+# functions
+### Euclidean Distance Function
+euclidean <- function(school, pool, vars, n = 10) {
+  # pull columns to measure distance on
+  mat <- pool |> select(unitid, instnm, all_of(vars))
+  
+  # drop rows with NA in selected variables
+  mat <- mat |> filter(if_all(all_of(vars), ~is.na(.)))
+  
+  # using z score normalization
+  mat_scaled <- mat |> 
+    mutate(across(all_of(vars), scale))
+  
+}
+
 
 ## Begin User Interface Section
 ui <- page_sidebar(
