@@ -6,9 +6,10 @@
 library(shiny)
 library(bslib)
 library(plotly)
-library(dplyr) # Added this to fix the error I was seeing that said 
-# could not find function "pull"
+library(dplyr) 
 library(ggplot2)
+library(shinyWidgets)
+library(DT)
 
 data <- load("data/master_data.RData")
 
@@ -18,7 +19,9 @@ metric_choices <- c(
   "Pell %"                  = "pell_pct",
   "HHI (Specialization)"    = "hhi_score",
   "Avg Net Price"           = "net_price_avg",
-  "Avg Net Price (Pell)"    = "net_price_avg_pell"
+  "Avg Net Price (Pell)"    = "net_price_avg_pell",
+  "Admissions Rate (%)"     = "admit_rate",
+  "Total Admissions"       = "admissions"
 )
 
 # functions
@@ -69,13 +72,25 @@ ui <- page_sidebar(
   title = "AU Retention & Peer Benchmarking",
   # Making sidebar global
   sidebar = sidebar(
+    # school selection
     checkboxGroupInput("filter_control", "1. Select Sector:",
                        choices = c("Public" = 1, 
                                    "Private Nonprofit" = 2,
                                    "Private For-Profit" = 3),
                        selected = c(1,2)),
     uiOutput("state_selector"),
-    uiOutput("school_selector")
+    uiOutput("school_selector"),
+    
+    hr(),
+    # inputs for the euclidean distance peer calculation
+    pickerInput("peer_vars", "Peer matching variables:",
+                choices = metric_choices, 
+                selected = c("admit_rate", "net_price_avg", 
+                             "pell_pct", "hhi_score"),
+                multiple = TRUE,
+                options = list(title = "Select Variables...")),
+    actionButton("find_peers_btn", "Find My Peers", class = "btn-primary w-100")
+    
     
   ),
   
@@ -118,7 +133,19 @@ ui <- page_sidebar(
           card_footer("")
         )
       )
-    )
+    ),
+    nav_panel("Peer Benchmarking",
+              layout_sidebar(
+                sidebar = sidebar(
+                  selectInput("peer_year", "Academic Year:",
+                              choices = levels(master_data$academic_year),
+                              selected = "2023-24")
+                ),
+                card(
+                  card_header("Most Similar Institutions"),
+                  DT::dataTableOutput("peer_table")
+                )
+              ))
   )
 )
 
