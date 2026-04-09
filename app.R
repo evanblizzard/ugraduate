@@ -34,6 +34,24 @@ euclidean <- function(school, pool, vars, n = 10) {
   mat_scaled <- mat |> 
     mutate(across(all_of(vars), scale))
   
+  # get the selected school's NORMALIZED values as a vector
+  target <- mat_scaled |> 
+    filter(instnm == selected_school) |> 
+    select(all_of(vars)) |> 
+    as.numeric()
+  
+  # calculate distance from target to every other school
+  
+  mat_scaled |> 
+    filter(instnm != selected_school) |> 
+    rowwise() |> 
+    mutate(    # this is just euclidean distance formula
+               # sqrt of the sum of the squared differences between selected school each of the other schools
+      distance = sqrt(sum((c_across(all_of(vars)) - target)^2))
+    ) |> 
+    ungroup()
+  slice_min(distance, n = n) # to compare with requested amount of schools
+  select(unitid, instnm, distance)
 }
 
 
