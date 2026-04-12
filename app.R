@@ -10,6 +10,7 @@ library(dplyr)
 library(ggplot2)
 library(shinyWidgets)
 library(DT)
+library(purrr)
 
 data <- load("data/master_data.RData")
 
@@ -42,7 +43,7 @@ euclidean <- function(school, pool, vars, n = 10) {
   
   # get the selected school's NORMALIZED values as a vector
   target <- mat_scaled |> 
-    filter(instnm == selected_school) |> 
+    filter(instnm == school) |> 
     select(all_of(vars)) |> 
     as.numeric()
   
@@ -50,7 +51,7 @@ euclidean <- function(school, pool, vars, n = 10) {
   
   mat_scaled |> 
     # make sure selected school isn't in the pool
-    filter(instnm != selected_school) |> 
+    filter(instnm != school) |> 
     # rowwise() so each row is treated as its own group
     # makes mutate run one row at a time
     # c_across(all_of(vars)) grabs current' rows variables for all 
@@ -61,8 +62,8 @@ euclidean <- function(school, pool, vars, n = 10) {
       distance = sqrt(sum((c_across(all_of(vars)) - target)^2))
     ) |> 
     # have to ungroup after using rowwise to return to normal data frame
-    ungroup()
-  slice_min(distance, n = n) # to compare with requested amount of schools
+    ungroup() |> 
+  slice_min(distance, n = n) |> # to compare with requested amount of schools
   select(unitid, instnm, distance)
 }
 
@@ -250,6 +251,38 @@ server <- function(input, output) {
     }
     ggplotly(p, tooltip = "text")
   })
+  
+  # Tab 3 Peer Benchmarking
+  peers <- eventReactive(input$find_peers_btn, {
+    req(input$peer_select, input$peer_vars)
+    
+    # require at least 2 variables for euclidean distance calc
+    validate(
+      need(length(input$peer_vars) >= 2, "Please select at least 2 variables.")
+    )
+    
+    # only use selected year for matching
+    pool <- master_data |> filter(academic_year == input$peer_year)
+    
+    # run function for each selected school
+    map_dfr(input$peer_select, function(school) {
+      result <- euclidean(school, pool, input$peer_vars, n = 10)
+      result$reference_school <- school
+      result
+    })
+  })
+  
+  output$peer_table <- DT::renderDataTable({
+    peers() |> 
+      select(
+        `Your School` = reference_school,
+        `Peer School` = instnm,
+        `Distance`    = distance
+      ) |> 
+      mutate(Distance = round(Distance, 3))
+  },
+  options = list(pageLength = 10),
+  rownames = FALSE)
 
 }
 
