@@ -30,5 +30,35 @@ intro_content <- tags$div(
             retention.")
   ),
   hr(),
-  h5("Variable Definitions:")
+  h5("Variable Definitions:"),
+  tags$table(
+    class = "table table-sm",
+    tags$thead(tags$tr(tags$th("Variable"), tags$th("Definition"))),
+    tags$tbody(
+      tags$tr(tags$td("Retention Rate"), tags$td("% of first-time, full-time
+                                                 undergrads who re-enroll the 
+                                                 following fall.")),
+      tags$tr(tags$td("Pell %"), tags$td("% of undergrads receiving Pell 
+                                         Grants")),
+      tags$tr(tags$td("HHI Score"), tags$td("Herfindahl-Hirschman Index - 
+                                            measures program concentration.
+                                            Higher = more specialized.")),
+      tags$tr(tags$td("Avg Net Price"), tags$td("Average net price for 
+                                                students receiving any 
+                                                financial aid.")),
+      tags$tr(tags$td("Avg Net Price (Pell)"), tags$td("Average net price for
+                                                       students in the 0-30k
+                                                       income bracket, used
+                                                       as a Pell proxy due to 
+                                                       data availability.")),
+      tags$tr(tags$td("Admission Rate"), tags$td("% of applicants admitted.")),
+      tags$tr(tags$td("Euclidean Distance"), tags$td("A measure of structural
+                                                     similarity between 
+                                                     institutions across
+                                                     user-selected variables.
+                                                     Lower = more similar."))
+    ),
+    hr(),
+    h5("A note on HHI"),
+  )
 )
