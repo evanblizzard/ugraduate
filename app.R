@@ -146,8 +146,24 @@ ui <- page_sidebar(
                   card_header("Most Similar Institutions"),
                   DT::dataTableOutput("peer_table")
                 )
-              ))
-  )
+              )
+            )
+  ),
+  nav_panel("Retention Gap",
+            layout_sidebar(
+              sidebar = sidebar(
+                selectInput("gap_year", "Academic Year:",
+                            choices = levels(master_data$academic_year),
+                            selected = "2023-24")
+              ),
+              card(
+                card_header("Overall vs. Pell Student Retention by Institution"),
+                plotlyOutput("gap_plot"),
+                card_footer("Gap = Overall Retention minus Pell Retention.
+                            Larger gap indicates greater disparity.")
+              )
+            )
+          )
 )
 
 
@@ -189,6 +205,20 @@ server <- function(input, output) {
     master_data |> 
       filter(instnm %in% input$peer_select) |> 
       filter(!is.na(.data[[input$metric]]))
+  })
+  
+  # retention gap reactive for tab 3
+  gap_data <- reactive({
+    req(input$peer_select, input$gap_year)
+    
+    master_data |> 
+      filter(instnm %in% input$peer_select,
+             academic_year == input$gap_year) |> 
+      filter(!is.na(ret_pres), !is.na(pell_pct)) |> 
+      mutate(gap = ret_pres - pell_pct) |> 
+      # sort by gap size so largest disparity is first
+      arrange(desc(gap)) |> 
+      mutate(instnm = factor(instnm, levels = instnm))
   })
   
   
