@@ -14,6 +14,7 @@ library(purrr)
 library(tidyverse)
 
 data <- load("data/master_data.RData")
+source("./R/intro_html.R")
 
 # variables used in multiple places
 metric_choices <- c(
@@ -98,13 +99,7 @@ ui <- page_sidebar(
   
   navset_card_underline(
     
-    nav_panel(
-      card(
-        card_body(
-          
-        )
-      )
-    ),
+    nav_panel("About", intro_content),
 
   # TAB 1: Trends
     nav_panel(

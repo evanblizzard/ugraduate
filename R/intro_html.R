@@ -1,7 +1,7 @@
 # ./R/intro_html.R
 
 intro_content <- tags$div(
-  tagsh1("Welcome to UGraduate!"),
+  tags$h1("Welcome to UGraduate!"),
   
   tags$p(
     "This app uses data from the Integrated Postsecondary Education Data 
@@ -60,5 +60,15 @@ intro_content <- tags$div(
     ),
     hr(),
     h5("A note on HHI"),
+    p("The Herfindahl-Hirschman Index was originally designed to measure market
+      concentration in economics. Here it has been adapted to measure program
+      concentration, or how evenly or unevenly a school's enrollment is 
+      distributed across academic fields. A high HHI means most students are 
+      concentrated in one or two subject areas. A low HHI means enrollment
+      is spread across many fields. This is a descriptive tool for understanding
+      a school's program structure, NOT it's quality."),
+    hr(),
+    p(em("Data Source: IPEDS 2019-2020 through 2023-24. Built with R Shiny by
+         Evan Blizzard, Natalie Cope, and Myles Nwatu."))
   )
 )
