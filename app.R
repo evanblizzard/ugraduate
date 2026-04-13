@@ -97,6 +97,14 @@ ui <- page_sidebar(
   ),
   
   navset_card_underline(
+    
+    nav_panel(
+      card(
+        card_body(
+          
+        )
+      )
+    ),
 
   # TAB 1: Trends
     nav_panel(
