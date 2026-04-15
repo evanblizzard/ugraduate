@@ -440,6 +440,18 @@ server <- function(input, output) {
   })
   
   # card below coefficient plot with model fit statistics
+  output$model_stats <- renderUI({
+    stats <- glance(retention_model())
+    
+    tagList(
+      p(strong("R²: "), round(stats$r.squared, 3),
+        " - the model explains ",
+        round(stats$r.squared * 100, 1),
+        "% of the variation in retention rates."),
+      p(strong("Adjusted R²: "), round(stats$adj.r.squared, 3)),
+      p(strong("Observations: "), stats$nobs)
+    )
+  })
 }
 
 shinyApp(ui, server)
