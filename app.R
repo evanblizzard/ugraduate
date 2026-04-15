@@ -452,6 +452,21 @@ server <- function(input, output) {
       p(strong("Observations: "), stats$nobs)
     )
   })
+  
+  # predicted vs actual values scatterplot
+  output$pred_actual_plot <- renderPlotly({
+    req(input$peer_select)
+    
+    model <- retention_model()
+    
+    model_data <- master_data |> 
+      filter(academic_year == input$model_year) |> 
+      select(instnm, ret_pres, admit_rate, net_price_avg, pell_pct, hhi_score) |> 
+      filter(if_all(where(is.numeric), ~!is.na(.)))
+    # using augment to add the .fitted and .resid columns to the original data
+    # so i can plot them
+    augmented <- augment(model, newdata = model_data)
+  })
 }
 
 shinyApp(ui, server)
