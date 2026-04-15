@@ -466,6 +466,38 @@ server <- function(input, output) {
     # using augment to add the .fitted and .resid columns to the original data
     # so i can plot them
     augmented <- augment(model, newdata = model_data)
+    
+    
+    # splitting into background schools and selected schools
+    bg <- augmented
+    selected <- augmented |> filter(instnm %in% input$peer_select)
+    
+    p <- ggplot() +
+      # 45 degree line for reference. points on this line = perfect fit
+      geom_abline(slope = 1, intercept = 0,
+                  linetype = "dashed", color = "gray50") +
+      # all schools in gray
+      geom_point(data = bg,
+                 aes(x = .fitted, y = ret_pres, text = instnm),
+                 color = "gray70", size = 2, alpha = 0.5) +
+      # color selected schools
+      geom_point(data = selected,
+                 aes(x = .fitted, y = ret_pres, 
+                     color = instnm, text = paste0(
+                       instnm,
+                   "\nActual: ", round(ret_pres, 1), "%",
+                   "\nPredicted: ", round(.fitted, 1), "%",
+                   "\nResidual: ", round(ret_pres - .fitted, 1), " pts")),
+                 size = 4) +
+      labs(x = "Predicted Retention (%)",
+           y = "Actual Retention (%)",
+           color = NULL) +
+      theme_minimal()
+    
+    ggplotly(p, tooltip = "text")
+      
+                 
+    
   })
 }
 
