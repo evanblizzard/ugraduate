@@ -12,6 +12,7 @@ library(shinyWidgets)
 library(DT)
 library(purrr)
 library(tidyverse)
+library(broom)
 
 data <- load("data/master_data.RData")
 source("./R/intro_html.R")
@@ -166,7 +167,34 @@ ui <- page_sidebar(
                             Larger gap indicates greater disparity.")
                 )
               )
-    )
+    ),
+  nav_panel("Retention Modeling",
+            layout_sidebar(
+              sidebar = sidebar(
+                selectInput("model_year", "Academic Year:",
+                            choices = levels(master_data$academic_year),
+                            selected = "2023-24"),
+                hr(),
+                p("Model predicts retention rate from admission rate, 
+                  net price, Pell %, and HHI score across all schools
+                  in the selected year.")
+              ),
+              layout_column_wrap(
+                width = 1,
+                card(
+                  card_header("Predictor Effects"),
+                  plotlyOutput("coef_plot"),
+                  card_footer(uiOutput("model_stats"))
+                ),
+                card(
+                  card_header("Predicted vs. Actual Retention"),
+                  plotlyOutput("pred_actual_plot"),
+                  card_footer("Points above dashed line retain better than
+                              predicted. Points below retain worse.
+                              Selected schools are highlighted.")
+                )
+              )
+            ))
   )
 
 )
@@ -233,6 +261,7 @@ server <- function(input, output) {
     model_data <- master_data |> 
       filter(academic_year == input$model_year) |> 
       select(ret_pres, admit_rate, net_price_avg, pell_pct, hhi_score) |> 
+      # drop any school missing any of the variables
       filter(if_all(everything(), ~!is.na(.)))
     
     validate(
@@ -371,7 +400,46 @@ server <- function(input, output) {
     
     ggplotly(p, tooltip = "text") # tooltip = "text" changes the results of hovering to what I defined in geom_text
   })
-
+  
+  
+  # coefficient plot for linear model
+  output$coef_plot <- renderPlotly({
+    model <- retention_model()
+    
+    # tidy() to extract coefficients into a clean df
+    # conf.int = TRUE to add 95% conf int columns
+    coefs <- tidy(model, conf.int = TRUE) |> 
+      filter(term != "(Intercept)") |> #cutting intercept bc not meaningful
+      mutate(
+        # making readable labels instead of column names
+        term = recode(term,
+                      "admit_rate" = "Admission Rate",
+                      "net_price_avg" = "Avg Net Price",
+                      "pell_pct" = "Pell %",
+                      "hhi_score" = "HHI Score"),
+        # flagging significant predictors so i can color them
+        significant = p.value < 0.05
+      )
+    
+    p <- ggplot(coefs,
+                aes(x = estimate, y = reorder(term, estimate),
+                    color = significant,
+                    text = paste0(term,
+                                  "\nEffect: ", round(estimate, 3),
+                                  "\np-value: ", round(p.value, 3)))) +
+      geom_point(size = 3) +
+      geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+      geom_vline(xintercept = 0, linetype = "dashed") +
+      labs(x = "Effect on Retention Rate (percentage points)",
+           y = NULL) +
+      theme_minimal() +
+      theme(legend.position = "top")
+    
+    ggplotly(p, tooltip = "text")
+    
+  })
+  
+  # card below coefficient plot with model fit statistics
 }
 
 shinyApp(ui, server)
