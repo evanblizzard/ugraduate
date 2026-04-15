@@ -226,6 +226,23 @@ server <- function(input, output) {
       mutate(instnm = factor(instnm, levels = instnm))
   })
   
+  # retention model reactive
+  retention_model <- reactive({
+    req(input$model_year)
+    
+    model_data <- master_data |> 
+      filter(academic_year == input$model_year) |> 
+      select(ret_pres, admit_rate, net_price_avg, pell_pct, hhi_score) |> 
+      filter(if_all(everything(), ~!is.na(.)))
+    
+    validate(
+      need(nrow(model_data) > 30,
+           "Not enough data to fit a model for this year.")
+    )
+    lm(ret_pres ~ admit_rate + net_price_avg + pell_pct + hhi_score,
+       data = model_data)
+  })
+  
   
   # Tab 1 Trend Plot
   output$trend_plot <- renderPlotly({
