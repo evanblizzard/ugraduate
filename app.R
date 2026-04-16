@@ -216,7 +216,15 @@ ui <- page_sidebar(
                 plotlyOutput("qq_plot"),
                 card_footer("Points should follow the dashed line closely.
                              Deviations suggest residuals may not be normally
-                             distributed.")))))))))
+                             distributed.")
+                )
+              )
+            )
+          )
+        )
+      )
+  )
+  )
 
 
   
@@ -523,9 +531,23 @@ server <- function(input, output) {
       theme_minimal()
     
     ggplotly(p, tooltip = "text")
-      
-                 
+  })
+  
+  # residual plot
+  output$residual_plot <- renderPlotly({
+    model <- retention_model()
+    augmented <- augment(model)
     
+    p <- ggplot(augmented, aes(x = .fitted, y = .resid)) +
+      geom_point(color = "gray60", alpha = 0.5) +
+      geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+      geom_smooth(method = "loess", se = FALSE, color = "blue",
+                  linewidth = 0.5) +
+      labs(x = "Fitted Values", y = "Residuals",
+           title = "Residuals vs Fitted") +
+      theme_minimal()
+    
+    ggplotly(p)
   })
 }
 
