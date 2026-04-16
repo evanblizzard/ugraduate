@@ -12,6 +12,8 @@ library(tidyverse)
 library(broom)
 
 data <- load("data/master_data.RData")
+# adding this to get rid of schools that don't have values for all of the 
+# variables
 master_data <- master_data |> 
   filter(!if_all(any_of(c("ret_pres", "pell_pct", "hhi_score", "net_price_avg",
                           "net_price_avg_pell", "admit_rate", "admissions")), 
@@ -322,6 +324,10 @@ server <- function(input, output) {
   
   # Tab 1 Trend Plot
   output$trend_plot <- renderPlotly({
+    validate(
+      need(nrow(filtered_data()) > 0,
+           "No data available. Please select at least one school.")
+    )
     p <- ggplot(filtered_data(),
                 aes(x = academic_year,
                     y = .data[[input$metric]],
@@ -338,6 +344,10 @@ server <- function(input, output) {
   # Tab 2 scatter explorer
   # two layers, gray background points (all schools) + colored selected schools
   output$scatter_plot <- renderPlotly({
+    validate(
+      need(nrow(filtered_data()) > 0,
+           "No data available. Please select at least one school.")
+    )
     req(input$scatter_x, input$scatter_y, input$year_select)
     
     x_var <- input$scatter_x
@@ -414,6 +424,10 @@ server <- function(input, output) {
   
   # Tab 4 Retention Gap
   output$gap_plot <- renderPlotly({
+    validate(
+      need(nrow(filtered_data()) > 0,
+           "No data available. Please select at least one school.")
+    )
     req(gap_data())
     
     # reshaping to long so ggplot can group by retention type
