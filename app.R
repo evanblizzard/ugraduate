@@ -219,9 +219,19 @@ ui <- page_sidebar(
             )
           )
         )
-      )
+      ),
+  nav_panel("Data",
+            card(
+              card_header("Filtered Dataset"),
+              layout_column_wrap(
+                width = 1, 
+                downloadButton("download_data", "Download CSV"),
+                DT::dataTableOutput("data_table")
+              )
+            )
+          )
   )
-  )
+)
 
 
   
