@@ -75,3 +75,63 @@ profiles, and program specialization. The app supports:
 ## Data
 
 ### Source
+
+This app uses data from the **Integrated Postsecondary Education Data
+System (IPEDS),** administered by the National Center for Education
+Statistics (NCES).
+
+-   Coverage: Academic years from 2019-20 through 2023-24
+
+-   URL: https://nces.ed.gov/ipeds/
+
+### Access
+
+IPEDS data is publicly available and free to download. No account or API
+key is required. Raw data files and the cleaning script that produces
+`data/master_data.Rdata` are in `data_raw/`.
+
+### Licenses and Restrictions
+
+IPEDS is a product of the U.S. federal government and is in the public
+domain. There are no restrictions on its use for educational or research
+purposes.
+
+## Responsible Data Science Considerations
+
+### Privacy
+
+IPEDS reports institution-level aggregated data only. No individual
+student records are included. Users should exercise caution when
+interpreting results for small or specialized institutions where Pell
+recipient cohorts may be very small.
+
+## Fairness and Interpretation
+
+Retention gaps between overall and Pell students reflect systemic
+structural inequities and should not be interpreted as institutional
+failures without broader context.
+
+The HHI score is adapted from economics and is a descriptive measure of
+program concentration. It is **not a rating of institutional quality**.
+
+The retention model identifies statistical association, not causal
+relationships. Coefficients reflect cross-sectional patterns and should
+not be used to make causal inferences about any specific institution's
+policies.
+
+## Team and Contact
+
+| Name | Role | Github |
+|----|----|----|
+| Evan Blizzard | Data ingestion, visualizations, UI, statistical modeling | <https://github.com/evanblizzard> |
+| Natalie Cope |  | <https://github.com/evanblizzard> |
+| Myles Nwatu |  | <https://github.com/a-nwatu> |
+
+## License
+
+This project is licensed under the **[MIT / GPL-3.0]** license. See
+`LICENSE` for details.
+
+Key third-party package licenses: `shiny` (GPL-3), `tidyverse` (MIT),
+`plotly` (MIT), `bslib` (MIT), `DT` (GPL-3), `broom` (MIT),
+`shinyWidgets` (GPL-3).
