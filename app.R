@@ -171,56 +171,55 @@ ui <- page_sidebar(
   # retention modeling panel with an additional diagnostics tab for checking
   # assumptions of linear regression
   nav_panel("Retention Modeling",
-            layout_sidebar(
-              sidebar = sidebar(
-                selectInput("model_year", "Academic Year:",
-                            choices = levels(master_data$academic_year),
-                            selected = "2023-24"),
-                hr(),
-                p("Model predicts retention rate from admission rate, 
-                  net price, Pell %, and HHI score across all schools
-                  in the selected year.")
+      layout_sidebar(
+        sidebar = sidebar(
+          selectInput("model_year", "Academic Year:",
+                      choices = levels(master_data$academic_year),
+                      selected = "2023-24"),
+          hr(),
+          p("Model predicts retention rate from admission rate,
+             net price, Pell %, and HHI score across all schools
+             in the selected year.",
+            style = "font-size: 0.85rem; color: gray;")
+        ),
+        navset_tab(
+
+          nav_panel("Results",
+            layout_column_wrap(
+              width = 1,
+              card(
+                card_header("Predictor Effects"),
+                plotlyOutput("coef_plot"),
+                card_footer(uiOutput("model_stats"))
               ),
-              navset_tab(
-                nav_panel("Results:",
-                          layout_column_wrap(
-                            width = 1,
-                            card(
-                              card_header("Predictor Effects"),
-                              plotlyOutput("coef_plot"),
-                              card_footer(uiOutput("model_stats"))
-                            ),
-                            card(
-                              card_header("Predicted vs. Actual Retention"),
-                              plotlyOutput("pred_actual_plot"),
-                              card_footer("Points above dashed line retain 
-                              better than predicted. Points below retain worse.
-                              Selected schools are highlighted.")
-                          )
-                          )
-                ),
-                nav_panel("Model Diagnostics",
-                          layout_column_wrap(
-                            width = 1/2,
-                            card(
-                              card_header("Residuals vs Fitted"),
-                              plotlyOutput("residual_plot"),
-                              card_footer("Points should be randomly scatttered
-                                          around zero. A pattern suggests
-                                          the linear assumption may not hold.")
-                            ),
-                            card(
-                              card_header("Normal Q-Q Plot"),
-                              plotlyOutput("qq_plot"),
-                              card_footer("Points should follow the dashed line
-                                          closely. Deviations suggests residuals
-                                          may not be normally distributed.")
-                            )
-                          )
-                        )
-                )
+              card(
+                card_header("Predicted vs. Actual Retention"),
+                plotlyOutput("pred_actual_plot"),
+                card_footer("Points above the dashed line retain better than
+                             predicted. Points below retain worse.
+                             Selected schools are highlighted.")
+              )
             )
-  ),
+          ),
+
+          nav_panel("Model Diagnostics",
+            layout_column_wrap(
+              width = 1/2,
+              card(
+                card_header("Residuals vs Fitted"),
+                plotlyOutput("residual_plot"),
+                card_footer("Points should be randomly scattered around zero.
+                             A pattern suggests the linear assumption may not hold.")
+              ),
+              card(
+                card_header("Normal Q-Q Plot"),
+                plotlyOutput("qq_plot"),
+                card_footer("Points should follow the dashed line closely.
+                             Deviations suggest residuals may not be normally
+                             distributed.")))))))))
+
+
+  
 
               
 
