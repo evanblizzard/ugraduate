@@ -541,10 +541,26 @@ server <- function(input, output) {
     p <- ggplot(augmented, aes(x = .fitted, y = .resid)) +
       geom_point(color = "gray60", alpha = 0.5) +
       geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-      geom_smooth(method = "loess", se = FALSE, color = "blue",
-                  linewidth = 0.5) +
       labs(x = "Fitted Values", y = "Residuals",
            title = "Residuals vs Fitted") +
+      theme_minimal()
+    
+    ggplotly(p)
+  })
+  
+  # qq plot
+  output$qq_plot <- renderPlotly({
+    model <- retention_model()
+    augmented <- augment(model) |> 
+      # using qqnorm with plot.it = F to get just the theoretical quantiles
+      # as a list
+      # just math, no plot
+      # using .std.resid for the computation of the quantiles
+      mutate(theoretical = qqnorm(.std.resid, plot.it = FALSE)$x) +
+      geom_point(color = "gray60", alpha = 0.5) +
+      geom_abline(linetype = "dashed", color = "red") +
+      labs(x = "Theoretical Quantiles", y = "Standardized Residuals",
+           title = "Normal Q-Q Plot") + 
       theme_minimal()
     
     ggplotly(p)
