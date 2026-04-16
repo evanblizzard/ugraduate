@@ -6,11 +6,8 @@
 library(shiny)
 library(bslib)
 library(plotly)
-library(dplyr) 
-library(ggplot2)
 library(shinyWidgets)
 library(DT)
-library(purrr)
 library(tidyverse)
 library(broom)
 
