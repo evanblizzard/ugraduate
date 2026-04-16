@@ -333,7 +333,7 @@ server <- function(input, output) {
                     y = .data[[input$metric]],
                     group = instnm,
                     color = instnm)) +
-      geom_line(size = 1) +
+      geom_line(linewidth = 1) +
       geom_point() +
       labs(y = "Value", x = "Academic Year", color = "Institution") +
       theme_minimal()
