@@ -12,7 +12,7 @@ library(tidyverse)
 library(broom)
 
 data <- load("data/master_data.RData")
-# adding this to get rid of schools that don't have values for all of the 
+# adding this to get rid of schools that don't have values for all of the
 # variables
 master_data <- master_data |> 
   filter(!if_all(any_of(c("ret_pres", "pell_pct", "hhi_score", "net_price_avg",
@@ -370,13 +370,13 @@ server <- function(input, output) {
       geom_point(data = bg,
                  aes(x = .data[[x_var]], y = .data[[y_var]], text = instnm),
                  color = "gray70", size = 2, alpha = 0.5) +
-    # layer 2: all selected schools colored and labeled
+      # layer 2: all selected schools colored and labeled
       geom_point(data = selected,
                  aes(x = .data[[x_var]], y = .data[[y_var]],
                      color = instnm, text = instnm),
                  size = 4) +
-        labs(x = x_label, y = y_label, color = "Selected Schools") +
-        theme_minimal()
+      labs(x = x_label, y = y_label, color = "Selected Schools") +
+      theme_minimal()
     
     if (input$show_line) {
       p <- p + geom_smooth(data = bg,
@@ -450,16 +450,18 @@ server <- function(input, output) {
                 aes(x = instnm,
                     y = pmax(ret_pres, pell_pct) + 1.5,
                     label = paste0("gap: ", round(gap, 1), " pts")),
-                    inherit.aes = FALSE,
-                    size = 3,
-                    color = "gray30") +
+                inherit.aes = FALSE,
+                size = 3,
+                color = "gray30") +
       scale_fill_manual(values = c("Overall Retention" = "#2196F3",
                                    "Pell Retention" = "#FF9800")) +
       labs(x = NULL, y = "Rate (%)", fill = NULL) +
       theme_minimal() +
       theme(legend.position = "top")
     
-    ggplotly(p, tooltip = "text") # tooltip = "text" changes the results of hovering to what I defined in geom_text
+    ggplotly(p, tooltip = "text")
+    # tooltip = "text" changes the results of hovering 
+    #to what I defined in geom_text
   })
   
   
