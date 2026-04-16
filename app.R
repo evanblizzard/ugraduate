@@ -556,7 +556,8 @@ server <- function(input, output) {
       # as a list
       # just math, no plot
       # using .std.resid for the computation of the quantiles
-      mutate(theoretical = qqnorm(.std.resid, plot.it = FALSE)$x) +
+      mutate(theoretical = qqnorm(.std.resid, plot.it = FALSE)$x)
+    p <- ggplot(augmented, aes(x = theoretical, y = .std.resid)) +
       geom_point(color = "gray60", alpha = 0.5) +
       geom_abline(linetype = "dashed", color = "red") +
       labs(x = "Theoretical Quantiles", y = "Standardized Residuals",
