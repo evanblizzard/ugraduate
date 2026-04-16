@@ -573,6 +573,26 @@ server <- function(input, output) {
     
     ggplotly(p)
   })
+  
+  # data table output
+  output$data_table <- DT::renderDataTable({
+    background_data() |> 
+      filter(academic_year == input$year_select) |> 
+      select(instnm, stabbr, control, ret_pres, pell_pct, hhi_score,
+             net_price_avg, admit_rate)
+  },
+  rownames = FALSE)
+  
+  # download output
+  output$download_data <- downloadHandler(
+    # using function to dynamically name the csv file with the year the user
+    # has selected
+    filename = function() paste0("ipeds_data_", input$year_select, ".csv"),
+    # using function to write the file to csv to a variable called content
+    content = function(file) {
+      write.csv(background_data(), file, row.names = FALSE)
+    }
+  )
 }
 
 shinyApp(ui, server)
