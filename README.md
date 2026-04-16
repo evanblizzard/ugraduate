@@ -124,7 +124,7 @@ policies.
 | Name | Role | Github |
 |----|----|----|
 | Evan Blizzard | Data ingestion, visualizations, UI, statistical modeling | <https://github.com/evanblizzard> |
-| Natalie Cope |  | <https://github.com/evanblizzard> |
+| Natalie Cope |  | <https://github.com/EverClearie> |
 | Myles Nwatu |  | <https://github.com/a-nwatu> |
 
 ## License
