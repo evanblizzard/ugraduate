@@ -12,6 +12,10 @@ library(tidyverse)
 library(broom)
 
 data <- load("data/master_data.RData")
+master_data <- master_data |> 
+  filter(!if_all(any_of(c("ret_pres", "pell_pct", "hhi_score", "net_price_avg",
+                          "net_price_avg_pell", "admit_rate", "admissions")), 
+                 is.na))
 source("./R/intro_html.R")
 
 # variables used in multiple places
