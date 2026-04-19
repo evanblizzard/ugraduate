@@ -36,7 +36,7 @@ profiles, and program specialization. The app supports:
 ## App Layout
 
 | Tab | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | **About** | App context, variable definitions, HHI explanation, and workflow guide |
 | **Institutional Trends** | Line charts tracking metrics over time for selected schools |
 | **Explore Relationships** | Scatterplot explorer for any two variables with optional trend line |
@@ -82,7 +82,7 @@ Statistics (NCES).
 
 -   Coverage: Academic years from 2019-20 through 2023-24
 
--   URL: https://nces.ed.gov/ipeds/
+-   URL: <https://nces.ed.gov/ipeds/>
 
 ### Access
 
