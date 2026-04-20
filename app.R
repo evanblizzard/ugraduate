@@ -1,6 +1,6 @@
 ## 1. Business Logic Section ------------
 # UGraduate App
-# Evan Blizzard, Natalie Cope, Myles Nwatu
+# Evan Blizzard, Natalie Cope, Adaobi Nwatu
 
 ## Library Packages
 library(shiny)
