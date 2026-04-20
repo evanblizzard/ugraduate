@@ -1,6 +1,6 @@
 ---
 title: "Progress Report"
-author: "Evan, Natalie, and Myles"
+author: "Evan B, Natalie C, and Adaobi N"
 format:
   html:
     theme: cosmo
