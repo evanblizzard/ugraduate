@@ -1,6 +1,6 @@
 ---
 title: "Project Plan"
-author: "Evan, Natalie, and Myles"
+author: "Evan B, Natalie C, and Adaobi N"
 format:
   html:
     theme: cosmo
@@ -13,7 +13,7 @@ format:
 
 # App: GraduateAU
 
-by Evan Blizzard, Myles Nwatu, Natalie Cope
+by Evan Blizzard, Adaobi Nwatu, Natalie Cope
 
 DATA-413
 
@@ -211,7 +211,7 @@ Natalie Cope:
 
 -   Written component revision
 
-Adaobi Myles Nwatu:
+Adaobi Nwatu:
 
 -   Qualitative research and written component drafting
 
