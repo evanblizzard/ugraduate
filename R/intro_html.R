@@ -69,6 +69,6 @@ intro_content <- tags$div(
       a school's program structure, NOT it's quality."),
     hr(),
     p(em("Data Source: IPEDS 2019-2020 through 2023-24. Built with R Shiny by
-         Evan Blizzard, Natalie Cope, and Myles Nwatu."))
+         Evan Blizzard, Natalie Cope, and Adaobi Nwatu."))
   )
 )
