@@ -11,8 +11,9 @@ retention outcomes across U.S. postsecondary institutions using publicly
 available federal data from the Integrated Postsecondary Education Data
 System.
 
-**Built by:** Evan Blizzard, Natalie Cope, and Myles Nwatu American
-University - DATA-413/613, Spring 2026
+**Built by:** 
+Evan Blizzard, Natalie Cope, and Adaobi (Myles) Nwatu 
+(American University, DATA-413/613, Spring 2026)
 
 ------------------------------------------------------------------------
 
