@@ -125,7 +125,7 @@ policies.
 |----|----|----|
 | Evan Blizzard | Data ingestion, visualizations, UI, statistical modeling | <https://github.com/evanblizzard> |
 | Natalie Cope |  | <https://github.com/EverClearie> |
-| Myles Nwatu |  | <https://github.com/a-nwatu> |
+| Adaobi (Myles) Nwatu | Ethics & Literature Reviews + Debugging | <https://github.com/a-nwatu> |
 
 ## License
 
