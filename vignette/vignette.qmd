@@ -2,6 +2,7 @@
 title: "UGraduate App Vignette"
 format: html
 editor: visual
+embed-resources: true
 ---
 
 ## INTRODUCTION
@@ -18,7 +19,21 @@ Introduction
 
 ------------------------------------------------------------------------
 
-## APP DETAILS II
+## Exploratory Data Analysis I
+
+**Scenario.** An institutional research analyst at American University wants to understand how AU's first-year retention rate has shifted over the past several years, and whether nearby nonprofit peers in DC have experienced similar trends. Before running any models or distance calculations, they want to look at the data by plotting one variable at a time across years to identify the pattern.
+
+**Workflow:** The app's global sidebar drives every tab. They select **Private Nonprofit** under *Select Sector*, which dynamically populates the *Select State(s)* dropdown with only the states that have nonprofit institutions in the filtered data. They pick **DC**, then uses the searchable *Select Peer Institution(s)* box to add American University, Georgetown, and George Washington University. This three-step filter (sector to state to school) prevents impossible combinations. They cannot, for example, ask for a public school in a state that has none in the dataset.
+
+From the global sidebar they look over at the *Institutional Trends* tab. Its local sidebar offers one control: a radio-button *Select Metric* list with seven choices (retention rate, Pell %, HHI specialization, two net-price variants, admission rate, and total admissions). They select **Retention Rate**. The main panel renders an interactive Plotly line chart with one line per selected school, colored by institution, across academic years on the x-axis. See @fig-trends-retention.
+
+![Retention rate trends for three DC private nonprofit institutions, 2019-2020 through 2023-24.](../figures/fig_trends_retention.png){#fig-trends-retention}
+
+**Interpreting the output.** The analyst reads three things off the chart. First, *level*. Georgetown sits consistently above AU and GWU, reflecting its more selective admissions profile. Second, *trajectory.* All three schools show a decline going into 2020-21, then an increase in 2021-22, followed by a decline to around pre-pandemic levels for the remaining academic years. Third, *volatility.* The COVID-era cohort shows up immediately with sharp decreases in retention following the onset of the pandemic in the spring semester of the 2019-2020 academic year. She then switches the metric to Pell % to check whether the same schools' Pell-eligible student share moved in tandem with retention, which would suggest the two metrics co-vary. See @fig-trends-pell. ![Pell-eligible student share at the same three DC institutions over the same window. Switching metrics while holding school selection fixed is the fastest way to check whether two variables move together at the institutional level](../figures/fig_trends_pell.png){#fig-trends-pell}
+
+------------------------------------------------------------------------
+
+## Exploratory Data Analysis II
 
 1.  WORKFLOW:
 
@@ -28,7 +43,7 @@ Introduction
 
 ------------------------------------------------------------------------
 
-## ANALYSIS
+## Statistical Analysis I
 
 1.  STATISTICAL ANALYSIS EXAMPLE:
 
