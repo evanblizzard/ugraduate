@@ -20,11 +20,57 @@ Introduction
 
 ## APP DETAILS II
 
-1.  WORKFLOW:
+### Workflow:
 
-2.  INPUTS/OUTPUTS:
+-   User selects sector, state, and institution(s) from the sidebar
 
-3.  CONSIDERATIONS:
+-   Data is filtered dynamically based on these selections
+
+-   Selected inputs update all tabs and visualizations in real time
+
+-   Users can explore trends, relationships, and comparisons across institutions
+
+-   Additional tabs allow for deeper analysis, including benchmarking and modeling
+
+### Inputs/Outputs:
+
+**Inputs:**
+
+-   Sector (Public, Private Nonprofit, Private For-Profit)
+
+-   State selection
+
+-   Institution selection (searchable dropdown)
+
+-   Academic year selection
+
+-   Metric selection (e.g., retention, Pell %, HHI)
+
+-   Optional toggles (e.g., trend lines, peer matching variables)
+
+**Outputs:**
+
+-   Time-series plots of selected metrics
+
+-   Scatterplots showing relationships between variables
+
+-   Peer comparison tables (similar institutions)
+
+-   Bar charts comparing retention measures
+
+-   Regression model outputs and diagnostics plots
+
+### Considerations:
+
+-   Some schools are missing data for certain variables
+
+-   Large dataset (\~4000 schools) requires efficient filtering
+
+-   Some variables required cleaning/combining (e.g., net price fields)
+
+-   Model results depend on sufficient data availability for selected filters
+
+-   User experience was improved through searchable inputs and responsive plots
 
 ------------------------------------------------------------------------
 
