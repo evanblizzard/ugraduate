@@ -1,5 +1,7 @@
 ---
 title: "UGraduate App Vignette"
+author: "Adaobi (Myles) Nwatu, Evan Blizzard, Natalie Cope"
+subtitle: "Spring 2026, DATA-413/613: Final Project"
 format: html
 editor: visual
 embed-resources: true
@@ -7,7 +9,19 @@ embed-resources: true
 
 ## INTRODUCTION
 
-Introduction
+UGraduate is an interactive R Shiny application for exploring undergraduate student retention outcomes across U.S. postsecondary institutions using publicly available federal data from the Integrated Postsecondary Education Data System.\
+\
+UGraduate is designed for institutional administrators and researchers who want to compare student retention outcomes across peer institutions and investigate relationships between retention, cost, financial aid profiles, and program specialization. The app supports:
+
+-   Tracking institutional metrics over time
+
+-   Exploring relationships between variables (e.g, admissions vs. retention)
+
+-   Identifying structurally similar peer institutions via Euclidean distance
+
+-   Analyzing retention gaps between overall and Pell Grant recipient students
+
+-   Modeling predictors of retention rates using multivariate linear regression
 
 ------------------------------------------------------------------------
 
@@ -15,7 +29,13 @@ Introduction
 
 1.  PACKAGES/VERSIONS:
 
+    1.  This app was built with the following packages: tidyverse, shiny, shinyWidgets, plotly, bslib, broom, DT.
+
 2.  DATA SOURCE & STRUCTURE:
+
+    1.  This app using publicly available federal data from the Integrated Post-secondary Education Data System.
+
+        Our app uses the following variables for our analysis: Retention Rate, Pell Grant Percentage, HHI (Specialization), Average Net Price (of Tuition), Avg Net Price (Pell Grant), Admissions Rate (%), Total Admissions
 
 ------------------------------------------------------------------------
 
@@ -93,10 +113,9 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 -   User experience was improved through searchable inputs and responsive plots
 
-------------------------------------------------------------------------
-## Exploratory Data Analysis III: Retention Gap
-
-------------------------------------------------------------------------
+|                                                  |
+|:-------------------------------------------------|
+| \## Exploratory Data Analysis III: Retention Gap |
 
 ## Statistical Analysis I: Peer Benchmarking
 
