@@ -76,7 +76,7 @@ euclidean <- function(school, pool, vars, n = 10) {
 
 ## Begin User Interface Section
 ui <- page_sidebar(
-  title = "AU Retention & Peer Benchmarking", #added theme for polishing
+  title = "UGraduate", #added theme for polishing
   theme = bs_theme(bootswatch = "morph"),
   # Making sidebar global
   sidebar = sidebar(
