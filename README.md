@@ -11,8 +11,7 @@ retention outcomes across U.S. postsecondary institutions using publicly
 available federal data from the Integrated Postsecondary Education Data
 System.
 
-**Built by:** 
-Evan Blizzard, Natalie Cope, and Adaobi (Myles) Nwatu 
+**Built by:** Evan Blizzard, Natalie Cope, and Adaobi (Myles) Nwatu
 (American University, DATA-413/613, Spring 2026)
 
 ------------------------------------------------------------------------
@@ -37,7 +36,7 @@ profiles, and program specialization. The app supports:
 ## App Layout
 
 | Tab | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | **About** | App context, variable definitions, HHI explanation, and workflow guide |
 | **Institutional Trends** | Line charts tracking metrics over time for selected schools |
 | **Explore Relationships** | Scatterplot explorer for any two variables with optional trend line |
@@ -123,9 +122,9 @@ policies.
 ## Team and Contact
 
 | Name | Role | Github |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | Evan Blizzard | Data ingestion, visualizations, UI, statistical modeling | <https://github.com/evanblizzard> |
-| Natalie Cope |  | <https://github.com/EverClearie> |
+| Natalie Cope | Code optimization, refinement, UI, Application Polishing | <https://github.com/EverClearie> |
 | Adaobi (Myles) Nwatu | Ethics & Literature Reviews + Debugging | <https://github.com/a-nwatu> |
 
 ## License
