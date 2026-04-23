@@ -31,6 +31,12 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 **Interpreting the output.** The analyst reads three things off the chart. First, *level*. Georgetown sits consistently above AU and GWU, reflecting its more selective admissions profile. Second, *trajectory.* All three schools show a decline going into 2020-21, then an increase in 2021-22, followed by a decline to around pre-pandemic levels for the remaining academic years. Third, *volatility.* The COVID-era cohort shows up immediately with sharp decreases in retention following the onset of the pandemic in the spring semester of the 2019-2020 academic year. She then switches the metric to Pell % to check whether the same schools' Pell-eligible student share moved in tandem with retention, which would suggest the two metrics co-vary. See @fig-trends-pell. ![Pell-eligible student share at the same three DC institutions over the same window. Switching metrics while holding school selection fixed is the fastest way to check whether two variables move together at the institutional level](../figures/fig_trends_pell.png){#fig-trends-pell}
 
+**Responsible Data Science Considerations.** Three things matter:
+
+1.  *Missing Data filtering:* The app drops any institution missing values on the core set of benchmarking variables (ret_pres, pell_pct, hhi_score, net_price_avg, net_price_avg_pell, admit_rate, admissions) before anything is plotted. This keeps every tab consistent, but it also means schools with incomplete IPEDS reporting are invisible in the trend view. The analyst should not interpret a DC comparison set as "all DC nonprofits."
+2.  *Autoscaling:* Plotly auto-scales the y-axis to the selected schools, so a three-point range can look as dramatic as a thirty-point range. Differences should always be read against the axis, not the steepness of the line.
+3.  *Single-metric framing:* A line chart can show that a metric fell or rose, but not *why*. The analyst should use Trends to generate hypotheses, not for confirmation.
+
 ------------------------------------------------------------------------
 
 ## Exploratory Data Analysis II
