@@ -19,7 +19,7 @@ Introduction
 
 ------------------------------------------------------------------------
 
-## Exploratory Data Analysis I
+## Exploratory Data Analysis I: Institutional Trends
 
 **Scenario.** An institutional research analyst at American University wants to understand how AU's first-year retention rate has shifted over the past several years, and whether nearby nonprofit peers in DC have experienced similar trends. Before running any models or distance calculations, they want to look at the data by plotting one variable at a time across years to identify the pattern.
 
@@ -39,7 +39,7 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 ------------------------------------------------------------------------
 
-## Exploratory Data Analysis II
+## Exploratory Data Analysis II: Explore Relationships
 
 ### Workflow:
 
@@ -94,6 +94,9 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 -   User experience was improved through searchable inputs and responsive plots
 
 ------------------------------------------------------------------------
+## Exploratory Data Analysis III: Retention Gap
+
+------------------------------------------------------------------------
 
 ## Statistical Analysis I: Peer Benchmarking
 
@@ -115,6 +118,39 @@ The user can also select multiple schools at once. If they put AU, Georgetown, a
 2.  *Euclidean distance treats all variables as independent and equally weighted, which is rarely true*. For example, admit rate and net price are correlated, so matching on both partially double counts selectivity. A correlation-aware distance would be more defensible, but we used Euclidean as a reasonable attempt within the time frame.
 3.  *Missing data exclusion*: the functiond drops any school missing a value on any of the selected matching variables before computing distances, so a school that looks like a great peer on three variables but is missing a fourth never appears in the list.
 4.  *Distances aren't probabilities*. "AU's nearest peer has distance 0.4" is not a statement about how likely the relationship is; it's just a sorted ranking.
+
+------------------------------------------------------------------------
+
+## Statistical Analysis II: Retention Modeling
+
+**Scenario.** Peer benchmarking tells the analyst which schools are similar to AU, but not what predicts retention within the peer pool. Their next question is: holding admissions selectivity, net price, Pell share, and academic specialization constant, which of these factors is associated with higher retention, and by how much? They want a fitted model with interpretable coefficients, a view of AU's predicted vs actual retention, and enough diagnostics to determine whether the model is valid.
+
+**Workflow.** They keep their sidebar set as before: AU selected as the main school. They open the *Retention Modeling tab,* whose local sidebar has one control: *Academic Year,* set to **2023-24.** The tab contains two sub-tabs: *Results* and *Model Diagnostics.*
+
+The *Results* sub-tab fits an OLS regression of retention rate on admit rate, average net price, Pell percentage, and HHI score across all institutions in the pool with complete data for the chosen year. It renders two outputs stacked: a coefficient plot with 95% confidence intervals, and a predicted-vs-actual scatter. See @fig-model-results.
+
+::: {#fig-model-results layout-ncol="2"}
+![Predictor effects with 95% CIs](../figures/coef_plot.png){#fig-coef} ![Predicted vs actual retention](../figures/pred_v_actual.png){#fig-pred-actual} OLS model of first-year retention fit on 2023-24 private nonprofit institutions. Panel (a) shows effect sizes with 95% confidence intervals; the dashed vertical line is zero effect. Panel (b) compares each school's actual retention to the model's prediction; points above the dashed 45-degree line retain better than the model predicts.
+:::
+
+**Interpreting the coefficient plot.** The analyst reads of the direction, magnitude, and precision of each predictor. A negative coefficient on admit rate would mean that more selective schools (lower admit rate) have higher retention, holding everything else constant. A positive coefficient on net price would mean higher-priced schools retain better controlling for everything else, which could be plausible if price is interpreted as a proxy for resources per student. The width of the confidence interval matters as much as the point estimate: a predictor whose CI crosses zero is not distinguishable from no effect in this sample, and the plot colors it accordingly.
+
+The card below the coefficient plot displays the model's $R^2$ and adjusted $R^2$, phrased in plain language ("the model explains X% of the variation in retention rates"). This helps with interpretation: if $R^2$ is 0.25, four predictors explain a quarter of the variation across institutions and the remaining three-quarters is driven by factors the model does not include.
+
+**Interpreting predicted vs actual.** The scatter places AU in context. If AU's point sits on the 45-degree line, its retention rate is exactly what the model predicts given its inputs (AU is neither over nor underperforming on retention relative to other institutions). If AU sits meaningfully above the line, it reatins students better than its admissions, price, Pell, and HHI profile predicts. Below the line is the reverse. The colored vs gray layering lets the analyst see AU's retention and its position in the residual distribution at the same time.
+
+**The Diagnostics sub-tab.** The analyst clicks over to *Model Diagnostics*, which renders a residuals-vs-fitted plot and a normal Q-Q plot side by side. These check the assumptions behind the coefficient plot's confident intervals. See @fig-model-diag
+
+![Residual diagnostics for the retention model. Residuals-vs-fitted should show random scatter around zero; a funnel shape or curve indicates heteroscedasticity or nonlinearity. The Q-Q plot should show points close to the dashed 45-degree line; deviations in the tails suggest non-normal residuals.](../figures/fig_model_diagnostics.png){#fig-model-diag}
+
+**Responsible data science considerations.**
+
+1.  *The model is not causal.* It describes which institutional characteristics are correlated with retention in a given year, not what would happen if a school changed one of them. For example, "Lowering admit rate would raise retention" is not a claim the model supports.
+2.  *Four predictors is a small model.* Retention is driven by innumerable factors. A very high $R^2$ would actually be suspicious in a model with this few predictors.
+3.  *The comparison pool is all schools nationally.* This means the model is assuming the retention generating process is similar at, say, a 40,000 student research university and a 900 student liberal arts college. This could be rectified if the model was stratified by enrollment size or some other controlling variable, but it is not in our implementation.
+4.  *Missing data exclusion.* Any school missing any of the four predictors is dropped entirely, which can bias the sample toward better-reporting institutions.
+
+------------------------------------------------------------------------
 
 ## LITERATURE REVIEW REPRISE
 
