@@ -4,4 +4,44 @@ format: html
 editor: visual
 ---
 
-## Introduction:
+## INTRODUCTION
+
+Introduction
+
+------------------------------------------------------------------------
+
+## APP DETAILS
+
+1.  PACKAGES/VERSIONS:
+
+2.  DATA SOURCE & STRUCTURE:
+
+------------------------------------------------------------------------
+
+## APP DETAILS II
+
+1.  WORKFLOW:
+
+2.  INPUTS/OUTPUTS:
+
+3.  CONSIDERATIONS:
+
+------------------------------------------------------------------------
+
+## ANALYSIS
+
+1.  STATISTICAL ANALYSIS EXAMPLE:
+
+2.  CONSIDERATIONS:
+
+------------------------------------------------------------------------
+
+## LITERATURE REVIEW REPRISE
+
+1.  ETHICAL CONSIDERATIONS:
+
+2.  TECHNICAL CONSIDERATIONS:
+
+------------------------------------------------------------------------
+
+## CONCLUSION
