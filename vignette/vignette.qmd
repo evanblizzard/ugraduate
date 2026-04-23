@@ -35,7 +35,7 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 1.  *Missing Data filtering:* The app drops any institution missing values on the core set of benchmarking variables (ret_pres, pell_pct, hhi_score, net_price_avg, net_price_avg_pell, admit_rate, admissions) before anything is plotted. This keeps every tab consistent, but it also means schools with incomplete IPEDS reporting are invisible in the trend view. The analyst should not interpret a DC comparison set as "all DC nonprofits."
 2.  *Autoscaling:* Plotly auto-scales the y-axis to the selected schools, so a three-point range can look as dramatic as a thirty-point range. Differences should always be read against the axis, not the steepness of the line.
-3.  *Single-metric framing:* A line chart can show that a metric fell or rose, but not *why*. The analyst should use Trends to generate hypotheses, not for confirmation.
+3.  *Single-metric framing:* A line chart can show that a metric fell or rose, but not *why*. The analyst should use the Trends tab to generate hypotheses, not for confirmation.
 
 ------------------------------------------------------------------------
 
@@ -95,13 +95,26 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 ------------------------------------------------------------------------
 
-## Statistical Analysis I
+## Statistical Analysis I: Peer Benchmarking
 
-1.  STATISTICAL ANALYSIS EXAMPLE:
+**Scenario.** The same institutional research analyst has now looked at AU's retention trend over time (EDA I) and how retention relates to other variables across DC-area nonprofits (EDA II). Their next question is: *which institutions nationally are most similar to AU on the dimensions she cares about, regardless of geography?* A DC-only list of peers is convenient but technically arbitrary. It may exclude institutions more similar to AU that could be better comparisons on admissions selectivity, pricing, and program mix. They want a data-driven list of peers.
 
-2.  CONSIDERATIONS:
+**Workflow.** They reduce their school selection to just AU. They then move to the global sidebar's *Peer matching variables* multi-select picker, which offers the same seven metrics used elsewhere in the app. They select four: **Admit Rate, Avg Net Price, Pell %,** and **HHI Score,** which is their definition of what makes institutions comparable. They click **Find My Peers.**
 
-------------------------------------------------------------------------
+They then open the *Peer Benchmarking Tab.* Its local sidebar has one control (*Academic Year)* which they set to **2023-24**. The main panel renders a sortable DataTable showing AU's ten closest peers nationally, ranked by Euclidean Distance. See @fig-peer-table. ![Ten closest national peers for American University in 2023-24, ranked by Euclidean distance across admissions rate, average net price, Pell %, and HHI score. Lower distance indicates greater similarity on the standardized scale.](../figures/fig_peer_table.png){#fig-peer-table}
+
+**How the distance calculation works.** The app uses standard z-score normalization before computing distances. Every selected variable is centered at zero and scaled to unit standard deviation across the full pool for the chosen year. This matters because the variables are on wildly different scales: admit rate runs 0-100, net price runs into the tens of thousands of dollars, HHI is bounded 0-1. Without normalization, net price would dominate the distance calculation and the other three variables would be effectively invisible. After scaling, each variable contributes equally to the distance, and the returned distance is unitless. A distance of 0.5 means "close"; a distance of 3 means "far." The numbers are only meaningful relative to each other because they are unitless.
+
+The user can also select multiple schools at once. If they put AU, Georgetown, and GWU in the sidebar selector, the table returns ten peers for each, with the *Your School* column identifying which school each peer row corresponds to.
+
+**Interpreting the output.** The analyst reads the peer list three ways. The first is face validity: do these schools make intuitive sense? If AU's top peers include, say, Boston University and GWU they already considered comparable, the matching variables they chose are doing reasonable work. Second is surprises: any unexpected peer is worth investigating because it either reveals a genuine similarity they had not considered, or it means they should reconsider their variable selection. Thirdly, distance gaps: if the top peer has distance 0.4 and the tenth has distance 2.1, AU has a tight comparison set. If distances are all clustered around 1.5, AU is unusual on this variable combination and no institution is a clean match.
+
+**Responsible Data Science Considerations.**
+
+1.  *The peer set is a user-construct*. It is entirely dependent on the user selected variables. The analyst should report the variable set alongside any peer list.
+2.  *Euclidean distance treats all variables as independent and equally weighted, which is rarely true*. For example, admit rate and net price are correlated, so matching on both partially double counts selectivity. A correlation-aware distance would be more defensible, but we used Euclidean as a reasonable attempt within the time frame.
+3.  *Missing data exclusion*: the functiond drops any school missing a value on any of the selected matching variables before computing distances, so a school that looks like a great peer on three variables but is missing a fourth never appears in the list.
+4.  *Distances aren't probabilities*. "AU's nearest peer has distance 0.4" is not a statement about how likely the relationship is; it's just a sorted ranking.
 
 ## LITERATURE REVIEW REPRISE
 
