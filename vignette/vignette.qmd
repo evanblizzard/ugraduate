@@ -33,9 +33,7 @@ UGraduate is designed for institutional administrators and researchers who want 
 
 2.  DATA SOURCE & STRUCTURE:
 
-    1.  This app using publicly available federal data from the Integrated Post-secondary Education Data System.
-
-        Our app uses the following variables for our analysis: Retention Rate, Pell Grant Percentage, HHI (Specialization), Average Net Price (of Tuition), Avg Net Price (Pell Grant), Admissions Rate (%), Total Admissions
+    1.  This app using publicly available federal data from the Integrated Post-secondary Education Data System. Our app uses the following variables for our analysis: Retention Rate, Pell Grant Percentage, HHI (Specialization), Average Net Price (of Tuition), Avg Net Price (Pell Grant), Admissions Rate (%), Total Admissions
 
 ------------------------------------------------------------------------
 
@@ -180,7 +178,13 @@ Each of the analytical modules in the app is grounded in established research pr
 This sections reviews this literature, and connects it back to the various strategies used in the app's implementation of the previously stated considerations
 
 1.  ETHICAL CONSIDERATIONS:
+    1.  *Missing Data & Sample Bias*
+    2.  *Pell Grant Equity Data Transparency*
+    3.  *Program Specialization (The HHI Score)*
 2.  TECHNICAL CONSIDERATIONS:
+    1.  *Using Regression to Model Student Retention*
+    2.  *R-Shiny as a Platform for Institutional Research*
+    3.  *Visualization Framing Effects*
 
 ------------------------------------------------------------------------
 
