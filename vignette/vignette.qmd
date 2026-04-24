@@ -178,9 +178,15 @@ Each of the analytical modules in the app is grounded in established research pr
 This sections reviews this literature, and connects it back to the various strategies used in the app's implementation of the previously stated considerations
 
 1.  ETHICAL CONSIDERATIONS:
-    1.  *Missing Data & Sample Bias*
-    2.  *Pell Grant Equity Data Transparency*
-    3.  *Program Specialization (The HHI Score)*
+    1.  *IPEDs Data Infrastructure*
+        1.  IPEDS is designed to help NCES meet its mandate to report full and complete statistics on the condition of post-secondary education in the United States, collecting institution-level data in areas including enrollment, admissions, graduate rates and other outcome measures, retention rates, student financial aid, tuition and fees, faculty staff, and finances.
+        2.  This mandatory reporting structure is what makes IPEDS the right foundation for a tool targeting institutional comparisons: the data-set is not a convenience sample. The span of coverage means that geographic and sector filters in UGraduate's global sidebar draw on a near-complete census of U.S. post-secondary institutions rather than a selective sample.
+        3.  For researchers and institutional administrators using UGraduate, one responsible-use implication flows directly from IPEDS's design. IPEDS data are used at the federal and state level for policy analysis and development and at the institutional level for benchmarking and peer analysis.
+            1.  However, the data-set's unit of analysis is the institution, not not the student. Additionally, IPEDS reports aggregate rates, not individual records, meaning that the OLS model in the UGraduate Retention Modeling tab is an ecological regression, and its coefficients should not be interpreted as individual-level causal effects. This has been noted in the app's disclaimer.
+    2.  *Missing Data & Sample Bias*
+        1.  IPEDS reporting completeness varies across institutions and variables. Institutions with incomplete records on any of the core benchmarking variables are excluded from analysis. This approach is consistent with standard practice in institutional benchmarking, where incomplete reporters are excluded to ensure comparability, but it introduces the risk that the analysis disproportionately reflects better-resourced institutions with more complete reporting capacity.
+    3.  *Pell Grant Equity Data Transparency*
+    4.  *Program Specialization (The HHI Score)*
 2.  TECHNICAL CONSIDERATIONS:
     1.  *Using Regression to Model Student Retention*
     2.  *R-Shiny as a Platform for Institutional Research*
