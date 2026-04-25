@@ -96,9 +96,18 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 3.  *Overplotting:* With a large dataset (\~4000 schools), points may overlap, making patterns harder to interpret. Transparency and highlighting help mitigate this.
 4.  *Model simplification:* The regression line provides a simplified summary of the relationship and may not capture nonlinear patterns or interactions between variables.
 
-|                                                  |
-|:-------------------------------------------------|
-| \## Exploratory Data Analysis III: Retention Gap |
+## Exploratory Data Analysis III: Retention Gap
+
+**Scenario.** The analyst has compared AU's retention to peers over time and across variables, but a single retention rate hides whether all students are retained equally. They want to know whether Pell Grant recipients, who tend to face greater financial pressure, are retained at lower rates than the overall student body, and how that gap compares across DC nonprofits.
+
+**Workflow.** They keep AU, Georgetown, and GWU selected in the global sidebar and open the *Retention Gap* tab. The local sidebar has one control, *Academic Year,* set to 2023-24. The main panel renders a grouped bar chart with two bars per institution (overall retention and Pell retention) with a labeled gap (in percentage points) above each pair. Schools are sorted by gap size, largest disparity first. See @fig-retention-gap.
+
+**Interpreting the output.** A small gap (a few points) means Pell and non-Pell students are retained at similar rates, which is the equity-favorable outcome. A larger gap suggests Pell recipients are leaving at higher rates, which points to a possible support, affordability, or belonging issue worth investigating.
+
+**Responsible Data Science Considerations.**
+
+1.  *Sample size*. At small institutions, the Pell subgroup may be small enough that year-over-year noise drives gap changes.
+2.  *A small gap is not the same as equity.* It just means the two groups retain similarly within an institution. An institution with low overall retention and a small gap is retaining everyone poorly, not retaining everyone well.
 
 ## Statistical Analysis I: Peer Benchmarking
 
