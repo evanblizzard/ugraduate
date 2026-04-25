@@ -21,8 +21,6 @@ UGraduate is designed for institutional administrators and researchers who want 
 
 -   Identifying structurally similar peer institutions via Euclidean distance
 
--   Analyzing retention gaps between overall and Pell Grant recipient students
-
 -   Modeling predictors of retention rates using multivariate linear regression
 
 ------------------------------------------------------------------------

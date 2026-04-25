@@ -41,7 +41,6 @@ profiles, and program specialization. The app supports:
 | **Institutional Trends** | Line charts tracking metrics over time for selected schools |
 | **Explore Relationships** | Scatterplot explorer for any two variables with optional trend line |
 | **Peer Benchmarking** | Euclidean distance-based peer institution discover |
-| **Retention Gap** | Grouped bar chart comparing overall vs. Pell retention |
 | **Retention Modeling** | Multivariate linear regression with coefficient plots and diagnostics |
 | **Data** | Filterable data with CSV download |
 
