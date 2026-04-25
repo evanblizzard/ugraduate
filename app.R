@@ -157,21 +157,7 @@ ui <- page_sidebar(
                 )
               )
             ),
-    nav_panel("Retention Gap",
-              layout_sidebar(
-                sidebar = sidebar(
-                  selectInput("gap_year", "Academic Year:",
-                              choices = levels(master_data$academic_year),
-                              selected = "2023-24")
-                ),
-                card(
-                  card_header("Overall vs. Pell Student Retention by Institution"),
-                  plotlyOutput("gap_plot"),
-                  card_footer("Gap = Overall Retention minus Pell Retention.
-                            Larger gap indicates greater disparity.")
-                )
-              )
-    ),
+
   # retention modeling panel with an additional diagnostics tab for checking
   # assumptions of linear regression
   nav_panel("Retention Modeling",
@@ -290,19 +276,7 @@ server <- function(input, output) {
       filter(!is.na(.data[[input$metric]]))
   })
   
-  # retention gap reactive for tab 4
-  gap_data <- reactive({
-    req(input$peer_select, input$gap_year)
-    
-    master_data |> 
-      filter(instnm %in% input$peer_select,
-             academic_year == input$gap_year) |> 
-      filter(!is.na(ret_pres), !is.na(pell_pct)) |> 
-      mutate(gap = ret_pres - pell_pct) |> 
-      # sort by gap size so largest disparity is first
-      arrange(desc(gap)) |> 
-      mutate(instnm = factor(instnm, levels = instnm))
-  })
+
   
   # retention model reactive
   retention_model <- reactive({
@@ -423,47 +397,6 @@ server <- function(input, output) {
   options = list(pageLength = 10),
   rownames = FALSE)
   
-  # Tab 4 Retention Gap
-  output$gap_plot <- renderPlotly({
-    validate(
-      need(nrow(filtered_data()) > 0,
-           "No data available. Please select at least one school.")
-    )
-    req(gap_data())
-    
-    # reshaping to long so ggplot can group by retention type
-    plot_data <- gap_data() |> 
-      pivot_longer(
-        cols = c(ret_pres, pell_pct),
-        names_to = "type",
-        values_to = "rate"
-      ) |> 
-      mutate(type = recode(type, 
-                           "ret_pres" = "Overall Retention",
-                           "pell_pct" = "Pell Retention"))
-    
-    p <- ggplot(plot_data,
-                aes(x = instnm, y = rate, fill = type,
-                    text = paste0(type, ": ", round(rate, 1),"%"))) +
-      geom_col(position = "dodge", width = 0.6) +
-      # gap labels above each pair of bars
-      geom_text(data = gap_data(),
-                aes(x = instnm,
-                    y = pmax(ret_pres, pell_pct) + 1.5,
-                    label = paste0("gap: ", round(gap, 1), " pts")),
-                inherit.aes = FALSE,
-                size = 3,
-                color = "gray30") +
-      scale_fill_manual(values = c("Overall Retention" = "#2196F3",
-                                   "Pell Retention" = "#FF9800")) +
-      labs(x = NULL, y = "Rate (%)", fill = NULL) +
-      theme_minimal() +
-      theme(legend.position = "top")
-    
-    ggplotly(p, tooltip = "text")
-    # tooltip = "text" changes the results of hovering 
-    #to what I defined in geom_text
-  })
   
   
   # coefficient plot for linear model
