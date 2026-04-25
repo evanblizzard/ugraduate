@@ -6,6 +6,7 @@ format:
   html:
     embed-resources: true
 editor: visual
+bibliography: 'references.bib'
 ---
 
 ## INTRODUCTION
@@ -26,9 +27,9 @@ UGraduate is designed for institutional administrators and researchers who want 
 
 ------------------------------------------------------------------------
 
-## APP DETAILS I
+## App Details
 
-1.  PACKAGES/VERSIONS:
+### Packages and Versions
 
 This app was built using the packages in @tbl-packages. `{renv}` was used to manage and lock dependencies.
 
@@ -44,9 +45,15 @@ This app was built using the packages in @tbl-packages. `{renv}` was used to man
 
 : Top-level package versions used during development. {#tbl-packages}
 
-1.  DATA SOURCE & STRUCTURE:
+### Data Source and Structure
 
-    1.  This app uses publicly available federal data from the Integrated Post-secondary Education Data System. Our app uses the following variables for our analysis: Retention Rate, Pell Grant Percentage, HHI (Specialization), Average Net Price (of Tuition), Avg Net Price (Pell Grant), Admissions Rate (%), Total Admissions
+**Data Source.** The app uses publicly available federal data from the Integrated Postsecondary Education Data System (IPEDS), administered by the National Center for Education Statistics (NCES) within the U.S. Department of Education [@ipeds]. IPEDS collects institution-level data annually from every Title IV-eligible postsecondary institution in the U.S., covering enrollment, admissions, completions, retention, financial aid, tuition and fees, and institutional finances. Because Title IV participation is basically a universal precondition for federal student aid, IPEDS is essentially a census of U.S. higher education (rather than a sample) which makes it the appropriate foundation for an institutional benchmarking tool.
+
+**Ingestion.** IPEDS distributes annual data as Microsoft Access database files, one per academic year, downloaded directly from the NCES IPEDS Data Center. Each annual database contains dozens of tables corresponding to different IPEDS surveys (admissions, enrollment, finance, etc.). During preprocessing, the relevant tables from each year were extracted, variables of interest were pulled from each, some variables were created from existing ones, and the per-year frames were merged into a single long-format data frame, `master_data`, with one row per institution per academic year. This dataframe is saved as `data/master_data.RData` and loaded once at app startup.
+
+**Structure.** `master_data` covers 2019-20 through 2023024, with 14,408 rows and 14 columns. There is one row per institution-year, across 3,105 unique institutions. Variables include identifiers (`unitid`, `instnm`, `city`, `stabbr`, `control`, `academic_year`), retention and demographic outcomes (`ret_pres`, `pell_pct`) and cost, selectivity and program structure measures (`applicants`, `admissions`, `admit_rate`, `net_price_avg`, `net_price_avg_pell`, `hhi_score`).
+
+**Restrictions on use.** IPEDS is U.S. federal government data and is in the public domain, so there are no licensing fees, redistribution restrictions, or registration requirements for accessing or using the data. NCES requests that users cite IPEDS as the source in any publications or public-facing materials, per standard NCES citation guidance. Because the data are institution-level aggregates rather than student-level records, there are no FERPA or individual privacy restrictions on use.
 
 ------------------------------------------------------------------------
 
@@ -60,7 +67,7 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 ![Retention rate trends for three DC private nonprofit institutions, 2019-2020 through 2023-24.](../figures/fig_trends_retention.png){#fig-trends-retention}
 
-**Interpreting the output.** The analyst reads three things off the chart. First, *level*. Georgetown sits consistently above AU and GWU, reflecting its more selective admissions profile. Second, *trajectory.* All three schools show a decline going into 2020-21, then an increase in 2021-22, followed by a decline to around pre-pandemic levels for the remaining academic years. Third, *volatility.* The COVID-era cohort shows up immediately with sharp decreases in retention following the onset of the pandemic in the spring semester of the 2019-2020 academic year. She then switches the metric to Pell % to check whether the same schools' Pell-eligible student share moved in tandem with retention, which would suggest the two metrics co-vary. See @fig-trends-pell. 
+**Interpreting the output.** The analyst reads three things off the chart. First, *level*. Georgetown sits consistently above AU and GWU, reflecting its more selective admissions profile. Second, *trajectory.* All three schools show a decline going into 2020-21, then an increase in 2021-22, followed by a decline to around pre-pandemic levels for the remaining academic years. Third, *volatility.* The COVID-era cohort shows up immediately with sharp decreases in retention following the onset of the pandemic in the spring semester of the 2019-2020 academic year. She then switches the metric to Pell % to check whether the same schools' Pell-eligible student share moved in tandem with retention, which would suggest the two metrics co-vary. See @fig-trends-pell.
 
 ![Pell-eligible student share at the same three DC institutions over the same window. Switching metrics while holding school selection fixed is the fastest way to check whether two variables move together at the institutional level](../figures/fig_trends_pell.png){#fig-trends-pell}
 
@@ -76,7 +83,7 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 **Scenario.** After examining how retention changes over time, the analyst now wants to understand how retention relates to other institutional characteristics. Specifically, they are interested in whether variables such as *program specialization (HHI)*, *admissions rate*, or *financial aid composition* are associated with higher or lower retention across institutions.
 
-**Workflow.** The analyst keeps the same global sidebar selections used in the *Institutional Trends* tab (sector, state, and selected institutions). They then navigate to the *Explore Relationships* tab. In this tab, they select variables for the x- and y-axes (e.g., **HHI Score** vs. **Retention Rate**). The app dynamically filters the dataset based on the sidebar inputs and renders an interactive Plotly scatterplot. If enabled, a regression line is added to show the overall relationship between the selected variables. Selected institutions are **highlighted**, while all other institutions appear in the background for context. See @fig-relationships. 
+**Workflow.** The analyst keeps the same global sidebar selections used in the *Institutional Trends* tab (sector, state, and selected institutions). They then navigate to the *Explore Relationships* tab. In this tab, they select variables for the x- and y-axes (e.g., **HHI Score** vs. **Retention Rate**). The app dynamically filters the dataset based on the sidebar inputs and renders an interactive Plotly scatterplot. If enabled, a regression line is added to show the overall relationship between the selected variables. Selected institutions are **highlighted**, while all other institutions appear in the background for context. See @fig-relationships.
 
 ![Scatterplot showing the relationship between program specialization (HHI) and retention rate across institutions. Selected institutions are highlighted, while all others appear in the background for context.](../figures/fig_relationships.png){#fig-relationships}
 
@@ -84,10 +91,10 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 **Responsible Data Science Considerations.**
 
-1.   *Correlation vs. causation:* The scatterplot shows **associations**, not causal relationships. A visible trend does not imply that one variable causes changes in another.
+1.  *Correlation vs. causation:* The scatterplot shows **associations**, not causal relationships. A visible trend does not imply that one variable causes changes in another.
 2.  *Missing data:* Institutions missing values for either selected variable are excluded from the plot, which may affect the observed relationship.
-3.   *Overplotting:* With a large dataset (\~4000 schools), points may overlap, making patterns harder to interpret. Transparency and highlighting help mitigate this.
-4.   *Model simplification:* The regression line provides a simplified summary of the relationship and may not capture nonlinear patterns or interactions between variables.
+3.  *Overplotting:* With a large dataset (\~4000 schools), points may overlap, making patterns harder to interpret. Transparency and highlighting help mitigate this.
+4.  *Model simplification:* The regression line provides a simplified summary of the relationship and may not capture nonlinear patterns or interactions between variables.
 
 |                                                  |
 |:-------------------------------------------------|
@@ -99,7 +106,7 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 
 **Workflow.** They reduce their school selection to just AU. They then move to the global sidebar's *Peer matching variables* multi-select picker, which offers the same seven metrics used elsewhere in the app. They select four: **Admit Rate, Avg Net Price, Pell %,** and **HHI Score,** which is their definition of what makes institutions comparable. They click **Find My Peers.**
 
-They then open the *Peer Benchmarking Tab.* Its local sidebar has one control (*Academic Year)* which they set to **2023-24**. The main panel renders a sortable DataTable showing AU's ten closest peers nationally, ranked by Euclidean Distance. See @fig-peer-table. 
+They then open the *Peer Benchmarking Tab.* Its local sidebar has one control (*Academic Year)* which they set to **2023-24**. The main panel renders a sortable DataTable showing AU's ten closest peers nationally, ranked by Euclidean Distance. See @fig-peer-table.
 
 ![Ten closest national peers for American University in 2023-24, ranked by Euclidean distance across admissions rate, average net price, Pell %, and HHI score. Lower distance indicates greater similarity on the standardized scale.](../figures/fig_peer_table.png){#fig-peer-table}
 
