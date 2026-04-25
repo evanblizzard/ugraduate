@@ -9,25 +9,19 @@ editor: visual
 bibliography: 'references.bib'
 ---
 
-## INTRODUCTION
+# Use Case
 
-UGraduate is an interactive R Shiny application for exploring undergraduate student retention outcomes across U.S. postsecondary institutions using publicly available federal data from the Integrated Postsecondary Education Data System.\
-\
-UGraduate is designed for institutional administrators and researchers who want to compare student retention outcomes across peer institutions and investigate relationships between retention, cost, financial aid profiles, and program specialization. The app supports:
+Selecting peer institutions for benchmarking and identifying which institutional characteristics are associated with student retention are two of the most common analytical tasks in institutional research. Both are typically done with small, hand selected comparison sets. Our app, UGradaute addresses this somewhat arbitray means of identifying peers and analyzing retention by giving users a data-driven alternative using the IPEDS dataset of U.S. postsecondary institutions.
 
--   Tracking institutional metrics over time
+The app supports four core tasks: tracking institutional metrics over time, exploring bivariate relationships between institutional characteristics, identifying structurally similar peers via Euclidean distance across user-selected variables, and fitting a multivariate linear model of retention to compare an institution's actual retention against what its admissions, pricing, financial aid, and program profile would predict.
 
--   Exploring relationships between variables (e.g, admissions vs. retention)
-
--   Identifying structurally similar peer institutions via Euclidean distance
-
--   Modeling predictors of retention rates using multivariate linear regression
+The app is designed for institutional researchers, university administrators, and particularly curious prospective students and families.
 
 ------------------------------------------------------------------------
 
-## App Details
+# App Details
 
-### Packages and Versions
+## Packages and Versions
 
 This app was built using the packages in @tbl-packages. `{renv}` was used to manage and lock dependencies.
 
@@ -43,7 +37,7 @@ This app was built using the packages in @tbl-packages. `{renv}` was used to man
 
 : Top-level package versions used during development. {#tbl-packages}
 
-### Data Source and Structure
+## Data Source and Structure
 
 **Data Source.** The app uses publicly available federal data from the Integrated Postsecondary Education Data System (IPEDS), administered by the National Center for Education Statistics (NCES) within the U.S. Department of Education [@ipeds]. IPEDS collects institution-level data annually from every Title IV-eligible postsecondary institution in the U.S., covering enrollment, admissions, completions, retention, financial aid, tuition and fees, and institutional finances. Because Title IV participation is basically a universal precondition for federal student aid, IPEDS is essentially a census of U.S. higher education (rather than a sample) which makes it the appropriate foundation for an institutional benchmarking tool.
 
@@ -54,6 +48,8 @@ This app was built using the packages in @tbl-packages. `{renv}` was used to man
 **Restrictions on use.** IPEDS is U.S. federal government data and is in the public domain, so there are no licensing fees, redistribution restrictions, or registration requirements for accessing or using the data. NCES requests that users cite IPEDS as the source in any publications or public-facing materials, per standard NCES citation guidance. Because the data are institution-level aggregates rather than student-level records, there are no FERPA or individual privacy restrictions on use.
 
 ------------------------------------------------------------------------
+
+# Exploratory Data Analysis Workflows
 
 ## Exploratory Data Analysis I: Institutional Trends
 
@@ -94,18 +90,9 @@ From the global sidebar they look over at the *Institutional Trends* tab. Its lo
 3.  *Overplotting:* With a large dataset (\~4000 schools), points may overlap, making patterns harder to interpret. Transparency and highlighting help mitigate this.
 4.  *Model simplification:* The regression line provides a simplified summary of the relationship and may not capture nonlinear patterns or interactions between variables.
 
-## Exploratory Data Analysis III: Retention Gap
+------------------------------------------------------------------------
 
-**Scenario.** The analyst has compared AU's retention to peers over time and across variables, but a single retention rate hides whether all students are retained equally. They want to know whether Pell Grant recipients, who tend to face greater financial pressure, are retained at lower rates than the overall student body, and how that gap compares across DC nonprofits.
-
-**Workflow.** They keep AU, Georgetown, and GWU selected in the global sidebar and open the *Retention Gap* tab. The local sidebar has one control, *Academic Year,* set to 2023-24. The main panel renders a grouped bar chart with two bars per institution (overall retention and Pell retention) with a labeled gap (in percentage points) above each pair. Schools are sorted by gap size, largest disparity first. See @fig-retention-gap.
-
-**Interpreting the output.** A small gap (a few points) means Pell and non-Pell students are retained at similar rates, which is the equity-favorable outcome. A larger gap suggests Pell recipients are leaving at higher rates, which points to a possible support, affordability, or belonging issue worth investigating.
-
-**Responsible Data Science Considerations.**
-
-1.  *Sample size*. At small institutions, the Pell subgroup may be small enough that year-over-year noise drives gap changes.
-2.  *A small gap is not the same as equity.* It just means the two groups retain similarly within an institution. An institution with low overall retention and a small gap is retaining everyone poorly, not retaining everyone well.
+# Statistical Analysis Workflows
 
 ## Statistical Analysis I: Peer Benchmarking
 
@@ -189,3 +176,57 @@ This sections reviews this literature, and connects it back to the various strat
 ------------------------------------------------------------------------
 
 ## CONCLUSION
+
+# Contributions
+
+```{block}
+#| include: false
+
+LLM USAGE:
+
+Evan: 
+1. Utilized Claude Opus 4.6 for help with data ingestion. It aided in writing some of the functions seen in the ingestion.qmd to help me figure out year-by-year changes in the tables that were breaking some of my script. A manual review of my final master_data file ensured no mistakes were made. 
+
+2. Also utilized in helping to build the Euclidean distance function, which I verified worked by checking a small test case of two schools and two variables and manually calculating the distance, which I then checked against function output.
+
+3. Used in formatting some of the UI, such as asking what type of element (navPanel, navset_card_underline, etc.) would be appropriate for whatever element of the app I was working on. Verified through trial and error to see what I thought looked best. 
+
+4. Utilized lightly for help with using Plotly, such as creating text elements that showed certain information when a mouse hovers over a certain part of the plot. Verified manually through running the app and checking.
+
+5. Utilized for creating the Q-Q plot in the Retention Modeling tab, as I had not created one manually before (as in not using the qqnorm() function). I checked that this code worked by comparing the plot against the results of qqnorm with the same data.
+
+Natalie:
+
+Myles:
+
+No LLM was used to generate code that was committed without review or comments explaining the code. All LLM-generated code was tested in the running app before commit.
+
+
+```
+
+```{block}
+#| include: false
+
+GROUP MEMBER CONTRIBUTIONS
+
+Evan: 
+  1. Euclidean function and Peer benchmarking tab
+  2. Retention Modeling tab including coefficient plot, predicted vs actual scatter,         residuals, and Q-Q diagnostics
+  3. Explore Relationships tab
+  4. About Tab
+  5. renv setup
+  6. README
+  7. Data Ingestion
+  8. Data Table output tab
+  9. Institutional Trends tab
+  10. Progress Report elements besides Updates of Ethics Review
+  11. Project Plan besides Ethics Review and Literature Review
+  12. Peer Review
+  13. Vignette: EDA I, Statistical Analysis I, Statistical Analysis II, Data Source &            Structure
+  
+Natalie:
+
+
+
+Myles:
+```
