@@ -228,10 +228,6 @@ Natalie:
 3. Helped with some UI/UX refinement, adjusting layout, theming with a bslib morph theme and visuals clean up overall. Final design decisions were made through testing the app manually and testing different themes/color schemes.
 
 
-Myles:
-
-
-
 No LLM was used to generate code that was committed without review or comments explaining the code. All LLM-generated code was tested in the running app before commit.
 
 
