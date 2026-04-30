@@ -11,7 +11,7 @@ bibliography: 'references.bib'
 
 # Use Case
 
-Selecting peer institutions for benchmarking and identifying which institutional characteristics are associated with student retention are two of the most common analytical tasks in institutional research. Both are typically done with small, hand selected comparison sets. Our app, UGradaute addresses this somewhat arbitray means of identifying peers and analyzing retention by giving users a data-driven alternative using the IPEDS dataset of U.S. postsecondary institutions.
+Selecting peer institutions for benchmarking and identifying which institutional characteristics are associated with student retention are two of the most common analytical tasks in institutional research. Both are typically done with small, hand selected comparison sets. Our app, UGraduate addresses this somewhat arbitrary means of identifying peers and analyzing retention by giving users a data-driven alternative using the IPEDS dataset of U.S. postsecondary institutions.
 
 The app supports four core tasks: tracking institutional metrics over time, exploring bivariate relationships between institutional characteristics, identifying structurally similar peers via Euclidean distance across user-selected variables, and fitting a multivariate linear model of retention to compare an institution's actual retention against what its admissions, pricing, financial aid, and program profile would predict.
 
@@ -114,7 +114,7 @@ The user can also select multiple schools at once. If they put AU, Georgetown, a
 
 1.  *The peer set is a user-construct*. It is entirely dependent on the user selected variables. The analyst should report the variable set alongside any peer list.
 2.  *Euclidean distance treats all variables as independent and equally weighted, which is rarely true*. For example, admit rate and net price are correlated, so matching on both partially double counts selectivity. A correlation-aware distance would be more defensible, but we used Euclidean as a reasonable attempt within the time frame.
-3.  *Missing data exclusion*: the functiond drops any school missing a value on any of the selected matching variables before computing distances, so a school that looks like a great peer on three variables but is missing a fourth never appears in the list.
+3.  *Missing data exclusion*: the function drops any school missing a value on any of the selected matching variables before computing distances, so a school that looks like a great peer on three variables but is missing a fourth never appears in the list.
 4.  *Distances aren't probabilities*. "AU's nearest peer has distance 0.4" is not a statement about how likely the relationship is; it's just a sorted ranking.
 
 ------------------------------------------------------------------------
@@ -135,11 +135,11 @@ The *Results* sub-tab fits an OLS regression of retention rate on admit rate, av
 
 The card below the coefficient plot displays the model's $R^2$ and adjusted $R^2$, phrased in plain language ("the model explains X% of the variation in retention rates"). This helps with interpretation: if $R^2$ is 0.25, four predictors explain a quarter of the variation across institutions and the remaining three-quarters is driven by factors the model does not include.
 
-**Interpreting predicted vs actual.** The scatter places AU in context. If AU's point sits on the 45-degree line, its retention rate is exactly what the model predicts given its inputs (AU is neither over nor underperforming on retention relative to other institutions). If AU sits meaningfully above the line, it reatins students better than its admissions, price, Pell, and HHI profile predicts. Below the line is the reverse. The colored vs gray layering lets the analyst see AU's retention and its position in the residual distribution at the same time.
+**Interpreting predicted vs actual.** The scatter places AU in context. If AU's point sits on the 45-degree line, its retention rate is exactly what the model predicts given its inputs (AU is neither over nor underperforming on retention relative to other institutions). If AU sits meaningfully above the line, it retains students better than its admissions, price, Pell, and HHI profile predicts. Below the line is the reverse. The colored vs gray layering lets the analyst see AU's retention and its position in the residual distribution at the same time.
 
 **The Diagnostics sub-tab.** The analyst clicks over to *Model Diagnostics*, which renders a residuals-vs-fitted plot and a normal Q-Q plot side by side. These check the assumptions behind the coefficient plot's confident intervals. See @fig-model-diag
 
-![Residual diagnostics for the retention model. Residuals-vs-fitted should show random scatter around zero; a funnel shape or curve indicates heteroscedasticity or nonlinearity. The Q-Q plot should show points close to the dashed 45-degree line; deviations in the tails suggest non-normal residuals.](../figures/fig_model_diagnostics.png){#fig-model-diag}
+![Residual diagnostics for the retention model. Residuals-vs-fitted should show random scatter around zero; a funnel shape or curve indicates heteroscedasticity or non-linearity. The Q-Q plot should show points close to the dashed 45-degree line; deviations in the tails suggest non-normal residuals.](../figures/fig_model_diagnostics.png){#fig-model-diag}
 
 **Responsible data science considerations.**
 
@@ -176,7 +176,7 @@ This sections reviews this literature, and connects it back to the various strat
     4.  *Program Specialization (The HHI Score)*
         1.  UGraduate uses a HHI score to quantify each institution's degree of academic program specialization. The HHIO is a well-established concentration measure from industrial economics. The is calculated by squaring the market share of each competing firm in the industry and then summing the resulting numbers. When applied to higher education, "the market shares" become the proportions of degrees conferred in each CIP program area. A high HHI score indicates an institution highly concentrated in small number of program areas ( a specialist school), while a low HHI score indicates a broad distributional spread (a generalist university).
         2.  The application of HHI beyond its antitrust origins to characterize concentration within a single entity across multiple domains has precedent in organizational research. HHI captures whether attention is concentrated in few domains (specialist) or distributed across many (generalist), providing a single score.
-            1.  In the context of higher education institutions, specialist profile (high HHI) is typically associated with professional schools, technical colleges, and institutions with focused missions, environments where students may beneit from strong co-curricular resources tailored to a single field.
+            1.  In the context of higher education institutions, specialist profile (high HHI) is typically associated with professional schools, technical colleges, and institutions with focused missions, environments where students may benefit from strong co-curricular resources tailored to a single field.
             2.  A generalist profiles (low HHI) is associated with comprehensive universities offering a wide range of programs. The relationship between specialization and retention is theoretically ambiguous, specialist environments may generate strong student belonging and focused career pathways while generalist environments provide academic flexibility which is precisely why the app tests it empirically as regression predictor rather than assuming a direction.
 2.  TECHNICAL CONSIDERATIONS:
     1.  *Using Regression to Model Student Retention*
@@ -221,6 +221,13 @@ Evan:
 
 Natalie:
 
+1. Utilized ChatGPT (GPT-5.3) to assist with debugging Shiny app errors, including resolving issues with reactive expressions, filtering logic, and rendering outputs. All suggested fixes were tested directly in the app before being implemented.
+
+2. Used LLM assistance for code cleanup and restructuring and organizing server logic, readability/consistancy in each tab. Changes were verified by confirming that app still functioned properly afterwards.
+
+3. Helped with some UI/UX refinement, adjusting layout, theming with a bslib morph theme and visuals clean up overall. Final design decisions were made through testing the app manually and testing different themes/color schemes.
+
+
 Myles:
 
 
@@ -251,8 +258,11 @@ Evan:
   13. Vignette: EDA I, Statistical Analysis I, Statistical Analysis II, Data Source &            Structure
   
 Natalie:
-
-
+1. Code debugging and error resolution across tabs
+2. Code cleanup and organization of server logic
+3. UI/UX refinement, layout improvements and application theming 
+4. Vignette: Exploratory Data Analysis II (Explore Relationships), App Workflow, Inputs/Outputs, and Considerations sections
+5. Final application polishing and consistency checks across all tabs
 
 Myles:
 1. Project Plan (Literature Review, Ethics & Code of Conduct)
