@@ -4,6 +4,12 @@ author: "Adaobi (Myles) Nwatu, Evan Blizzard, Natalie Cope"
 subtitle: "Spring 2026, DATA-413/613: Final Project"
 format:
   html:
+    theme: cosmo
+    toc: true
+    toc-title: "Contents"
+    toc-location: left
+    number-sections: true
+    smooth-scroll: true
     embed-resources: true
 editor: visual
 bibliography: 'references.bib'
@@ -150,7 +156,7 @@ The card below the coefficient plot displays the model's $R^2$ and adjusted $R^2
 
 ------------------------------------------------------------------------
 
-## LITERATURE REVIEW REPRISE
+# LITERATURE REVIEW REPRISE
 
 UGraduate combines five important area of studies together: federal post-secondary data, unexplored factors that contribute to student retention, understanding the effects that economics play into program specialization and data-driven peer benchmarking to create an interactive, user-friendly research tool.
 
@@ -189,7 +195,7 @@ This sections reviews this literature, and connects it back to the various strat
 
 ------------------------------------------------------------------------
 
-## CONCLUSION
+# CONCLUSION
 
 UGraduate began with a simple observation: the two most common tasks in institutional research—choosing peer institutions and understanding what predicts student retention—are routinely performed in ways that are more arbitrary than they need to be. Peer groups are often assembled by hand, based on geography, athletic conference membership, or reputational familiarity. Retention analyses are often confined to internal dashboards that compare a single institution to itself over time. Both approaches leave available data on the table.
 
@@ -262,6 +268,6 @@ Natalie:
 
 Myles:
 1. Project Plan (Literature Review, Ethics & Code of Conduct)
-2. Vingette (Introduction, App Deatils, Literview Review Reprise: Ethical & Technical Considerations, Conclusion)
+2. Vignette (Introduction, App Details, Literature Review Reprise: Ethical & Technical Considerations, Conclusion)
 3. Data Visualization Assistance with Natalie
 ```
