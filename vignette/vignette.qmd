@@ -213,6 +213,8 @@ Natalie:
 
 Myles:
 
+
+
 No LLM was used to generate code that was committed without review or comments explaining the code. All LLM-generated code was tested in the running app before commit.
 
 
@@ -244,6 +246,6 @@ Natalie:
 
 Myles:
 1. Project Plan (Literature Review, Ethics & Code of Conduct)
-2. Final Prohect Report (Introduction, App Deatils, Literview Review Reprise: Ethical & Technical Considerations, Conclusion)
+2. Vingette (Introduction, App Deatils, Literview Review Reprise: Ethical & Technical Considerations, Conclusion)
 3. Data Visualization Assistance with Natalie
 ```
