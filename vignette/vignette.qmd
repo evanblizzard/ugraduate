@@ -243,4 +243,7 @@ Natalie:
 
 
 Myles:
+1. Project Plan (Literature Review, Ethics & Code of Conduct)
+2. Final Prohect Report (Introduction, App Deatils, Literview Review Reprise: Ethical & Technical Considerations, Conclusion)
+3. Data Visualization Assistance with Natalie
 ```
