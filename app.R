@@ -11,7 +11,7 @@ library(DT)
 library(tidyverse)
 library(broom)
 
-data <- load("data/master_data.RData")
+load("data/master_data.RData")
 # adding this to get rid of schools that don't have values for all of the
 # variables
 master_data <- master_data |> 
@@ -19,6 +19,20 @@ master_data <- master_data |>
                           "net_price_avg_pell", "admit_rate", "admissions")), 
                  is.na))
 source("./R/intro_html.R")
+
+# institution names aren't unique (~25 duplicates / year) and some schools change names over time
+  # so everything is keyed on unitid
+  # display label uses each school's most recent name + city and statewith unitid appended
+  # in case that is still ambiguous
+school labels <- master_data |>
+  arrange(unitid, desc(academic_year)) |>
+  distinct(unitid, .keep_all=TRUE) |>
+  transmute(unitid, label=paste0(instnm, " (", city, ", ", stabbr, ")")) |>
+  group_by(label) |>
+  mutate(label = if (n() > 1) paste0(label, " [", unitid, "]") else label) |>
+  ungroup()
+
+
 
 # variables used in multiple places
 metric_choices <- c(
