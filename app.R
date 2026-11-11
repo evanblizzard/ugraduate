@@ -24,7 +24,7 @@ source("./R/intro_html.R")
   # so everything is keyed on unitid
   # display label uses each school's most recent name + city and statewith unitid appended
   # in case that is still ambiguous
-school labels <- master_data |>
+school_labels <- master_data |>
   arrange(unitid, desc(academic_year)) |>
   distinct(unitid, .keep_all=TRUE) |>
   transmute(unitid, label=paste0(instnm, " (", city, ", ", stabbr, ")")) |>
@@ -59,19 +59,21 @@ euclidean <- function(school, pool, vars, n = 10) {
   mat_scaled <- mat |> 
     # scale() subtracts column mean and divides by standard deviation
     # ensures every variable is centered at 0 with spread of 1
-    mutate(across(all_of(vars), scale))
+    mutate(across(all_of(vars), ~ as.numeric(scale(.x))) # added as numeric to keep columns as plain numbers
   
+
+  if (!school %in% mat_scaled$unitid) return (NULL) # crash fix for school missing one of selected variables
   # get the selected school's NORMALIZED values as a vector
   target <- mat_scaled |> 
-    filter(instnm == school) |> 
+    filter(unitid == school) |> 
     select(all_of(vars)) |> 
-    as.numeric()
+    unlist(use.names = FALSE)
   
   # calculate distance from target to every other school
   
   mat_scaled |> 
     # make sure selected school isn't in the pool
-    filter(instnm != school) |> 
+    filter(unitid != school) |> 
     # rowwise() so each row is treated as its own group
     # makes mutate run one row at a time
     # c_across(all_of(vars)) grabs current' rows variables for all 
@@ -104,6 +106,10 @@ ui <- page_sidebar(
     uiOutput("school_selector"),
     
     hr(),
+    numericInput("min_admits", "Minimum admitted students:",
+    value=0, min=0, step=50),
+    p("Model predicts retention rate from admission rate, net price, Pell %, and HHI score across all schools in the selected year. Raise the minimum to exclude very small schools, whose retention rates are noisy.",
+    style = "font-size: 0.85rem; color: gray"),
     # inputs for the euclidean distance peer calculation
     pickerInput("peer_vars", "Peer matching variables:",
                 choices = metric_choices, 
@@ -232,6 +238,10 @@ ui <- page_sidebar(
               card_header("Filtered Dataset"),
               layout_column_wrap(
                 width = 1, 
+                selectInput("data_year" "Academic Year:",
+                choices=c("All years"),
+                levels(master_data$academic_year)),
+                selected="2023-24"
                 downloadButton("download_data", "Download CSV"),
                 DT::dataTableOutput("data_table")
               )
@@ -250,7 +260,7 @@ ui <- page_sidebar(
 
 
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   # state dropdown based on sector selection
   output$state_selector <- renderUI({
     states <- master_data |> 
@@ -267,7 +277,11 @@ server <- function(input, output) {
     schools <- master_data |> 
       filter(as.integer(control) %in% input$filter_control,
              stabbr %in% input$filter_state) |> 
-      pull(instnm) |> unique() |> sort()
+      distinct(unitid, label) |>
+      arrange(label)
+      # named vector: label shown to the user, unitid used as the value
+    choices <- setNames(as.character(schools$unitid), schools$label)
+
     
     selectizeInput("peer_select", "3. Select Peer Institution(s):",
                    choices = schools,
@@ -286,10 +300,23 @@ server <- function(input, output) {
   filtered_data <- reactive({
     req(input$peer_select)
     master_data |> 
-      filter(instnm %in% input$peer_select) |> 
+      filter(unitid %in% input$peer_select) |> 
       filter(!is.na(.data[[input$metric]]))
   })
   
+  # data used to fit the retention model (shared by all model outputs so the
+  # plots always match the fitted model)
+  model_data <- reactive({
+    req(input$model_year)
+    master_data |> 
+      filter(academic_year == input$model_year,
+             is.na(admissions) | admissions >= (input$min_admits %||% 0)) |> 
+      select(unitid, label, ret_pres, admit_rate, net_price_avg, pell_pct,
+             hhi_score) |> 
+      # drop any school missing any of the model variables
+      filter(if_all(c(ret_pres, admit_rate, net_price_avg, pell_pct, hhi_score),
+                    ~ !is.na(.)))
+  })
 
   
   # retention model reactive
