@@ -32,7 +32,7 @@ school_labels <- master_data |>
   mutate(label = if (n() > 1) paste0(label, " [", unitid, "]") else label) |>
   ungroup()
 
-
+master_data <- master_data |> left_join(school_labels, by = "unitid")
 
 # variables used in multiple places
 metric_choices <- c(
@@ -59,7 +59,7 @@ euclidean <- function(school, pool, vars, n = 10) {
   mat_scaled <- mat |> 
     # scale() subtracts column mean and divides by standard deviation
     # ensures every variable is centered at 0 with spread of 1
-    mutate(across(all_of(vars), ~ as.numeric(scale(.x))) # added as numeric to keep columns as plain numbers
+    mutate(across(all_of(vars), ~ as.numeric(scale(.x))))# added as numeric to keep columns as plain numbers
   
 
   if (!school %in% mat_scaled$unitid) return (NULL) # crash fix for school missing one of selected variables
@@ -106,10 +106,7 @@ ui <- page_sidebar(
     uiOutput("school_selector"),
     
     hr(),
-    numericInput("min_admits", "Minimum admitted students:",
-    value=0, min=0, step=50),
-    p("Model predicts retention rate from admission rate, net price, Pell %, and HHI score across all schools in the selected year. Raise the minimum to exclude very small schools, whose retention rates are noisy.",
-    style = "font-size: 0.85rem; color: gray"),
+    
     # inputs for the euclidean distance peer calculation
     pickerInput("peer_vars", "Peer matching variables:",
                 choices = metric_choices, 
@@ -183,15 +180,17 @@ ui <- page_sidebar(
   nav_panel("Retention Modeling",
       layout_sidebar(
         sidebar = sidebar(
-          selectInput("model_year", "Academic Year:",
+                    selectInput("model_year", "Academic Year:",
                       choices = levels(master_data$academic_year),
                       selected = "2023-24"),
+          numericInput("min_admits", "Minimum admitted students:",
+                       value = 0, min = 0, step = 50),
           hr(),
           p("Model predicts retention rate from admission rate,
              net price, Pell %, and HHI score across all schools
-             in the selected year.",
-            style = "font-size: 0.85rem; color: gray;")
-        ),
+             in the selected year. Raise the minimum to exclude very small
+             schools, whose retention rates are noisy.",
+            style = "font-size: 0.85rem; color: gray;"),
         navset_tab(
 
           nav_panel("Results",
@@ -238,9 +237,8 @@ ui <- page_sidebar(
               card_header("Filtered Dataset"),
               layout_column_wrap(
                 width = 1, 
-                selectInput("data_year" "Academic Year:",
-                choices=c("All years"),
-                levels(master_data$academic_year)),
+                selectInput("data_year", "Academic Year:",
+                choices=c("All years", levels(master_data$academic_year)),
                 selected="2023-24"
                 downloadButton("download_data", "Download CSV"),
                 DT::dataTableOutput("data_table")
@@ -284,8 +282,8 @@ server <- function(input, output, session) {
 
     
     selectizeInput("peer_select", "3. Select Peer Institution(s):",
-                   choices = schools,
-                   selected = schools[1],
+                   choices = choices,
+                   selected = choices[1],
                    multiple = TRUE,
                    options = list(placeholder = "Type to search"))
   })
@@ -382,7 +380,7 @@ server <- function(input, output, session) {
       # layer 2: all selected schools colored and labeled
       geom_point(data = selected,
                  aes(x = .data[[x_var]], y = .data[[y_var]],
-                     color = instnm, text = label),
+                     color = label, text = label),
                  size = 4) +
       labs(x = x_label, y = y_label, color = "Selected Schools") +
       theme_minimal()
@@ -529,7 +527,7 @@ server <- function(input, output, session) {
     
     # using augment to add the .fitted and .resid columns to the original data
     # so i can plot them
-    augmented <- augment(model, newdata = model_data)
+    augmented <- augment(model, newdata = model_data())
     
     
     # splitting into background schools and selected schools
