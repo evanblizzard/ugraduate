@@ -49,7 +49,7 @@ metric_choices <- c(
 ### Euclidean Distance Function
 euclidean <- function(school, pool, vars, n = 10) {
   # pull columns to measure distance on
-  mat <- pool |> select(unitid, instnm, all_of(vars))
+  mat <- pool |> select(unitid, label, all_of(vars))
   
   # drop rows with NA in selected variables
   mat <- mat |> filter(if_all(all_of(vars), ~!is.na(.))) # using a lambda 
@@ -84,7 +84,7 @@ euclidean <- function(school, pool, vars, n = 10) {
     # have to ungroup after using rowwise to return to normal data frame
     ungroup() |> 
   slice_min(distance, n = n) |> # to compare with requested amount of schools
-  select(unitid, instnm, distance)
+  select(unitid, label, distance)
 }
 
 
