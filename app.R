@@ -487,13 +487,18 @@ server <- function(input, output, session) {
     p <- ggplot(coefs,
                 aes(x = estimate, y = reorder(term, estimate),
                     color = significant,
-                    text = paste0(term,
-                                  "\nEffect: ", round(estimate, 3),
-                                  "\np-value: ", round(p.value, 3)))) +
+                                        text = paste0(term,
+                                  "\nEffect of +1 SD (", signif(sd, 3), "): ",
+                                  round(estimate, 2), " pts",
+                                  "\nPer unit: ", signif(raw_estimate, 3),
+                                  "\np-value: ", signif(p.value, 3)))) +
+      # segments instead of geom_errorbarh (deprecated in ggplot2 >= 4.0)
+      geom_segment(aes(x = conf.low, xend = conf.high,
+                       yend = reorder(term, estimate))) +
+
       geom_point(size = 3) +
-      geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
       geom_vline(xintercept = 0, linetype = "dashed") +
-      labs(x = "Effect on Retention Rate (percentage points)",
+      labs(x = "Change in retention (pct. points) per 1 SD increase",
            y = NULL) +
       theme_minimal() +
       theme(legend.position = "top")
@@ -522,10 +527,6 @@ server <- function(input, output, session) {
     
     model <- retention_model()
     
-    model_data <- master_data |> 
-      filter(academic_year == input$model_year) |> 
-      select(instnm, ret_pres, admit_rate, net_price_avg, pell_pct, hhi_score) |> 
-      filter(if_all(where(is.numeric), ~!is.na(.)))
     # using augment to add the .fitted and .resid columns to the original data
     # so i can plot them
     augmented <- augment(model, newdata = model_data)
@@ -533,7 +534,7 @@ server <- function(input, output, session) {
     
     # splitting into background schools and selected schools
     bg <- augmented
-    selected <- augmented |> filter(instnm %in% input$peer_select)
+    selected <- augmented |> filter(unitid %in% input$peer_select)
     
     p <- ggplot() +
       # 45 degree line for reference. points on this line = perfect fit
@@ -541,13 +542,13 @@ server <- function(input, output, session) {
                   linetype = "dashed", color = "gray50") +
       # all schools in gray
       geom_point(data = bg,
-                 aes(x = .fitted, y = ret_pres, text = instnm),
+                 aes(x = .fitted, y = ret_pres, text = label),
                  color = "gray70", size = 2, alpha = 0.5) +
       # color selected schools
       geom_point(data = selected,
                  aes(x = .fitted, y = ret_pres, 
-                     color = instnm, text = paste0(
-                       instnm,
+                     color = label, text = paste0(
+                       label,
                    "\nActual: ", round(ret_pres, 1), "%",
                    "\nPredicted: ", round(.fitted, 1), "%",
                    "\nResidual: ", round(ret_pres - .fitted, 1), " pts")),
@@ -595,24 +596,38 @@ server <- function(input, output, session) {
   })
   
   # data table output
+  # data tab uses its own year selector, and the table and the download
+  # use the same data so what you see is what you get
+  table_data <- reactive({
+    req(input$data_year)
+    d <- background_data()
+    if (input$data_year != "All years") {
+      d <- d |> filter(academic_year == input$data_year)
+    }
+    d |> select(-label)
+  })
+
   output$data_table <- DT::renderDataTable({
-    background_data() |> 
-      filter(academic_year == input$year_select) |> 
-      select(instnm, stabbr, control, ret_pres, pell_pct, hhi_score,
-             net_price_avg, admit_rate)
+    table_data() |> 
+      select(academic_year, instnm, city, stabbr, control, ret_pres, pell_pct,
+             hhi_score, net_price_avg, net_price_avg_pell, admit_rate)
   },
   rownames = FALSE)
-  
-  # download output
+
+    # download output
   output$download_data <- downloadHandler(
     # using function to dynamically name the csv file with the year the user
     # has selected
-    filename = function() paste0("ipeds_data_", input$year_select, ".csv"),
+    filename = function() {
+      yr <- if (input$data_year == "All years") "2019-2024" else input$data_year
+      paste0("ipeds_data_", yr, ".csv")
+    },
     # using function to write the file to csv to a variable called content
     content = function(file) {
-      write.csv(background_data(), file, row.names = FALSE)
+      write.csv(table_data(), file, row.names = FALSE)
     }
   )
 }
+
 
 shinyApp(ui, server)
