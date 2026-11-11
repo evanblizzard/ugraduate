@@ -369,7 +369,7 @@ server <- function(input, output, session) {
     
     # highlighted (only selected schools)
     selected <- bg |> 
-      filter(instnm %in% input$peer_select)
+      filter(unitid %in% input$peer_select)
     
     x_label <- names(metric_choices)[metric_choices == x_var]
     y_label <- names(metric_choices)[metric_choices == y_var]
@@ -377,12 +377,12 @@ server <- function(input, output, session) {
     p <- ggplot() +
       # first layer: all schools
       geom_point(data = bg,
-                 aes(x = .data[[x_var]], y = .data[[y_var]], text = instnm),
+                 aes(x = .data[[x_var]], y = .data[[y_var]], text = label),
                  color = "gray70", size = 2, alpha = 0.5) +
       # layer 2: all selected schools colored and labeled
       geom_point(data = selected,
                  aes(x = .data[[x_var]], y = .data[[y_var]],
-                     color = instnm, text = instnm),
+                     color = instnm, text = label),
                  size = 4) +
       labs(x = x_label, y = y_label, color = "Selected Schools") +
       theme_minimal()
@@ -399,9 +399,10 @@ server <- function(input, output, session) {
     ggplotly(p, tooltip = "text")
   })
   
-  # Tab 3 Peer Benchmarking
-  peers <- eventReactive(input$find_peers_btn, {
-    req(input$peer_select, input$peer_vars)
+  # Tab 3 Peer Benchmarking. fixing to recompute when button is clicked OR year changes (after first click)
+    peers <- eventReactive(list(input$find_peers_btn, input$peer_year), {
+    req(input$find_peers_btn > 0, input$peer_select, input$peer_vars)
+
     
     # require at least 2 variables for euclidean distance calc
     validate(
@@ -412,12 +413,31 @@ server <- function(input, output, session) {
     pool <- master_data |> filter(academic_year == input$peer_year)
     
     # run function for each selected school
-    map_dfr(input$peer_select, function(school) {
-      result <- euclidean(school, pool, input$peer_vars, n = 10)
-      result$reference_school <- school
+    results <- map(input$peer_select, function(school) {
+      result <- euclidean(as.numeric(school), pool, input$peer_vars, n = 10)
+      if (is.null(result)) return(NULL)
+      result$reference_school <- school_labels$label[
+        school_labels$unitid == as.numeric(school)]
       result
     })
+    
+    # tell the user about any school that couldn't be matched
+    skipped <- school_labels$label[
+      school_labels$unitid %in% as.numeric(input$peer_select[map_lgl(results, is.null)])]
+    if (length(skipped) > 0) {
+      showNotification(
+        paste0("Skipped (missing data for the selected variables in ",
+               input$peer_year, "): ", paste(skipped, collapse = "; ")),
+        type = "warning", duration = 8)
+    }
+    validate(
+      need(length(skipped) < length(input$peer_select),
+           paste0("None of the selected schools have data for all of the ",
+                  "selected matching variables in ", input$peer_year, "."))
+    )
+    bind_rows(results)
   })
+
   
   output$peer_table <- DT::renderDataTable({
     peers() |> 
