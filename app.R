@@ -443,7 +443,7 @@ server <- function(input, output, session) {
     peers() |> 
       select(
         `Your School` = reference_school,
-        `Peer School` = instnm,
+        `Peer School` = label,
         `Distance`    = distance
       ) |> 
       mutate(Distance = round(Distance, 3))
@@ -459,9 +459,21 @@ server <- function(input, output, session) {
     
     # tidy() to extract coefficients into a clean df
     # conf.int = TRUE to add 95% conf int columns
+    # predictors are on very different scales (net price is in dollars, the
+    # others in percentage points / a 0-1 index), so raw coefficients aren't
+    # comparable. multiply each by its predictor's SD to get the effect of a
+    # one-standard-deviation increase, in retention percentage points.
+    sds <- model_data() |> 
+      summarise(across(c(admit_rate, net_price_avg, pell_pct, hhi_score), sd)) |> 
+      pivot_longer(everything(), names_to = "term", values_to = "sd")
+    
     coefs <- tidy(model, conf.int = TRUE) |> 
       filter(term != "(Intercept)") |> #cutting intercept bc not meaningful
+      left_join(sds, by = "term") |> 
       mutate(
+        raw_estimate = estimate,
+        across(c(estimate, conf.low, conf.high), ~ .x * sd),
+
         # making readable labels instead of column names
         term = recode(term,
                       "admit_rate" = "Admission Rate",
