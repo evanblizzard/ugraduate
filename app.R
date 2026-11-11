@@ -190,7 +190,8 @@ ui <- page_sidebar(
              net price, Pell %, and HHI score across all schools
              in the selected year. Raise the minimum to exclude very small
              schools, whose retention rates are noisy.",
-            style = "font-size: 0.85rem; color: gray;"),
+            style = "font-size: 0.85rem; color: gray;")
+        ),
         navset_tab(
 
           nav_panel("Results",
@@ -239,7 +240,7 @@ ui <- page_sidebar(
                 width = 1, 
                 selectInput("data_year", "Academic Year:",
                 choices=c("All years", levels(master_data$academic_year)),
-                selected="2023-24"
+                selected="2023-24"),
                 downloadButton("download_data", "Download CSV"),
                 DT::dataTableOutput("data_table")
               )
