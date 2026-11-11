@@ -321,21 +321,14 @@ server <- function(input, output, session) {
   
   # retention model reactive
   retention_model <- reactive({
-    req(input$model_year)
-    
-    model_data <- master_data |> 
-      filter(academic_year == input$model_year) |> 
-      select(ret_pres, admit_rate, net_price_avg, pell_pct, hhi_score) |> 
-      # drop any school missing any of the variables
-      filter(if_all(everything(), ~!is.na(.)))
-    
     validate(
-      need(nrow(model_data) > 30,
+      need(nrow(model_data()) > 30,
            "Not enough data to fit a model for this year.")
     )
     lm(ret_pres ~ admit_rate + net_price_avg + pell_pct + hhi_score,
-       data = model_data)
+       data = model_data())
   })
+
   
   
   # Tab 1 Trend Plot
@@ -347,11 +340,11 @@ server <- function(input, output, session) {
     p <- ggplot(filtered_data(),
                 aes(x = academic_year,
                     y = .data[[input$metric]],
-                    group = instnm,
-                    color = instnm)) +
+                    group = label,
+                    color = label)) +
       geom_line(linewidth = 1) +
       geom_point() +
-      labs(y = "Value", x = "Academic Year", color = "Institution") +
+      labs(y = names(metric_choices)[metric_choices==input$metric], x = "Academic Year", color = "Institution") +
       theme_minimal()
     
     ggplotly(p)
